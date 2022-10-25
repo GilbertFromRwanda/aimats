@@ -119,7 +119,7 @@ if (isset($_GET['n'])) {
                                             ?>
                                             <tr>
                                             <td><?= $i?></td>
-                                            <td class="pointer" onclick="openStudentPartner(<?php echo htmlspecialchars(json_encode($h))?>);"><span class=" pointer"><?= $h['card_id'] ?></span></td>
+                                            <td class="pointer" onclick="openStudentPartner(<?php echo htmlspecialchars(json_encode($h))?>);"><span class=" pointer"><?= $h['card_id'] ?></span><span class="flaticon-381-share text-primary"></span></td>
                                                 <td class=" text-capitalize"><?= $h['first_name'] .' '. $h['last_name'] ?></td>
                                                 <td class=" text-capitalize"><?= $h['internaship'] ?></td>
                                                 <td class=" text-capitalize" id="pname<?=$h['id']?>"><?= $h['institition_name'] ?></td>
@@ -206,7 +206,7 @@ if (isset($_GET['n'])) {
                         </div> 
                         <div class="col-lg-6">
                             <div class="mb-3">
-                                <label for="menu_type" class="text-black form-label">Partner <span class="required text-danger">*</span></label>
+                                <label for="menu_type" class="text-black form-label">Partner  <span class="required text-danger">*</span> <span class=" text-warning" id="waitPartner"></span></label>
                                 <select value="" id="sPartner" name="partner" class=" form-control">
                                 </select>
                             </div>
@@ -249,7 +249,7 @@ if (isset($_GET['n'])) {
       $(e).addClass("d-none");
       $("#ajaxresults").html(`<div class="alert alert-warning"><span>Please wait moment ... </span></div>`);
       let i=$("#intern").val();
-      sendWithAjax(`student=${selectedStudent.id}&p=${partner}&s=${supper}&idate=${intershipDate}&action=ASSSIGN_SUPPERVISIOR_PARTNER_TO_STUDENT`, "ajax_pages/suppervisior").then((res) => {
+      sendWithAjax(`osup=${selectedStudent.suppervisior_id}&op=${selectedStudent.partner_id}&major=${selectedStudent.major_in}&inter=${selectedStudent.internaship_periode_id}&student=${selectedStudent.id}&p=${partner}&s=${supper}&idate=${intershipDate}&action=ASSSIGN_SUPPERVISIOR_PARTNER_TO_STUDENT`, "ajax_pages/suppervisior").then((res) => {
         $(e).removeClass('d-none');
         NProgress.done(true);
         if (res.isOk) {
@@ -269,6 +269,7 @@ if (isset($_GET['n'])) {
             }
         function openStudentPartner(student){
             selectedStudent=student;
+            // console.log(selectedStudent);
             $("#title").text("Assign Student to partner and suppervisior");
                 $("#basicModal").modal("show");
                 $(".mydv").addClass("d-none");
@@ -277,11 +278,23 @@ if (isset($_GET['n'])) {
                 $("#names").val(names);
                 $("#majorIn").val(student.major_in);
                 $("#sSuppervisior").html('');
+                $("#waitPartner").text("Loading ...");
+                // get suppervisior that has  send request;
+                fetch(`ajax_pages/internaship?action=GET_PARTNER_FOR_MAJOR_IN&inter=${student.internaship_periode_id}&major=${student.major_in}`).then((res)=>res.json()).then((data)=>{
+                    partners=data.data;
+                    $("#waitPartner").text("")
+                    let option='<option selected value=" " disabled>__select__</option>';
+                partners.forEach(p => {
+                    let selected=selectedStudent.partner_id==p.id?"selected":"NoSelected";
+                    option+=`<option value="${p.id}" ${selected}>${p.name} -> ${p.place}</option>`;
+                });
+                $("#sPartner").html(option);
+                })
                 //  append suppervisiors
                 let option='<option selected value=" " disabled>__select__</option>';
                 suppervisiors.forEach(s => {
                     let selected=selectedStudent.suppervisior_id==s.id?"selected":"NoSelected";
-                    console.log(selectedStudent.suppervisior_id,s.id);
+                    // console.log(selectedStudent.suppervisior_id,s.id);
                     let keydep=s.department.replace(/ /g,"");
                     if(deps[keydep].includes(selectedStudent.major_in)){
                         option+=`<option value="${s.id}" ${selected}>${s.names} -> ${s.department}</option>`;
@@ -296,12 +309,7 @@ if (isset($_GET['n'])) {
                 partners=data.data.partners;
                 suppervisiors=data.data.suppervisiors;
                 //  put in select
-                let option='<option selected value=" " disabled>__select__</option>';
-                partners.forEach(p => {
-                    let selected=selectedStudent.partner_id==p.id?"selected":"NoSelected";
-                    option+=`<option value="${p.id}" ${selected}>${p.name} -> ${p.place}</option>`;
-                });
-                $("#sPartner").html(option);
+            
             })
         }
         $(document).ready(()=>{

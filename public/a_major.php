@@ -53,30 +53,40 @@ include("./includes/head.php");
                                         <th class=" fs-13">#</th>
                                             <th class=" fs-13">Major </th>
                                             <th class=" fs-13">Available</th>
-                                            <th class=" fs-13">Take</th>
+                                            <th class=" fs-13">Requested</th>
                                         </tr>
                                     </thead>
                                     <tbody class=" fs-12">
                                         <?php
-                                        $major=$database->fetch("SELECT COUNT(*) as total,major_in FROM a_student_tb WHERE (internaship_periode_id={$currentIntern->id} AND partner_id IS NULL) GROUP by major_in");
+                                        $major=$database->fetch("SELECT COUNT(*) as total,major_in FROM a_student_tb WHERE (internaship_periode_id={$currentIntern->id} AND partner_id IS NULL) GROUP by major_in ");
                                         $i=0;
+                                        $userID=$_SESSION['ht_userId'];
                                         foreach ($major as $key => $m) {
                                             $i++;
                                             $noSpace=input::removeSpaceWith($m['major_in'],"_");
+                                            $requested=$database->get("request_student_number as nb","a_partner_student_request","internaship_id={$currentIntern->id} AND partner_id={$userID} AND major_in='{$m['major_in']}' ");
+                                            $req=0;
+                                            if(isset($requested->nb)) $req=$requested->nb;
                                             ?>
                                             <tr>
                                             <td><?= $i?></td>
                                     <td class=" text-capitalize"><?=$m['major_in']?></td>
                                     <td><?=$m['total']?></td>
-                                    <td><input class="form-control" type="number" name="<?=$noSpace?>" id="input<?=$i?>" data-count="<?=$m['total']?>" data-name="<?=$m['major_in']?>" value="0"></td>
+                                    <td>
+                                    <input class="form-control" type="number" <?=$req>0?"readonly":""?>
+                                     name="<?=$noSpace?>" id="input<?=$i?>" data-count="<?=$m['total']?>"
+                                      data-name="<?=$m['major_in']?>" 
+                                      data-old="<?=$req?>"
+                                      value="<?=$req?>"></td>
                                     </tr>
                                     <?php 
                                     }
                                     ?>
-                                    <tr><td colspan="3" class=" text-center">
-                                        <button style="margin-left:38%;position: absolute;" class="btn btn-outline-primary" onclick="onPartnerSendRequest(<?=$i?>)">Send Request Now</button></td></tr>
+                                    <!-- <tr><td colspan="3" class=" text-center">
+                                        </td></tr> -->
                                     </tbody>
                                 </table>
+                                <button  style=" margin-left: 40%;position: absolute;margin-top: -5%;" class="btn btn-outline-primary mb-3" onclick="onPartnerSendRequest(<?=$i?>)">Send Request Now</button>
                             </div>
                    
                  </div>
@@ -90,6 +100,7 @@ include("./includes/head.php");
     <script>
         var inter="<?=$currentIntern->id?>";
         function onPartnerSendRequest(round=0){
+            $("#btnRequest").addClass("d-none");
             let urlname="";
             let urlvalue="";
             let isCorrect=true;
@@ -97,6 +108,7 @@ include("./includes/head.php");
             for (let index = 1; index <=round; index++) {
                 let taken=$(`#input${index}`).val();
                 let Available= $(`#input${index}`).data("count");
+                let oldInput=Number($(`#input${index}`).data("old"));
                 let name=$(`#input${index}`).data("name");
                 if(taken>Available && taken>0){
                     $(`#input${index}`).addClass("border-red");
@@ -110,16 +122,29 @@ include("./includes/head.php");
                 }
             }
             if(!isCorrect){
+                $("#btnRequest").removeClass("d-none");
                 alert("Please check your input");
                 return;
             }
             if(!hasData){
+                $("#btnRequest").removeClass("d-none");
                 alert("couldn't empty");
                 return;
             }
             fetch(`ajax_pages/internaship?action=PARTNER_REQUEST_STUDENT&major=${urlname}&major_value=${urlvalue}&inter=${inter}`)
-            .then((res)=>res.json()).then((res)=>{
-                console.log(res);
+            .then((res)=>res.text()).then((res)=>{
+                $("#btnRequest").removeClass("d-none");
+                try {
+                    let json=JSON.parse(res);
+                if(json.status=="ok"){
+                    window.location.href="a_student_request";return;
+                    }
+                    alert(json.status);
+                } catch (error) {
+                    alert(JSON.stringify(res));
+                }
+               
+
             });
         }
         $(document).ready(()=>{

@@ -16,7 +16,8 @@ switch ($action) {
         }
     echo json_encode(["isOk"=>true,
     "data"=>["suppervisiors"=>$database->fetch("SELECT * from a_suppervisior_tb where status='active'"),
-    "partners"=>$database->fetch("SELECT * from a_partner_tb where is_active='yes'")]]); 
+    "partners"=>[]]]); 
+    // $database->fetch("SELECT * from a_partner_tb where is_active='yes'")
     break;
     case 'ASSSIGN_SUPPERVISIOR_PARTNER_TO_STUDENT':
         // get hote code,Ymd
@@ -35,6 +36,10 @@ switch ($action) {
         $partner=input::get("p");
         $student=input::get("student");
         $suppervisior=input::get("s");
+        $oldPartiner=input::get("op");
+        $oldSuperVisior=input::get("osup");
+        $i=input::get("inter");
+        $major=input::get("major");
         if(!is_numeric($partner) || !is_numeric($suppervisior)){
             echo json_encode(["isOk"=>false,"data"=>" partner or suppervisior is invalid"]);
             exit(0);
@@ -47,7 +52,24 @@ switch ($action) {
            $isUpdated=$database->update("a_student_tb","id=$student",
            ["partner_id"=>$partner,"suppervisior_id"=>$suppervisior,"updated_at"=>date('Y-m-d h:i:s')]);
            if($isUpdated){
-            echo json_encode(["isOk"=>true,"data"=>$isUpdated]);
+            // update taken 
+            // update partner request
+         if($partner!=$oldPartiner){
+           $uQuery="UPDATE a_partner_student_request SET given_student_number=given_student_number+1 WHERE partner_id=$partner AND internaship_id=$i AND major_in='$major'";
+           $database->query($uQuery);
+           $update2="UPDATE a_partner_student_request_totals SET given_student=given_student+1 WHERE partner_id=$partner AND internaship_id=$i ";
+           $database->query($update2);
+        //    $database->query("UPDATE a_internaship_periode SET taken_student=taken_student+1 WHERE id=$i");
+          }
+          if(is_numeric($oldPartiner) && $partner!=$oldPartiner){
+            // remove student from old partiner
+            $uQuery="UPDATE a_partner_student_request SET given_student_number=given_student_number-1 WHERE partner_id=$oldPartiner AND internaship_id=$i AND major_in='$major' AND given_student_number>0";
+            $database->query($uQuery);
+            $update2="UPDATE a_partner_student_request_totals SET given_student=given_student-1 WHERE partner_id=$oldPartiner AND internaship_id=$i AND given_student>0 ";
+            $database->query($update2); 
+        }  
+        // $database->query($update2);
+           echo json_encode(["isOk"=>true,"data"=>$isUpdated]);
             exit(0);
            }
            throw new Exception("unable to update please try again", 1);
