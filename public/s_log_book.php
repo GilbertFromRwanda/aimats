@@ -43,6 +43,7 @@ include("./includes/head.php");
                                     <thead>
                                         <tr>
                                         <th class=" fs-13">#</th>
+                                            <th class=" fs-13">Student</th>
                                             <th class=" fs-13">Description</th>
                                             <th class=" fs-13">Date</th>
                                             <th class=" fs-13">Lesson Learnt</th>
@@ -62,6 +63,7 @@ include("./includes/head.php");
                                             ?>
                                             <tr>
                                             <td><?= $i?></td>
+                                                <td  ><span class=" pointer"><?= $h['student_id'] ?></span></td>
                                                 <td class=" text-capitalize"><?= $h['name'] ?></td>
                                                 <td class=""><?= $h['created_at'] ?></td>
                                                 <td class=""><?= $h['objective'] ?></td>
@@ -81,7 +83,7 @@ include("./includes/head.php");
                                                             </svg>
                                                         </div>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            <a class="dropdown-item" href="#"><i class="las la-check-square scale5 text-primary me-2"></i> Edit</a>
+                                                            <a class="dropdown-item" href="#"  onclick="openStudentPartner(<?php echo htmlspecialchars(json_encode($h))?>);"><i class="las la-check-square scale5 text-primary me-2"></i> Edit</a>
                                                             <!-- <a class="dropdown-item" href="#"><i class="las la-times-circle scale5 text-danger me-2"></i> Reject Order</a> -->
                                                         </div>
                                                     </div>
@@ -91,21 +93,6 @@ include("./includes/head.php");
                                         ?>
                                     </tbody>
                                 </table>
-
-
-                                <?php
-
-                                    // $lists=$database->query("SELECT * FROM a_users WHERE id='$_SESSION['ht_userId']'" );
-                                    $user_id = $_SESSION['ht_userId'];
-                                    $lists=$database->query("SELECT * FROM a_student_tb WHERE id='$user_id'" );    
-                                    $i=0;
-                                    foreach ($lists as $key => $h) {
-                                        $i++;
-                                        ?>
-        
-
-
-
 
                             </div>
                 </div>
@@ -121,29 +108,27 @@ include("./includes/head.php");
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add Daily Activity</h5>
+                    <h5 class="modal-title" id="title">Add Daily Activity</h5>
                     <span class="  close"> <span class=" fa fa-times " data-bs-dismiss="modal"></span></span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <form id="form" method="post">
                     <div class="col-lg-6">
-                                 <input type="hidden" name="internaship_id" value="<?= $h['internaship_periode_id']; ?>"/> 
-                                 <input type="hidden" name="suppervisor_id" value=" <?= $h['suppervisior_id']; ?>"/> 
-                                 <input type="hidden" name="partner_id" value="<?= $h['partner_id']; ?>"/> 
-                            
+                               
                         </div>
-                        <?php } ?>
+                      
                     <div class="row">
                         
 
                             
                     <div class="col-lg-12">
+                    
                             <div class="mb-3">
                                 <label for="menu_type" class="text-black form-label">Description <span class="required text-danger">*</span></label>
-                                <input type="text"  name="description" placeholder="Eg:Environment setup" class=" form-control text-uppercase"/>
-                                <input type="hidden" name="action" value="ADD_LOGBOOK"/>
-                                            
+                                <input type="text"  name="description" value="" id="description" class=" form-control text-uppercase" readonly/>
+                                <input type="hidden" name="action" value="ADD_COMMENT"/>
+                                <input type="hidden" name="row_id" value="0" id="studentId"/>           
                             
                             </div>
                         </div>
@@ -151,20 +136,25 @@ include("./includes/head.php");
                         <div class="col-lg-12">
                             <div class="mb-3">
                                 <label for="menu_type" class="text-black form-label">Lessons Learnt <span class="required text-danger">*</span></label>
-                                <input type="text"  name="lesson" placeholder="Eg:php" class=" form-control text-uppercase"/>
+                                <input type="text" id="lesson"  name="lesson" value="" class=" form-control text-uppercase" readonly/>
                                 <!-- <input type="hidden" name="lesson" value="CREATE_NEW_BEN"/> -->
                             </div>
                         </div> 
                         <div class="col-lg-12">
                             <div class="mb-3">
                                 <label for="menu_type" class="text-black form-label">Challenges Faced <span class="required text-danger">*</span></label>
-                                <input type="text"  name="challenge" placeholder="Eg:working hours" class=" form-control text-uppercase"/>
+                                <input type="text" id="challenge" name="challenge" value="" class=" form-control text-uppercase" readonly/>
                                 <!-- <input type="hidden" name="challenge" value="CREATE_NEW_BEN"/> -->
                             </div>
                         </div> 
                      
-                       
-                        
+                        <div class="col-lg-12">
+                            <div class="mb-3">
+                                <label for="menu_type" class="text-black form-label">Supervisor Comment <span class="required text-danger">*</span></label>
+                                <textarea  name="sp_comment" id="sp_comment" placeholder="Eg:Great.." class=" form-control text-uppercase"></textarea>
+                                <!-- <input type="hidden" name="lesson" value="CREATE_NEW_BEN"/> -->
+                            </div>
+                        </div>
                         <div class="col-12">
                             <div id="ajaxresults"></div>
                         </div>
@@ -186,8 +176,8 @@ include("./includes/head.php");
         //  let formdData=document.getElementById("form");
         $(".btnlog").attr("disabled","disabled");
          let formData=$("#form").serialize();
-        //  let  formData2 = new FormData($("#form")[0]);
-        //  console.log(formData)
+        //   let  formData2 = $(#from).serialize();
+               //  console.log(formData)
          fetch(`ajax_pages/logbook?${formData}`).then((res)=>res.text()).then((data)=>{
             // $(".btnlog").removeClass("d-none");
         $(".btnlog").removeAttr("disabled");
@@ -204,6 +194,27 @@ include("./includes/head.php");
                 alert(data);
             }
          })  
+        }
+
+
+        function openStudentPartner(student){
+            selectedStudent=student;
+            console.log(selectedStudent);
+            $("#studentId").val(selectedStudent.id);
+            $("#challenge").val(student.challenges);
+            $("#sp_comment").val(student.suppervisior_comment);
+            $("#description").val(student.name);
+            $("#lesson").val(student.objective);
+            $("#title").text("Add comment");
+                $("#basicModal").modal("show");
+                $(".mydv").addClass("d-none");
+                $(".divStudent").removeClass("d-none");
+                // let names=student.card_id+" - "+student.first_name+" "+student.last_name;
+                // $("#names").val(names);
+                // $("#majorIn").val(student.major_in);
+                // $("#sSuppervisior").html('');
+                //  append suppervisiors
+                
         }
     </script>
     
