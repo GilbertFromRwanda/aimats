@@ -22,15 +22,7 @@
               <span class="nav-text">Dashboard</span>
             </a>
           </li>
-          <?php if($level=='SUP_ADMIN'){ ?>
-            <li>
-            <a class="ai-icon" href="sup_profile">
-              <i class="flaticon-381-archive"></i>
-              <span class="nav-text">institition Profile</span>
-            </a>
-          </li>
-            <?php }?>
-          <?php if($level=='ADMIN'){ ?>
+          <?php if($level=='STUDENT'){ ?>
             <li>
             <a class="ai-icon" href="a_log_book">
               <i class="flaticon-381-book"></i>
@@ -38,6 +30,18 @@
               </span>
             </a>
           </li>
+            <?php }?>
+            <?php if($level=='SUPERVISIOR'){ ?>
+            <li>
+            <a class="ai-icon" href="s_log_book">
+              <i class="flaticon-381-book"></i>
+              <span class="nav-text">Log book
+              </span>
+            </a>
+          </li>
+            <?php }?>
+          <?php if($level=='ADMIN'){ ?>
+   
           <li>
             <a class="ai-icon" href="a_student_request">
               <i class="flaticon-381-add"></i>
