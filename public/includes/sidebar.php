@@ -40,6 +40,15 @@
             </a>
           </li>
             <?php }?>
+            <?php if($level=='PARTNER'){ ?>
+            <li>
+            <a class="ai-icon" href="p_log_book">
+              <i class="flaticon-381-book"></i>
+              <span class="nav-text">Log book
+              </span>
+            </a>
+          </li>
+            <?php }?>
           <?php if($level=='ADMIN'){ ?>
    
           <li>
@@ -64,6 +73,12 @@
           </li>
           <li>
             <a class="ai-icon" href="institition">
+              <i class="flaticon-381-home"></i>
+              <span class="nav-text">Institution</span>
+            </a>
+          </li>
+          <li>
+            <a class="ai-icon" href="a_partner">
               <i class="flaticon-381-home"></i>
               <span class="nav-text">Partner</span>
             </a>
