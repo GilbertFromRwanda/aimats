@@ -73,7 +73,7 @@ include("./includes/head.php");
                                             ?>
                                             <tr>
                                             <td><?= $i?></td>
-                                                <td class=" text-capitalize"><?= $h['start_date'] ?>-<?=$h['end_date']?></td>
+                                                <td class=" text-capitalize"><?= $h['start_date'] ?> to <?=$h['end_date']?></td>
                                                 <td class=""><?= $h['requested_student'] ?></td>
                                                 <td class=""><a href="a_partner_student?pinter=<?=$h['internaship_id']?>"><?= $h['given_student'] ?> 
                                                  <span class="flaticon-381-share text-primary"></span></a>
