@@ -65,9 +65,8 @@ switch ($action) {
                 "email"=>['required'=>true],
                 "name"=>['required'=>true],
                 "gender"=>['required'=>true],
-                // "password"=>['required'=>true],
-                
-                // "username"=>['required'=>true]
+                "password"=>['required'=>true],
+                "username"=>['required'=>true]
             ]);
             if(!$val->passed()){
                 echo json_encode(["isOk"=>false,"data"=>implode(',',$val->errors())]);
@@ -78,19 +77,39 @@ switch ($action) {
             $email=input::get("email");
             $phone=input::get("phone");
             $gender=input::get("gender");
-            $password=input::getHash($_POST["password"]);
+            $password=input::getHash(input::get('password'));
             $username=input::get("username");
             $userId=$_SESSION['ht_userId'];
-            $supquery="INSERT INTO `a_suppervisior_tb` (`names`, `gender`, `department`, `email`, `phone`) VALUES ('{$name}', '{$gender}', '{$department}', '{$email}', '{$phone}')";
-            $userquery="INSERT INTO `a_users` (`names`, `username`, `phone`, `secret`, `level`) VALUES ('{$name}', '{$username}', '{$phone}', '{$password}', 'SUPERVISIOR')";
+            //Verifying username
 
-            $iscreated=$database->query($supquery);
-            $iscreated=$database->query($userquery);
-            if($iscreated){
-                echo json_encode(["isOk"=>true,"data"=>"Data Saved"]); 
-                exit(0);
+            $usercheck=$database->fetch("SELECT username FROM a_users");
+            $i=0;
+            foreach ($usercheck as $key => $h) {
+                $i++;
+                $existusername=$h['username'];
             }
-            echo json_encode(["isOk"=>false,"data"=>"Data was not saved"]);
+                if ($username==$existusername) {
+                    echo json_encode(["isOk"=>true,"data"=>"Username Taken"]);
+                }else {
+                    $supquery="INSERT INTO `a_suppervisior_tb` (`names`, `gender`, `department`, `email`, `phone`) VALUES ('{$name}', '{$gender}', '{$department}', '{$email}', '{$phone}')";
+                    $userquery="INSERT INTO `a_users` (`names`, `username`, `phone`, `secret`, `level`,`status`) VALUES ('{$name}', '{$username}', '{$phone}', '{$password}', 'SUPERVISIOR','active')";
+                   $database->beginTransaction();
+                    try {
+                        $iscreated=$database->query($supquery);
+                        $usercreated=$database->query($userquery);
+                        $database->commit();
+                        echo json_encode(["isOk"=>true,"data"=>"Suppervisior   added"]);
+                    } catch (\Throwable $th) {
+                        $database->rollBack();
+                        echo json_encode(["isOk"=>false,
+                        "data"=>"Suppervisior not Saved" . $th->getMessage()]);
+                    }
+        
+                
+                // echo json_encode(["isOk"=>true,"data"=>$h['username']]);
+            }
+          
+            // 
             
                                 
         break;
