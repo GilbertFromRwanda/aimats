@@ -142,7 +142,7 @@ include("./includes/head.php");
                                 <select type="text" class="form-control" name="department" >
                                     <option value="" disabled selected>__select__</option>
                                     <option value="IT">IT</option>
-                                    <option value="BUSINESS">BUSINESS</option>
+                                    <option value="BUSSINESS">BUSINESS</option>
                                     <option value="THEOLOGY">THEOLOGY</option>
                                     <option value="HEALTH SCIENCE">HEALTH SCIENCE</option>
                                 </select>

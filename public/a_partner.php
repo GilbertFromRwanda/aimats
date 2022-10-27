@@ -142,9 +142,21 @@ include("./includes/head.php");
                                 <input  type="number" name="tin"   placeholder="Eg:12800000" class=" form-control"/>
                             </div>
                         </div> 
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="menu_type" class="text-black form-label">Username <span class="required text-danger">*</span></label>
+                                <input  type="text" name="username" placeholder="Eg:john" class=" form-control"/>
+                            </div>
+                        </div> 
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="menu_type" class="text-black form-label">Password<span class="required text-danger">*</span></label>
+                                <input  type="text" name="password"   placeholder="Eg:*****" class=" form-control"/>
+                            </div>
+                        </div> 
                         <div class="col-lg-12">
                             <div class="mb-3">
-                                <label for="menu_type" class="text-black form-label">C Profile <span class="required text-danger">*</span></label>
+                                <label for="menu_type" class="text-black form-label">Company Profile <span class="required text-danger">*</span></label>
                                 <textarea type="text"  name="profile" placeholder="Eg:Bio" class=" form-control "></textarea>
                                 
                             </div>
