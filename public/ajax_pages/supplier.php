@@ -41,7 +41,6 @@ switch ($action) {
     case 'SUPPLIER_REGISTRATION':
         $val=new validate();
         $val->check($_POST,[
-         "tin"=>["required"=>true,"max"=>30,"unique"=>["table"=>"a_partner_tb","column"=>'tin']],
          "email"=>['required'=>true,"max"=>100],
          "person"=>['required'=>true,"max"=>100],
          "company"=>['required'=>true,"max"=>100],
@@ -58,7 +57,7 @@ switch ($action) {
             "name"=>$database->escape_value($_POST['company']),
             "email"=>$database->escape_value($_POST['email']),
             "phone"=>$database->escape_value($_POST['phone']),
-            "tin"=>$database->escape_value($_POST['tin']),
+            "tin"=>00000,
             "place"=>$database->escape_value($_POST['place']),
             "user_id"=>NULL,
             "is_active"=>"no"
@@ -67,7 +66,7 @@ switch ($action) {
         $userData=[
             "names"=>$database->escape_value($_POST['person']),
             "username"=>$database->escape_value($_POST['user_name']),
-            "level"=>"SUP_ADMIN",
+            "level"=>"PARTNER",
             "secret"=>input::getHash($_POST['password']),
             "status"=>'active',
             "phone"=>$_POST['phone'],
@@ -79,7 +78,7 @@ switch ($action) {
           if($isUserCreated){
             // set sessions
             $_SESSION['ht_userId']=$isUserCreated;
-            $_SESSION['ht_level']="SUP_ADMIN";
+            $_SESSION['ht_level']="PARTNER";
             $_SESSION['sup_is_active']="no";
             $_SESSION['ht_hotel']=$isSupInserted;
             $_SESSION['ht_name']=$_POST['person'];

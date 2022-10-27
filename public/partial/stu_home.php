@@ -1,7 +1,7 @@
 <div class="col-lg-12">
   <div class="row">
 
-    <div class="col-lg-4">
+    <div class="col-lg-4 pointer">
       <div class="widget-stat card ">
         <div class="card-body p-4" onclick="window.location.href='tenders'">
           <div class="media ai-icon d-flex">
@@ -12,18 +12,18 @@
               <h3 class="mb-0 text-black">
                 <span class="counter ms-0">
                   <?php
-                  45
+                  echo 45
                   ?>
                 </span>
               </h3>
-              <p class="mb-0 fs-11"> Days left </p>
+              <p class="mb-0 fs-11">Internaship days left </p>
             </div>
           </div>
         </div>
       </div>
     </div>
     
-    <div class="col-lg-4">
+    <div class="col-lg-4 pointer">
       <div class="widget-stat card ">
         <div class="card-body p-4">
           <div class="media ai-icon d-flex">
@@ -40,49 +40,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-4">
-      <div class="widget-stat card ">
-        <div class="card-body p-4">
-          <div class="media ai-icon d-flex">
-            <span class="me-3 bgl-primary text-white bg7">
-              <i class="flaticon-381-success"></i>
-            </span>
-            <div class="media-body">
-              <h3 class="mb-0 text-black">
-                <span class="counter ms-0">
-                  <?php
-                  // "Mucyo ltd | location here"
-                  ?>
-                </span>
-              </h3>
-              <p class="mb-0 fs-11">My suppervisior </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-4">
-      <div class="widget-stat card ">
-        <div class="card-body p-4">
-          <div class="media ai-icon d-flex">
-            <span class="me-3 bgl-primary text-white bg5">
-              <!-- <i class="ti-user"></i> -->
-              <i class="flaticon-381-share-2"></i>
-            </span>
-            <div class="media-body">
-              <h3 class="mb-0 text-black">
-                <span class="counter ms-0">
-                  <?php
-                  ?>
-                </span>
-              </h3>
-              <p class="mb-0">Assigned company</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-4">
+    <div class="col-lg-4 pointer">
       <div class="widget-stat card ">
         <div class="card-body p-4">
           <div class="media ai-icon d-flex">
@@ -103,7 +61,47 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-4 ">
+    <div class="col-lg-4 pointer">
+      <div class="widget-stat card ">
+        <div class="card-body p-4">
+          <div class="media ai-icon d-flex">
+            <span class="me-3 bgl-primary text-white bg7">
+              <i class="flaticon-381-success"></i>
+            </span>
+            <div class="media-body">
+              <h3 class="mb-0 text-black">
+                <span class="counter ms-0">
+                </span>
+              </h3>
+              <p class="mb-0 ">My suppervisior </p>
+              <small class=" mb-0 fs-11 ml-20">Jeniffer | 0789047173</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 pointer">
+      <div class="widget-stat card ">
+        <div class="card-body p-4">
+          <div class="media ai-icon d-flex">
+            <span class="me-3 bgl-primary text-white bg5">
+              <!-- <i class="ti-user"></i> -->
+              <i class="flaticon-381-share-2"></i>
+            </span>
+            <div class="media-body">
+              <h3 class="mb-0 text-black">
+                <span class="counter ms-0">
+                </span>
+              </h3>
+              <p class="mb-0">Assigned company</p>
+              <small class=" mb-0 fs-11 ml-20">Risa | risa@gmail.com</small>
+              <small class=" mb-0 fs-11 ml-20">Place:Kigali-muhima</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 pointer ">
       <div class="widget-stat card  ">
         <div class="card-body p-4">
           <div class="media ai-icon d-flex">
@@ -113,12 +111,9 @@
             <div class="media-body">
               <h3 class="mb-0 text-black">
                 <span class="counter ms-0">
-                  <?php
-                 echo 0;
-                  ?>
                 </span>
               </h3>
-              <p class="mb-0 fs-11">Add Remark </p>
+              <p class="mb-0">Add Remark </p>
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 <div class="col-lg-12">
   <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-4 pointer">
       <div class="widget-stat card ">
         <div class="card-body p-4" onclick="window.location.href='tenders'">
           <div class="media ai-icon d-flex">
@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-4 pointer">
       <div class="widget-stat card ">
         <div class="card-body p-4">
           <div class="media ai-icon d-flex">
@@ -40,7 +40,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-4 pointer">
       <div class="widget-stat card ">
         <div class="card-body p-4">
           <div class="media ai-icon d-flex">
@@ -61,7 +61,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-4 pointer">
       <div class="widget-stat card ">
         <div class="card-body p-4">
           <div class="media ai-icon d-flex">
