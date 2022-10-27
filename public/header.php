@@ -8,7 +8,7 @@
               <div class="input-group search-area w-100">
                 <input type="text" class="form-control" placeholder="Search here..." onkeyup="searchBy(this)" />
                 <span class="input-group-text"><a href="javascript:void(0)"><i class="flaticon-381-search-2"></i></a></span>
-                <div id="search-results-container">
+                <div id="search-results-container" >
                   <ul id="search-results">
                       <!-- <li> <a href="benificiery?p=1">CT:Kwizera elisa #789047172/gihango</a>
                       </li>
@@ -64,12 +64,12 @@
                   <a class="all-notification <?=$hasNotification>5?'':'d-none'?>" href="#">See all notifications <i class="ti-arrow-right"></i></a>
                 </div>
               </li>
-              <li class="nav-item dropdown header-profile">
-                <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown">
-                  <div class="header-info">
-                    <span>Hello, <strong><?=$_SESSION['ht_name']?></strong></span>
+              <li class="nav-item dropdown header-profile ">
+                <a class="nav-link bg6" href="#" role="button" data-bs-toggle="dropdown">
+                  <div class="header-info  ">
+                    <span class=""><strong><?=$_SESSION['ht_name']?></strong></span>
                   </div>
-                  <img src="images/profile/pic1.jpg" width="20" alt="" />
+                  <img src="images/avatar/1.png" width="20" alt="" />
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
                   <!-- <a href="app-profile.html" class="dropdown-item ai-icon">

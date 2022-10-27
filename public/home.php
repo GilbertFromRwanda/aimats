@@ -15,13 +15,13 @@ include("includes/head.php");
             case 'ADMIN':
              include('./partial/admin_home.php');
               break;
-              case 'INST_ADMIN':
-                include('./partial/inst_home.php');
+              case 'STUDENT':
+                include('./partial/stu_home.php');
                 break;
-                case 'BEN_ADMIN':
-                  include('./partial/ben_home.php');
+                case 'PARTERN':
+                  include('./partial/par_home.php');
                   break;
-                case 'SUP_ADMIN':
+                case 'SUPERVISIOR':
                     include('./partial/sup_home.php');
                     break;
             default:

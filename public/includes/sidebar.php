@@ -1,5 +1,5 @@
 <!-- style="background-color: #2f4cddb3;border-radius: 0px 0px 100px 100px;" -->
-<div class="nav-header" style="background-color: #2f4cddb3;border-radius: 20px 20px;">
+<div class="nav-header bg6">
       <a href="home" class="brand-logo">
       <img class="logo-abbr" src="images/logo.png" alt="">
         <span class="brand-title">AIMATS</span>

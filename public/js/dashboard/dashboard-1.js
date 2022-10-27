@@ -92,6 +92,6 @@ var chartBar = function (ss = [], cats = []) {
   chartBar1.render();
 };
 $(document).ready(() => {
-  chartBar(series, categories);
+  // chartBar(series, categories);
   //   console.log("document is ready");
 });

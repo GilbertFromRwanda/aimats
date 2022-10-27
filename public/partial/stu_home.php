@@ -1,6 +1,6 @@
-
 <div class="col-lg-12">
   <div class="row">
+
     <div class="col-lg-4">
       <div class="widget-stat card ">
         <div class="card-body p-4" onclick="window.location.href='tenders'">
@@ -12,17 +12,17 @@
               <h3 class="mb-0 text-black">
                 <span class="counter ms-0">
                   <?php
-                  $cond = "";
-                  echo 0;
+                  45
                   ?>
                 </span>
               </h3>
-              <p class="mb-0 fs-11"> Internaship Students </p>
+              <p class="mb-0 fs-11"> Days left </p>
             </div>
           </div>
         </div>
       </div>
     </div>
+    
     <div class="col-lg-4">
       <div class="widget-stat card ">
         <div class="card-body p-4">
@@ -32,9 +32,9 @@
             </span>
             <div class="media-body">
               <h3 class="mb-0 text-black">
-                <span class="counter ms-0"><?= 0 ?></span>
+                <span class="counter ms-0"><?= 3 ?></span>
               </h3>
-              <p class="mb-0 fs-11">Students haven't partners </p>
+              <p class="mb-0 fs-11">Unsubmitted daily report </p>
             </div>
           </div>
         </div>
@@ -51,11 +51,11 @@
               <h3 class="mb-0 text-black">
                 <span class="counter ms-0">
                   <?php
-                  echo 0
+                  // "Mucyo ltd | location here"
                   ?>
                 </span>
               </h3>
-              <p class="mb-0 fs-11">Students haven't suppervisior </p>
+              <p class="mb-0 fs-11">My suppervisior </p>
             </div>
           </div>
         </div>
@@ -73,17 +73,15 @@
               <h3 class="mb-0 text-black">
                 <span class="counter ms-0">
                   <?php
-                  echo 0;
                   ?>
                 </span>
               </h3>
-              <p class="mb-0">UnVisited Students</p>
+              <p class="mb-0">Assigned company</p>
             </div>
           </div>
         </div>
       </div>
     </div>
-    
     <div class="col-lg-4">
       <div class="widget-stat card ">
         <div class="card-body p-4">
@@ -95,17 +93,16 @@
               <h3 class="mb-0 text-black">
                 <span class="counter ms-0">
                   <?php
-                   echo 0;
+                   echo "...";
                   ?>
                 </span>
               </h3>
-              <p class="mb-0">Unhappy Students </p>
+              <p class="mb-0">My graded marks </p>
             </div>
           </div>
         </div>
       </div>
     </div>
-  
     <div class="col-lg-4 ">
       <div class="widget-stat card  ">
         <div class="card-body p-4">
@@ -117,11 +114,11 @@
               <h3 class="mb-0 text-black">
                 <span class="counter ms-0">
                   <?php
-                  echo 0;
+                 echo 0;
                   ?>
                 </span>
               </h3>
-              <p class="mb-0 fs-11">Unreported daily report </p>
+              <p class="mb-0 fs-11">Add Remark </p>
             </div>
           </div>
         </div>

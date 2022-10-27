@@ -205,3 +205,88 @@ hr {
 .is_no {
   color: red;
 }
+.pointer {
+  cursor: pointer;
+}
+.bg1 {
+  background: linear-gradient(90deg, rgb(28, 181, 224) 0%, rgb(0, 8, 81) 100%);
+}
+.bg2 {
+  background: linear-gradient(
+    90deg,
+    rgb(158, 189, 19) 0%,
+    rgb(0, 133, 82) 100%
+  );
+}
+.bg3 {
+  background: linear-gradient(
+    90deg,
+    rgb(253, 187, 45) 0%,
+    rgb(58, 28, 113) 100%
+  );
+}
+.bg4 {
+  background: linear-gradient(90deg, rgb(7, 0, 184) 0%, rgb(0, 255, 136) 100%);
+}
+.bg5 {
+  background: linear-gradient(
+    90deg,
+    rgb(213, 51, 105) 0%,
+    rgb(218, 174, 81) 100%
+  );
+}
+.bg6 {
+  background: linear-gradient(
+    209.21deg,
+    rgb(29, 145, 252) 13.57%,
+    rgb(90, 54, 192) 98.38%
+  );
+}
+.bg7 {
+  background: linear-gradient(
+    209.21deg,
+    rgb(101, 187, 118) 13.57%,
+    rgb(70, 111, 171) 98.38%
+  );
+}
+.bg8 {
+  background: linear-gradient(
+    209.21deg,
+    rgb(215, 81, 65) 13.57%,
+    rgb(215, 65, 101) 98.38%
+  );
+}
+.bg9 {
+  background: linear-gradient(
+    209.21deg,
+    rgb(10, 57, 136) 13.57%,
+    rgb(188, 168, 255) 98.38%
+  );
+}
+.bg10 {
+  background: linear-gradient(
+    209.21deg,
+    rgb(210, 145, 255) 13.57%,
+    rgb(31, 0, 64) 98.38%
+  );
+}
+.bg11 {
+  background: linear-gradient(
+    209.21deg,
+    rgb(89, 42, 121) 13.57%,
+    rgb(232, 126, 114) 98.38%
+  );
+}
+.bg12 {
+  background: linear-gradient(
+    209.21deg,
+    rgb(0, 24, 69) 13.57%,
+    rgb(54, 135, 216) 98.38%
+  );
+}
+.fs-12 {
+  font-size: 12px !important;
+}
+.fs-11 {
+  font-size: 11px !important;
+}
