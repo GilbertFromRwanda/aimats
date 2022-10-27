@@ -1,10 +1,10 @@
 <div class="col-lg-12">
   <div class="row">
-    <div class="col-lg-4 pointer">
+  <div class="col-lg-4 pointer">
       <div class="widget-stat card ">
         <div class="card-body p-4" onclick="window.location.href='tenders'">
           <div class="media ai-icon d-flex">
-            <span class="me-3 bgl-primary text-white bg4">
+            <span class="me-3 bgl-primary text-white bg9">
               <i class="flaticon-381-add"></i>
             </span>
             <div class="media-body">
@@ -15,7 +15,28 @@
                   ?>
                 </span>
               </h3>
-              <p class="mb-0 fs-11">Given students </p>
+              <p class="mb-0">Requested students </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 pointer">
+      <div class="widget-stat card ">
+        <div class="card-body p-4" onclick="window.location.href='tenders'">
+          <div class="media ai-icon d-flex">
+            <span class="me-3 bgl-primary text-white bg4">
+              <i class="flaticon-381-user-3"></i>
+            </span>
+            <div class="media-body">
+              <h3 class="mb-0 text-black">
+                <span class="counter ms-0">
+                  <?php
+                  echo 0;
+                  ?>
+                </span>
+              </h3>
+              <p class="mb-0 ">Given students </p>
             </div>
           </div>
         </div>
@@ -34,7 +55,7 @@
                   <?= 0 ?>
               </span>
               </h3>
-              <p class="mb-0 fs-11">Unsubmitted daily report</p>
+              <p class="mb-0 fs-12 ">Unsubmitted daily report</p>
             </div>
           </div>
         </div>
@@ -55,7 +76,7 @@
                   ?>
                 </span>
               </h3>
-              <p class="mb-0 fs-11">Internaship days left </p>
+              <p class="mb-0 ">Internaship days left </p>
             </div>
           </div>
         </div>
@@ -78,6 +99,27 @@
                 </span>
               </h3>
               <p class="mb-0">Ungraded students</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 pointer">
+      <div class="widget-stat card ">
+        <div class="card-body p-4" onclick="window.location.href='tenders'">
+          <div class="media ai-icon d-flex">
+            <span class="me-3 bgl-primary text-white bg11">
+              <i class="flaticon-381-send-2"></i>
+            </span>
+            <div class="media-body">
+              <h3 class="mb-0 text-black">
+                <span class="counter ms-0">
+                  <?php
+                  echo 0;
+                  ?>
+                </span>
+              </h3>
+              <p class="mb-0 =">All Served students </p>
             </div>
           </div>
         </div>

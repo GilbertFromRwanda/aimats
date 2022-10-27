@@ -18,7 +18,7 @@ include("includes/head.php");
               case 'STUDENT':
                 include('./partial/stu_home.php');
                 break;
-                case 'PARTERN':
+                case 'PARTNER':
                   include('./partial/par_home.php');
                   break;
                 case 'SUPERVISIOR':
