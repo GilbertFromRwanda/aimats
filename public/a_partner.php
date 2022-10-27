@@ -7,7 +7,6 @@ include("./includes/head.php");
     <!-- header here -->
     <?php include("./header.php") ?>
     <!-- chatbox here -->
-            
     <div class="content-body">
         <div class="container-fluid">
             <div class="row">
@@ -17,6 +16,7 @@ include("./includes/head.php");
                             <div class="mb-3">
                                 <h4 class="card-title mb-1">
                                     <!-- <button class=" btn btn-outline-primary">Create Menu</button> -->
+                                    <button class=" btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#basicModal">Add New</button>
                                 </h4>                                   
                                 <!-- <small class="mb-0"></small> -->
                             </div>
@@ -24,7 +24,7 @@ include("./includes/head.php");
                                 <ul class="nav nav-tabs" role="tablist">
                                     <li class="nav-item">
                                         <a class="nav-link active" data-bs-toggle="tab" href="#monthly" role="tab">
-                                            LogBook
+                                            All Partners
                                         </a>
                                     </li>
                                 </ul>
@@ -42,35 +42,30 @@ include("./includes/head.php");
                                     <thead>
                                         <tr>
                                         <th class=" fs-13">#</th>
-                                            <th class=" fs-13">Student</th>
-                                            <th class=" fs-13">Description</th>
-                                            <th class=" fs-13">Date</th>
-                                            <th class=" fs-13">Lesson Learnt</th>
-                                            <th class=" fs-13">Challenges</th>
-                                            <th class=" fs-13">Partner Comment</th>
-                                            <th class=" fs-13">Supervisor Comment</th>
+                                            <th class=" fs-13">Names</th>
+                                            <th class=" fs-13">Email</th>
+                                            <th class=" fs-13">Place</th>
+                                            <th class=" fs-13">Phone</th>
+                                            <th class=" fs-13">TIN Number</th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody class=" fs-12">
                                         <?php
-                                        
-                                        $user_id=$_SESSION['ht_userId'];
-                                        // $lists=$database->fetch("SELECT * FROM a_student_logbook  where suppervisor_id ='{$user_id}' order by id desc");
-                                            $lists=$database->fetch("SELECT al.*,st.first_name,st.last_name FROM a_student_logbook as al INNER JOIN a_student_tb as st WHERE st.id=al.student_id and al.suppervisor_id ='{$user_id}'");
+                                        $ins=$_SESSION['ht_hotel'];
+                                        $lists=$database->fetch("SELECT * FROM a_partner_tb   order by id desc");
                                         $i=0;
                                         foreach ($lists as $key => $h) {
                                             $i++;
                                             ?>
                                             <tr>
                                             <td><?= $i?></td>
-                                                <td  ><span class=" pointer"><?= $h['first_name']." ".$h['last_name'] ?></span></td>
                                                 <td class=" text-capitalize"><?= $h['name'] ?></td>
-                                                <td class=""><?= $h['created_at'] ?></td>
-                                                <td class=""><?= $h['objective'] ?></td>
-                                                <td class=""><?= $h['challenges'] ?></td>
-                                                <td class=""><?= $h['partner_comment'] ?></td>
-                                                <td class="" id="sup<?=$h['id']?>"><?= $h['suppervisior_comment'] ?></td>
+                                                <td class=""><?= $h['email'] ?></td>
+                                                <td class=""><?= $h['place'] ?></td>
+                                                <td class=""><?= $h['phone'] ?></td>
+                                                <td class=""><?= $h['tin'] ?></td>
+                                                
                                                 <td>
                                                     <div class="dropdown ms-auto text-right">
                                                         <div class="btn-link" data-bs-toggle="dropdown">
@@ -84,7 +79,7 @@ include("./includes/head.php");
                                                             </svg>
                                                         </div>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            <a class="dropdown-item" href="#"  onclick="openStudentPartner(<?php echo htmlspecialchars(json_encode($h))?>);"><i class="las la-check-square scale5 text-primary me-2"></i> Edit</a>
+                                                            <a class="dropdown-item" href="#"><i class="las la-check-square scale5 text-primary me-2"></i> Edit</a>
                                                             <!-- <a class="dropdown-item" href="#"><i class="las la-times-circle scale5 text-danger me-2"></i> Reject Order</a> -->
                                                         </div>
                                                     </div>
@@ -94,7 +89,6 @@ include("./includes/head.php");
                                         ?>
                                     </tbody>
                                 </table>
-
                             </div>
                 </div>
                 </div>
@@ -103,57 +97,56 @@ include("./includes/head.php");
         </div>
     </div>
         <!-- modal -->
-                                               
-       
         <div class="modal fade bd-example-modal-lg" id="basicModal" tabindex="-1" role="dialog" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="title">Add Daily Activity</h5>
+                    <h5 class="modal-title">Add New Partner</h5>
                     <span class="  close"> <span class=" fa fa-times " data-bs-dismiss="modal"></span></span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="form" method="post">
-                    <div class="col-lg-6">
-                               
-                        </div>
-                      
+                    <form id="form">
                     <div class="row">
-                        
-
-                            
-                    <div class="col-lg-12">
+                       
                     
+                        <div class="col-lg-12">
                             <div class="mb-3">
-                                <label for="menu_type" class="text-black form-label">Description <span class="required text-danger">*</span></label>
-                                <input type="text"  name="description" value="" id="description" class=" form-control text-uppercase" readonly/>
-                                <input type="hidden" name="action" value="ADD_COMMENT"/>
-                                <input type="hidden" name="row_id" value="" id="studentId"/>           
-                            
+                                <label for="menu_type" class="text-black form-label">Name <span class="required text-danger">*</span></label>
+                                <input type="text"  name="name" placeholder="Eg:UR" class=" form-control text-uppercase"/>
+                                <input type="hidden" name="action" value="ADD_PARTNER"/>
+                            </div>
+                        </div> 
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="menu_type" class="text-black form-label">Email<span class="required text-danger">*</span></label>
+                                <input type="email"  name="email" placeholder="Eg:UR@company.net" class=" form-control text-uppercase"/>
+                                <!-- <input type="hidden" name="action" value="ADD_SUPERVISOR"/> -->
                             </div>
                         </div>
-                        
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
                             <div class="mb-3">
-                                <label for="menu_type" class="text-black form-label">Lessons Learnt <span class="required text-danger">*</span></label>
-                                <input type="text" id="lesson"  name="lesson" value="" class=" form-control text-uppercase" readonly/>
-                                <!-- <input type="hidden" name="lesson" value="CREATE_NEW_BEN"/> -->
+                                <label for="menu_type" class="text-black form-label">Place <span class="required text-danger">*</span></label>
+                                <input  type="text" name="place" placeholder="Eg:KIGALI" class=" form-control"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="menu_type" class="text-black form-label">Contact Phone <span class="required text-danger">*</span></label>
+                                <input  type="number" name="phone"  onkeypress="limitKeypress(event,this.value,10)" placeholder="Eg:0789000000" class=" form-control"/>
+                            </div>
+                        </div> 
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="menu_type" class="text-black form-label">TIN Number<span class="required text-danger">*</span></label>
+                                <input  type="number" name="tin"   placeholder="Eg:12800000" class=" form-control"/>
                             </div>
                         </div> 
                         <div class="col-lg-12">
                             <div class="mb-3">
-                                <label for="menu_type" class="text-black form-label">Challenges Faced <span class="required text-danger">*</span></label>
-                                <input type="text" id="challenge" name="challenge" value="" class=" form-control text-uppercase" readonly/>
-                                <!-- <input type="hidden" name="challenge" value="CREATE_NEW_BEN"/> -->
-                            </div>
-                        </div> 
-                     
-                        <div class="col-lg-12">
-                            <div class="mb-3">
-                                <label for="menu_type" class="text-black form-label">Supervisor Comment <span class="required text-danger">*</span></label>
-                                <textarea  name="sp_comment" id="sp_comment" placeholder="Eg:Great.." class=" form-control text-uppercase"></textarea>
-                                <!-- <input type="hidden" name="lesson" value="CREATE_NEW_BEN"/> -->
+                                <label for="menu_type" class="text-black form-label">C Profile <span class="required text-danger">*</span></label>
+                                <textarea type="text"  name="profile" placeholder="Eg:Bio" class=" form-control "></textarea>
+                                
                             </div>
                         </div>
                         <div class="col-12">
@@ -164,7 +157,7 @@ include("./includes/head.php");
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary btnlog" name="logbook" onclick="return onLogBookSubmit()">Save</button>
+                    <button type="button" class="btn btn-primary" onclick=" return onSupervisorAdd()">Save</button>
                 </div>
             </div>
         </div>
@@ -172,59 +165,29 @@ include("./includes/head.php");
     <!-- end of modal -->
     <!-- include footer -->
     <?php include_once("./footer.php") ?>
+
     <script>
-        var selectedStudent=null;
-        function onLogBookSubmit(){
-        //  let formdData=document.getElementById("form");
-        $(".btnlog").attr("disabled","disabled");
-         let formData=$("#form").serialize();
-         let comment=$("#sp_comment").val();
-        //   let  formData2 = $(#from).serialize();
-                // console.log(formData);
-                // return;
-         fetch(`ajax_pages/logbook?${formData}`).then((res)=>res.text()).then((data)=>{
-            // $(".btnlog").removeClass("d-none");
-        $(".btnlog").removeAttr("disabled");
+        function onSupervisorAdd(){
+
+        let formData=$("#form").serialize();
+        console.log(formData);
+        fetch(`ajax_pages/partner?${formData}`).then((res)=>res.text()).then((data)=>{
+           
             try {
-               let json=JSON.parse(data);
-               console.log(json);
-              if(json.isOk){
-                alert("Data was saved");
-                $(`#sup${selectedStudent.id}`).text(comment);
-                // $("#basicModal").hide("d-none");
-                window.location.reload();
-              }else{
-                console.log(json.data);
-                alert(json.data);
-              }
+                let json=JSON.parse(data);
+                if (json.isOk) {
+                    alert("Data was Saved");
+                    window.location.reload();
+                } else {
+                    alert(json.data);
+                }       
+                
             } catch (error) {
                 alert(data);
             }
-         })  
+        });
+        return
+
         }
 
-
-        function openStudentPartner(student){
-            selectedStudent=student;
-            console.log(selectedStudent);
-            $("#studentId").val(selectedStudent.id);
-            $("#challenge").val(student.challenges);
-            $("#sp_comment").val(student.suppervisior_comment);
-            $("#description").val(student.name);
-            $("#lesson").val(student.objective);
-            $("#title").text("Add comment as Supervisor");
-                $("#basicModal").modal("show");
-                $(".mydv").addClass("d-none");
-                $(".divStudent").removeClass("d-none");
-                // let names=student.card_id+" - "+student.first_name+" "+student.last_name;
-                // $("#names").val(names);
-                // $("#majorIn").val(student.major_in);
-                // $("#sSuppervisior").html('');
-                //  append suppervisiors
-                
-        }
     </script>
-    
-
-
-   

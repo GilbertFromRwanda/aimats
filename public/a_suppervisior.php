@@ -98,40 +98,24 @@ include("./includes/head.php");
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add New benificiare</h5>
+                    <h5 class="modal-title">Add New Supervisor</h5>
                     <span class="  close"> <span class=" fa fa-times " data-bs-dismiss="modal"></span></span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <form id="form">
                     <div class="row">
-                        <?php if($level=="ADMIN") { ?>
-                    <div class="col-lg-12">
-                            <div class="mb-3">
-                                <label for="menu_type" class="text-black form-label">institition <span class="required text-danger">*</span></label>
-                                                            <select type="text" class="form-control" value="" name="institition" id="insti">
-                                                            <option value="" disabled selected>__select__</option>
-                                                            <?php 
-                                                                $lists=$database->fetch("SELECT id,name from institition_tb order by id desc");
-                                                                foreach ($lists as $key => $h) {
-                                                                ?>    
-                                                                <option value="<?=$h['id']?>"><?=$h['name']?></option>
-                                                                <?php }?>
-                                                            </select>
-                            
-                            </div>
-                        </div>
-                        <?php } ?>
+                
                         <div class="col-lg-12">
                             <div class="mb-3">
                                 <label for="menu_type" class="text-black form-label">Name <span class="required text-danger">*</span></label>
                                 <input type="text"  name="name" placeholder="Eg:UR" class=" form-control text-uppercase"/>
-                                <input type="hidden" name="action" value="CREATE_NEW_BEN"/>
+                                <input type="hidden" name="action" value="ADD_SUPERVISOR"/>
                             </div>
                         </div> 
                         <div class="col-lg-6">
                             <div class="mb-3">
-                                <label for="menu_type" class="text-black form-label">Contact Email <span class="required text-danger">*</span></label>
+                                <label for="menu_type" class="text-black form-label">Email <span class="required text-danger">*</span></label>
                                 <input  type="email" name="email"  class=" form-control"/>
                             </div>
                         </div>
@@ -141,6 +125,42 @@ include("./includes/head.php");
                                 <input  type="number" name="phone"  onkeypress="limitKeypress(event,this.value,10)" placeholder="Eg:0789000000" class=" form-control"/>
                             </div>
                         </div> 
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="menu_type" class="text-black form-label">Gender <span class="required text-danger">*</span></label>
+                                <select type="text" class="form-control" name="gender" >
+                                    <option value="" disabled selected>__select__</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                                <!-- <input  type="text" name="gender"  class=" form-control"/> -->
+                            </div>
+                        </div> 
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="menu_type" class="text-black form-label">Department <span class="required text-danger">*</span></label>
+                                <select type="text" class="form-control" name="department" >
+                                    <option value="" disabled selected>__select__</option>
+                                    <option value="IT">IT</option>
+                                    <option value="BUSINESS">BUSINESS</option>
+                                    <option value="THEOLOGY">THEOLOGY</option>
+                                    <option value="HEALTH SCIENCE">HEALTH SCIENCE</option>
+                                </select>
+                               
+                            </div>
+                        </div> 
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="menu_type" class="text-black form-label">Username <span class="required text-danger">*</span></label>
+                                <input  type="text" name="username"  class=" form-control"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="menu_type" class="text-black form-label">Password <span class="required text-danger">*</span></label>
+                                <input  type="password" name="password"  class=" form-control"/>
+                            </div>
+                        </div>
                         <div class="col-12">
                             <div id="ajaxresults"></div>
                         </div>
@@ -149,7 +169,7 @@ include("./includes/head.php");
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="onBenCreated(this)">Save</button>
+                    <button type="button" class="btn btn-primary" onclick=" return onSupervisorAdd()">Save</button>
                 </div>
             </div>
         </div>
@@ -157,3 +177,29 @@ include("./includes/head.php");
     <!-- end of modal -->
     <!-- include footer -->
     <?php include_once("./footer.php") ?>
+
+    <script>
+        function onSupervisorAdd(){
+
+        let formData=$("#form").serialize();
+        // console.log(formData);
+        fetch(`ajax_pages/suppervisior?${formData}`).then((res)=>res.text()).then((data)=>{
+            try {
+               let json=JSON.parse(data);
+               console.log(json.data);
+              if(json.isOk){
+                alert("Data was saved");
+                window.location.reload();
+              }else{
+                // console.log(json.data);
+                alert(json.data);
+              }
+            } catch (error) {
+                alert(data);
+            }
+        });
+        return
+
+        }
+
+    </script>

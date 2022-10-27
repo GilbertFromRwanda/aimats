@@ -57,7 +57,7 @@ include("./includes/head.php");
                                         
                                         $user_id=$_SESSION['ht_userId'];
                                         // $lists=$database->fetch("SELECT * FROM a_student_logbook  where suppervisor_id ='{$user_id}' order by id desc");
-                                            $lists=$database->fetch("SELECT al.*,st.first_name,st.last_name FROM a_student_logbook as al INNER JOIN a_student_tb as st WHERE st.id=al.student_id and al.suppervisor_id ='{$user_id}'");
+                                            $lists=$database->fetch("SELECT al.*,st.first_name,st.last_name FROM a_student_logbook as al INNER JOIN a_student_tb as st WHERE st.id=al.student_id and al.partner_id ='{$user_id}'");
                                         $i=0;
                                         foreach ($lists as $key => $h) {
                                             $i++;
@@ -128,7 +128,7 @@ include("./includes/head.php");
                             <div class="mb-3">
                                 <label for="menu_type" class="text-black form-label">Description <span class="required text-danger">*</span></label>
                                 <input type="text"  name="description" value="" id="description" class=" form-control text-uppercase" readonly/>
-                                <input type="hidden" name="action" value="ADD_COMMENT"/>
+                                <input type="hidden" name="action" value="ADD_PARTNERCOMMENT"/>
                                 <input type="hidden" name="row_id" value="" id="studentId"/>           
                             
                             </div>
@@ -151,8 +151,8 @@ include("./includes/head.php");
                      
                         <div class="col-lg-12">
                             <div class="mb-3">
-                                <label for="menu_type" class="text-black form-label">Supervisor Comment <span class="required text-danger">*</span></label>
-                                <textarea  name="sp_comment" id="sp_comment" placeholder="Eg:Great.." class=" form-control text-uppercase"></textarea>
+                                <label for="menu_type" class="text-black form-label">Partner Comment <span class="required text-danger">*</span></label>
+                                <textarea  name="p_comment" id="p_comment" placeholder="Eg:Great.." class=" form-control text-uppercase"></textarea>
                                 <!-- <input type="hidden" name="lesson" value="CREATE_NEW_BEN"/> -->
                             </div>
                         </div>
@@ -209,10 +209,10 @@ include("./includes/head.php");
             console.log(selectedStudent);
             $("#studentId").val(selectedStudent.id);
             $("#challenge").val(student.challenges);
-            $("#sp_comment").val(student.suppervisior_comment);
+            $("#p_comment").val(student.partner_comment);
             $("#description").val(student.name);
             $("#lesson").val(student.objective);
-            $("#title").text("Add comment as Supervisor");
+            $("#title").text("Add comment as Partner");
                 $("#basicModal").modal("show");
                 $(".mydv").addClass("d-none");
                 $(".divStudent").removeClass("d-none");

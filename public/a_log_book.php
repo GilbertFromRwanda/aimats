@@ -17,7 +17,7 @@ include("./includes/head.php");
                             <div class="mb-3">
                                 <h4 class="card-title mb-1">
                                     <!-- <button class=" btn btn-outline-primary">Create Menu</button> -->
-                                    <button class=" btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#basicModal">Add New</button>
+                                    <button class=" btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#basicModal">Add Daily Activity</button>
                                 </h4>                                   
                                 <!-- <small class="mb-0"></small> -->
                             </div>
@@ -39,6 +39,9 @@ include("./includes/head.php");
                 <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
+
+
+                   
                                 <table id="example"  class="display" style="min-width: 845px">
                                     <thead>
                                         <tr>
@@ -54,8 +57,8 @@ include("./includes/head.php");
                                     </thead>
                                     <tbody class=" fs-12">
                                         <?php
-                                        $ins=$_SESSION['ht_hotel'];
-                                        $lists=$database->fetch("SELECT * FROM a_student_logbook  order by id desc");
+                                        $user_id=$_SESSION['ht_userId'];
+                                        $lists=$database->fetch("SELECT * FROM a_student_logbook  where student_id ='{$user_id}' order by id desc");
                                         $i=0;
                                         foreach ($lists as $key => $h) {
                                             $i++;
@@ -102,10 +105,6 @@ include("./includes/head.php");
                                     foreach ($lists as $key => $h) {
                                         $i++;
                                         ?>
-        
-
-
-
 
                             </div>
                 </div>
@@ -162,9 +161,8 @@ include("./includes/head.php");
                                 <!-- <input type="hidden" name="challenge" value="CREATE_NEW_BEN"/> -->
                             </div>
                         </div> 
-                     
+                      
                        
-                        
                         <div class="col-12">
                             <div id="ajaxresults"></div>
                         </div>

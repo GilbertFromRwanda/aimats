@@ -16,8 +16,7 @@ switch ($action) {
         }
     echo json_encode(["isOk"=>true,
     "data"=>["suppervisiors"=>$database->fetch("SELECT * from a_suppervisior_tb where status='active'"),
-    "partners"=>[]]]); 
-    // $database->fetch("SELECT * from a_partner_tb where is_active='yes'")
+    "partners"=>$database->fetch("SELECT * from a_partner_tb where is_active='yes'")]]); 
     break;
     case 'ASSSIGN_SUPPERVISIOR_PARTNER_TO_STUDENT':
         // get hote code,Ymd
@@ -36,10 +35,6 @@ switch ($action) {
         $partner=input::get("p");
         $student=input::get("student");
         $suppervisior=input::get("s");
-        $oldPartiner=input::get("op");
-        $oldSuperVisior=input::get("osup");
-        $i=input::get("inter");
-        $major=input::get("major");
         if(!is_numeric($partner) || !is_numeric($suppervisior)){
             echo json_encode(["isOk"=>false,"data"=>" partner or suppervisior is invalid"]);
             exit(0);
@@ -52,24 +47,7 @@ switch ($action) {
            $isUpdated=$database->update("a_student_tb","id=$student",
            ["partner_id"=>$partner,"suppervisior_id"=>$suppervisior,"updated_at"=>date('Y-m-d h:i:s')]);
            if($isUpdated){
-            // update taken 
-            // update partner request
-         if($partner!=$oldPartiner){
-           $uQuery="UPDATE a_partner_student_request SET given_student_number=given_student_number+1 WHERE partner_id=$partner AND internaship_id=$i AND major_in='$major'";
-           $database->query($uQuery);
-           $update2="UPDATE a_partner_student_request_totals SET given_student=given_student+1 WHERE partner_id=$partner AND internaship_id=$i ";
-           $database->query($update2);
-        //    $database->query("UPDATE a_internaship_periode SET taken_student=taken_student+1 WHERE id=$i");
-          }
-          if(is_numeric($oldPartiner) && $partner!=$oldPartiner){
-            // remove student from old partiner
-            $uQuery="UPDATE a_partner_student_request SET given_student_number=given_student_number-1 WHERE partner_id=$oldPartiner AND internaship_id=$i AND major_in='$major' AND given_student_number>0";
-            $database->query($uQuery);
-            $update2="UPDATE a_partner_student_request_totals SET given_student=given_student-1 WHERE partner_id=$oldPartiner AND internaship_id=$i AND given_student>0 ";
-            $database->query($update2); 
-        }  
-        // $database->query($update2);
-           echo json_encode(["isOk"=>true,"data"=>$isUpdated]);
+            echo json_encode(["isOk"=>true,"data"=>$isUpdated]);
             exit(0);
            }
            throw new Exception("unable to update please try again", 1);
@@ -77,8 +55,47 @@ switch ($action) {
         } catch (\Exception $e) {
             echo json_encode(["isOk"=>false,"data"=>$e->getMessage()]);
         }
-
         break;
+
+        case 'ADD_SUPERVISOR':
+            $val=new validate();
+            $val->check($_GET,[
+                "department"=>['required'=>true],
+                "phone"=>['required'=>true],
+                "email"=>['required'=>true],
+                "name"=>['required'=>true],
+                "gender"=>['required'=>true],
+                // "password"=>['required'=>true],
+                
+                // "username"=>['required'=>true]
+            ]);
+            if(!$val->passed()){
+                echo json_encode(["isOk"=>false,"data"=>implode(',',$val->errors())]);
+                exit(0);
+            }
+            $name=input::get("name");
+            $department=input::get("department");
+            $email=input::get("email");
+            $phone=input::get("phone");
+            $gender=input::get("gender");
+            $password=input::getHash($_POST["password"]);
+            $username=input::get("username");
+            $userId=$_SESSION['ht_userId'];
+            $supquery="INSERT INTO `a_suppervisior_tb` (`names`, `gender`, `department`, `email`, `phone`) VALUES ('{$name}', '{$gender}', '{$department}', '{$email}', '{$phone}')";
+            $userquery="INSERT INTO `a_users` (`names`, `username`, `phone`, `secret`, `level`) VALUES ('{$name}', '{$username}', '{$phone}', '{$password}', 'SUPERVISIOR')";
+
+            $iscreated=$database->query($supquery);
+            $iscreated=$database->query($userquery);
+            if($iscreated){
+                echo json_encode(["isOk"=>true,"data"=>"Data Saved"]); 
+                exit(0);
+            }
+            echo json_encode(["isOk"=>false,"data"=>"Data was not saved"]);
+            
+                                
+        break;
+
+      
     default:
         echo json_encode(["isOk"=>false,"data"=>"action".$action.'  not found']);
         break;
