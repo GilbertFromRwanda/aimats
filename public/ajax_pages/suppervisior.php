@@ -35,17 +35,23 @@ switch ($action) {
         $partner=input::get("p");
         $student=input::get("student");
         $suppervisior=input::get("s");
-        if(!is_numeric($partner) || !is_numeric($suppervisior)){
+        if(!is_numeric($partner) && !is_numeric($suppervisior)){
             echo json_encode(["isOk"=>false,"data"=>" partner or suppervisior is invalid"]);
             exit(0);
+        }
+        $formData= ["partner_id"=>$partner,"suppervisior_id"=>$suppervisior,"updated_at"=>date('Y-m-d h:i:s')];
+        if(!is_numeric($partner)){
+            unset($formData["partner_id"]);
+        }
+        if(!is_numeric($suppervisior)){
+            unset($formData["suppervisior_id"]);
         }
         if($today>=$iDate){
             echo json_encode(["isOk"=>false,"data"=>"you are not allowed to change partner or suppervisior because internaship date was expired"]);
             exit(0);
         }
         try {
-           $isUpdated=$database->update("a_student_tb","id=$student",
-           ["partner_id"=>$partner,"suppervisior_id"=>$suppervisior,"updated_at"=>date('Y-m-d h:i:s')]);
+           $isUpdated=$database->update("a_student_tb","id=$student",$formData);
            if($isUpdated){
             echo json_encode(["isOk"=>true,"data"=>$isUpdated]);
             exit(0);

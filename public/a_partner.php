@@ -53,7 +53,7 @@ include("./includes/head.php");
                                     <tbody class=" fs-12">
                                         <?php
                                         $ins=$_SESSION['ht_hotel'];
-                                        $lists=$database->fetch("SELECT * FROM a_partner_tb   order by id desc");
+                                        $lists=$database->fetch("SELECT * FROM a_partner_tb where is_active='yes'  order by id desc");
                                         $i=0;
                                         foreach ($lists as $key => $h) {
                                             $i++;

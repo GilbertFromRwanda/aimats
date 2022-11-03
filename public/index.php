@@ -55,6 +55,7 @@ if(isset($_SESSION['ht_userId'])){
   </style>
 </head>
 <body class="h-100 mybg">
+
 <script type="text/javascript">
     NProgress.configure({
       showSpinner: false

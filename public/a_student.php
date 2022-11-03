@@ -66,16 +66,22 @@ if (isset($_GET['n'])) {
                                         </tr>
                                     </thead>
                                     <tbody class=" fs-12">
-                                    <?php $currentIntern=$database->get("*","a_internaship_periode","status='activated'"); ?>
+                                    <?php $currentIntern=$cIntern ?>
                                         <?php
-                                            $cond="";
+                                            $cond="where 1 ";
                                             if(isset($_GET['d'])){
                                                 $cond="where id={$_GET['d']}";
                                             } else if(isset($_GET['view'])){
                                                 if(isset($currentIntern->id))$cond="where internaship_periode_id !={$currentIntern->id} order by id desc limit 50";
                                             }
-                                          
-                                        $lists=$database->fetch("SELECT * FROM a_student_tb $cond ");
+                                            $status=input::get("status");
+                                            if($status=="no_suppervisior"){
+                                                $cond.=" AND suppervisior_id  IS NULL";
+                                            }else if($status=="no_partner"){
+                                                $cond.=" AND partner_id  IS NULL";
+                                            }
+                                        //   var_dump("SELECT * FROM a_student_tb $cond");
+                                        $lists=$database->fetch("SELECT * FROM a_student_tb $cond");
                                         $i=0;
                                         $inters=[];
                                         $partners=[];

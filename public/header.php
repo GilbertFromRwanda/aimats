@@ -1,4 +1,8 @@
-
+<?php $cIntern=$database->get("*","a_internaship_periode","status='activated'");
+  if(!isset($cIntern->id)){
+    $cIntern=$database->get("*","a_internaship_periode","order by id desc"); 
+  }
+?>
 
         <div class="header">
       <div class="header-content">
@@ -58,6 +62,7 @@
                       </li>
                         <?php }
                       }
+                      
                       ?>
                     </ul>
                   </div>

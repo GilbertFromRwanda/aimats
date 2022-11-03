@@ -1,9 +1,10 @@
-
+<?php 
+?>
 <div class="col-lg-12">
   <div class="row">
     <div class="col-lg-4 pointer">
       <div class="widget-stat card ">
-        <div class="card-body p-4" onclick="window.location.href='tenders'">
+        <div class="card-body p-4" onclick="window.location.href='a_student'">
           <div class="media ai-icon d-flex">
             <span class="me-3 bgl-primary text-white bg4">
               <i class="flaticon-381-add"></i>
@@ -12,18 +13,39 @@
               <h3 class="mb-0 text-black">
                 <span class="counter ms-0">
                   <?php
-                  $cond = "";
-                  echo 0;
+                 echo $database->count_all("a_student_tb where internaship_periode_id='{$cIntern->id}'");
                   ?>
                 </span>
               </h3>
-              <p class="mb-0 fs-11"> Internaship Students </p>
+              <p class="mb-0 fs-12"> Internaship Students </p>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-lg-4 pointer">
+    <div class="col-lg-4 pointer" onclick="window.location.href='a_student?status=no_happy'">
+      <div class="widget-stat card ">
+        <div class="card-body p-4">
+          <div class="media ai-icon d-flex">
+            <span class="me-3 bgl-primary text-white bg2">
+              <i class="flaticon-381-bookmark"></i>
+            </span>
+            <div class="media-body">
+              <h3 class="mb-0 text-black">
+                <span class="counter ms-0">
+                  <?php
+                   echo 0;
+                  ?>
+                </span>
+              </h3>
+              <p class="mb-0 fs-11"> Requested Students for Internaship </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="col-lg-4 pointer" onclick="window.location.href='a_student?status=no_partner'">
       <div class="widget-stat card ">
         <div class="card-body p-4">
           <div class="media ai-icon d-flex">
@@ -32,15 +54,19 @@
             </span>
             <div class="media-body">
               <h3 class="mb-0 text-black">
-                <span class="counter ms-0"><?= 0 ?></span>
+                <span class="counter ms-0">
+                  <?php 
+                   echo $database->count_all("a_student_tb where internaship_periode_id='{$cIntern->id}' AND partner_id IS NULL");
+                  ?>
+                </span>
               </h3>
-              <p class="mb-0 fs-11">Students haven't partners </p>
+              <p class="mb-0 fs-12">Students haven't partners </p>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-lg-4 pointer">
+    <div class="col-lg-4 pointer" onclick="window.location.href='a_student?status=no_suppervisior'">
       <div class="widget-stat card ">
         <div class="card-body p-4">
           <div class="media ai-icon d-flex">
@@ -50,12 +76,12 @@
             <div class="media-body">
               <h3 class="mb-0 text-black">
                 <span class="counter ms-0">
-                  <?php
-                  echo 0
+                <?php 
+                   echo $database->count_all("a_student_tb where internaship_periode_id='{$cIntern->id}' AND suppervisior_id  IS NULL");
                   ?>
                 </span>
               </h3>
-              <p class="mb-0 fs-11">Students haven't suppervisior </p>
+              <p class="mb-0 fs-12">Students haven't suppervisior </p>
             </div>
           </div>
         </div>
@@ -71,7 +97,7 @@
             </span>
             <div class="media-body">
               <h3 class="mb-0 text-black">
-                <span class="counter ms-0">
+                <span class="counter ms-0" onclick="window.location.href='a_student?status=no_visit'">
                   <?php
                   echo 0;
                   ?>
@@ -84,29 +110,8 @@
       </div>
     </div>
     
-    <div class="col-lg-4 pointer">
-      <div class="widget-stat card ">
-        <div class="card-body p-4">
-          <div class="media ai-icon d-flex">
-            <span class="me-3 bgl-primary text-white bg2">
-              <i class="flaticon-381-bookmark"></i>
-            </span>
-            <div class="media-body">
-              <h3 class="mb-0 text-black">
-                <span class="counter ms-0">
-                  <?php
-                   echo 0;
-                  ?>
-                </span>
-              </h3>
-              <p class="mb-0">Unhappy Students </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   
-    <div class="col-lg-4 pointer ">
+    <div class="col-lg-4 pointer" onclick="window.location.href='a_student?status=no_daily'">
       <div class="widget-stat card  ">
         <div class="card-body p-4">
           <div class="media ai-icon d-flex">
@@ -121,14 +126,14 @@
                   ?>
                 </span>
               </h3>
-              <p class="mb-0 fs-11">Unreported daily report </p>
+              <p class="mb-0 fs-12">Unreported daily report </p>
             </div>
           </div>
         </div>
       </div>
     </div>
       
-    <div class="col-lg-4 pointer ">
+    <div class="col-lg-4 pointer" onclick="window.location.href='a_partner'">
       <div class="widget-stat card  ">
         <div class="card-body p-4">
           <div class="media ai-icon d-flex">
@@ -139,17 +144,17 @@
               <h3 class="mb-0 text-black">
                 <span class="counter ms-0">
                   <?php
-                  echo 0;
+                  echo $database->count_all("a_partner_tb where is_active='yes'")
                   ?>
                 </span>
               </h3>
-              <p class="mb-0 fs-11">All Partners </p>
+              <p class="mb-0 fs-12">All Partners </p>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-lg-4 pointer ">
+    <div class="col-lg-4 pointer" onclick="window.location.href='a_partner'" >
       <div class="widget-stat card  ">
         <div class="card-body p-4">
           <div class="media ai-icon d-flex">
@@ -164,7 +169,7 @@
                   ?>
                 </span>
               </h3>
-              <p class="mb-0 fs-11">Partners Request </p>
+              <p class="mb-0 fs-12">Partners Request </p>
             </div>
           </div>
         </div>
@@ -185,7 +190,7 @@
                   ?>
                 </span>
               </h3>
-              <p class="mb-0 fs-11">Suppervisiors </p>
+              <p class="mb-0 fs-12">Suppervisiors </p>
             </div>
           </div>
         </div>
