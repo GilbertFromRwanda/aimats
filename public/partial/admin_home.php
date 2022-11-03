@@ -34,7 +34,7 @@
               <h3 class="mb-0 text-black">
                 <span class="counter ms-0">
                   <?php
-                   echo 0;
+                   echo $database->get("SUM(requested_student) as total","a_partner_student_request_totals","internaship_id='{$cIntern->id}'")->total;
                   ?>
                 </span>
               </h3>
@@ -154,7 +154,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-4 pointer" onclick="window.location.href='a_partner'" >
+    <div class="col-lg-4 pointer" onclick="window.location.href='a_internaship'" >
       <div class="widget-stat card  ">
         <div class="card-body p-4">
           <div class="media ai-icon d-flex">
@@ -163,13 +163,14 @@
             </span>
             <div class="media-body">
               <h3 class="mb-0 text-black">
-                <span class="counter ms-0">
+                <span class="counter ms-0 fs-12">
                   <?php
-                  echo 0;
+                  $today=date('Y-m-d');
+                
                   ?>
                 </span>
               </h3>
-              <p class="mb-0 fs-12">Partners Request </p>
+              <p class="mb-0 "><?=   input::getRemainingDateTime($today,$cIntern->end_date) .'   days left';?> </p>
             </div>
           </div>
         </div>
@@ -186,7 +187,7 @@
               <h3 class="mb-0 text-black">
                 <span class="counter ms-0">
                   <?php
-                  echo 0;
+                echo $database->count_all("a_suppervisior_tb where status='active'")
                   ?>
                 </span>
               </h3>

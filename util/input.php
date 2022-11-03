@@ -191,4 +191,12 @@ public static function extractNumbers($string){
 	return $int;
 	// return preg_replace('/[^0-9]/', '', $string);
 }
+//  remaining datetime
+public static function getRemainingDateTime($dt1,$dt2,$ft="%a"){
+	$date1 = new DateTime($dt1);  //current date or any date
+	$date2 = new DateTime($dt2);   //Future date
+	$diff = $date2->diff($date1)->format($ft);  //find difference
+	$days = intval($diff);   //rounding days
+	echo $days;
+}
 }

@@ -68,7 +68,7 @@ include("./includes/head.php");
                                             $req=0;
                                             if(isset($requested->nb)) $req=$requested->nb;
                                             ?>
-                                            <tr>
+                                            <tr> 
                                             <td><?= $i?></td>
                                     <td class=" text-capitalize"><?=$m['major_in']?></td>
                                     <td><?=$m['total']?></td>
