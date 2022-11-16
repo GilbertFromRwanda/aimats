@@ -77,7 +77,7 @@ if (isset($_GET['n'])) {
                 }
                 if(isset($_GET['d'])){
                     // get one students
-                    $cond="where st.card_id={$_GET['d']}";
+                    $cond="where st.id={$_GET['d']}";
                 }
                 $query="SELECT st.* $column FROM a_student_tb st $cond";
     
@@ -137,7 +137,7 @@ if (isset($_GET['n'])) {
                                                             </svg>
                                                         </div>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            <?php if($level=="PARTERN"): ?>
+                                                            <?php if($level=="PARTNER"): ?>
                                                             <a class="dropdown-item" href="#" onclick="openStudentPartner(<?php echo htmlspecialchars(json_encode($h))?>,'ADD_GRADE');">
                                                             <i class="las la-check-square scale5 text-primary me-2"></i> Add Grade</a>
                                                             <?php endif ?>
