@@ -1,5 +1,10 @@
 <?php
 include("includes/head.php");
+if (isset($_GET['n'])) {
+  $id = $_GET['n'];
+  $idDec=input::enc_dec("d",$id);
+  $database->query("DELETE FROM notifications_tb where id=$idDec");
+}
 ?>
 
 <div id="main-wrapper">

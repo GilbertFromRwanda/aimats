@@ -46,6 +46,7 @@ const sendWithAjax = async (inputData, url = "users") => {
     return {
       isOk: true,
       data: content.data,
+      extra: content,
     };
   }
   return {

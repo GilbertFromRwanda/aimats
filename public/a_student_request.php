@@ -1,17 +1,22 @@
 <?php
 // require_once("../config/grobals.php");
 include("./includes/head.php");
+if(session::get("is_active")!='yes' && $level=='PARTERN'){
+    echo "Unautorized <span >Redirecting ...</span>";
+    echo '<meta http-equiv="refresh" content="1;url=./home">';
+    exit(0);
+}
 ?>
 <div id="main-wrapper">
     <?php include("./includes/sidebar.php") ?>
     <!-- header here -->
     <?php include("./header.php") ?>
     <?php
-    $currentIntern=$database->get("*","a_internaship_periode","status='activated'");
+    $currentIntern=$cIntern;
     $studentNumbers=0;
     $given=0;
     $requested=0;
-    $userID=$_SESSION['ht_userId'];
+    $userID=$_SESSION['ht_hotel'];
     if(isset($currentIntern->id)){
     $studentNumbers=$database->count_all("a_student_tb where internaship_periode_id={$currentIntern->id}");
     $taken=$database->get("SUM(given_student) AS total","a_partner_student_request_totals","internaship_id={$currentIntern->id}")->total;

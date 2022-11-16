@@ -45,7 +45,7 @@ if(!in_array($level,['ADMIN','INST_ADMIN'])){
                                             <th  class=" fs-13">username</th>
                                             <th  class=" fs-13">Phone</th>
                                             <th  class=" fs-13">Role</th>
-                                            <th  class=" fs-13">Place</th>
+                                            <!-- <th  class=" fs-13">Place</th> -->
                                             <th  class=" fs-13">Status</th>
                                             <th></th>
                                         </tr>
@@ -59,10 +59,6 @@ if(!in_array($level,['ADMIN','INST_ADMIN'])){
                                         $place=[];
                                         foreach ($lists as $key => $h) {
                                             $hasId=input::enc_dec('e',$h['id']);
-                                            if(!isset($place[$h['institition_id'].'_'.$h['ben_id']])){
-                                                $place[$h['institition_id'].'_'.$h['ben_id']]=User::userByPlace($h['institition_id'],$h['ben_id']);
-
-                                            }
                                             ?>
                                             <tr>
                                                 <td><?= $i ?></td>
@@ -70,7 +66,6 @@ if(!in_array($level,['ADMIN','INST_ADMIN'])){
                                                 <td class=""><?= $h['username'] ?></td>
                                                 <td class=""><?= $h['phone'] ?></td>
                                                 <td><?= $h['level'] ?></td>
-                                                <td><?= $place[$h['institition_id'].'_'.$h['ben_id']] ?></td>
                                                 <td>
                                                     <span class="btn btn-sm light <?= $h['status'] != 'active' ? 'btn-warning' : 'btn-success light' ?> w-space-no fs-16 text-uppercase"><?= $h['status'] ?></span>
                                                 </td>

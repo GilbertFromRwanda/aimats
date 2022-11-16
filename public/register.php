@@ -22,7 +22,7 @@ if (isset($_SESSION['ht_userId'])) {
     <script src="js/customer/nprogress.js"></script>
 </head>
 
-<body class="h-100">
+<body class="h-100 mybg">
     <script type="text/javascript">
         NProgress.configure({
             showSpinner: false
@@ -48,13 +48,13 @@ if (isset($_SESSION['ht_userId'])) {
                                 <div class="auth-form">
                                     <div class="row">
                                         <div class="col-md-12 text-center mb-2">
-                                            <h3 class="mb-2">Supplier registration form</h3>
+                                            <h3 class="mb-2">Auca partner registration form</h3>
                                             <hr/>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="text-center">
                                                 <!-- MyStoma -->
-                                                <a href="./"><img src="images/rwanda_logo.png" alt=""></a>
+                                                <a href="./"><img src="images/logo.png" alt=""></a>
                                             </div>
                                         </div>
                                         <div class="col-md-8">

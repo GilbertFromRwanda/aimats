@@ -197,6 +197,18 @@ public static function getRemainingDateTime($dt1,$dt2,$ft="%a"){
 	$date2 = new DateTime($dt2);   //Future date
 	$diff = $date2->diff($date1)->format($ft);  //find difference
 	$days = intval($diff);   //rounding days
-	echo $days;
+	return $days;
+	// echo $days;
 }
+public static function isStrongPasssword($password,$atLeast=8){
+	$number = preg_match('@[0-9]@', $password);
+	$uppercase = preg_match('@[A-Z]@', $password);
+	$lowercase = preg_match('@[a-z]@', $password);
+	$specialChars = preg_match('@[^\w]@', $password);
+	if(strlen($password) < $atLeast || !$number || !$uppercase || !$lowercase || !$specialChars) {
+	 return "Password must be at least 8 characters in length and must contain at least one number, one upper case letter, one lower case letter and one special character.";
+	} else {
+		return "ok";
+	}
+	}
 }

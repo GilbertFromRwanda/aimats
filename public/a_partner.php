@@ -1,6 +1,11 @@
 <?php
 // require_once("../config/grobals.php");
 include("./includes/head.php");
+if (isset($_GET['n'])) {
+    $id = $_GET['n'];
+    $idDec=input::enc_dec("d",$id);
+    $database->query("DELETE FROM notifications_tb where id=$idDec");
+}
 ?>
 <div id="main-wrapper">
     <?php include("./includes/sidebar.php") ?>
@@ -46,15 +51,21 @@ include("./includes/head.php");
                                             <th class=" fs-13">Email</th>
                                             <th class=" fs-13">Place</th>
                                             <th class=" fs-13">Phone</th>
-                                            <th class=" fs-13">TIN Number</th>
+                                            <!-- <th class=" fs-13">TIN Number</th> -->
+                                            <th class=" fs-13">Join Date</th>
+                                            <th class="fs-13">Approved</th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody class=" fs-12">
                                         <?php
-                                        $ins=$_SESSION['ht_hotel'];
-                                        $lists=$database->fetch("SELECT * FROM a_partner_tb where is_active='yes'  order by id desc");
                                         $i=0;
+                                        $cond="";
+                                        if(isset($_GET['d'])){
+                                            $cond="where id={$_GET['d']}";
+                                        }
+                                    $lists=$database->fetch("SELECT * FROM a_partner_tb $cond  order by id desc");
+                                   
                                         foreach ($lists as $key => $h) {
                                             $i++;
                                             ?>
@@ -64,7 +75,14 @@ include("./includes/head.php");
                                                 <td class=""><?= $h['email'] ?></td>
                                                 <td class=""><?= $h['place'] ?></td>
                                                 <td class=""><?= $h['phone'] ?></td>
-                                                <td class=""><?= $h['tin'] ?></td>
+                                                <!-- <td class=""><?= $h['tin'] ?></td> -->
+                                                <td class=""><?= date('Y-m-d',strtotime($h['created_at'])) ?></td>
+                                                <td>
+                                                    <select  class="approveSupplier form-control is_<?=$h['is_active']?>" data-sup="<?= $h['id']?>">
+                                                       <option value="yes" <?php if($h['is_active']=="yes")echo "selected" ?>> Yes </option>
+                                                       <option value="no" <?php if($h['is_active']=="no")echo "selected" ?>> No </option>
+                                                </select>
+                                                </td>
                                                 
                                                 <td>
                                                     <div class="dropdown ms-auto text-right">
@@ -179,6 +197,14 @@ include("./includes/head.php");
     <?php include_once("./footer.php") ?>
 
     <script>
+          $(".approveSupplier").change(function(){
+    let v=$(this).val();
+    if(confirm("are you sure to change status?")){
+      let sup=$(this).attr("data-sup");
+      window.location.href=`sup_profile?c=${sup}&v=${v}`;  
+    }
+    // console.log("supp is now approved")
+   })
         function onSupervisorAdd(){
 
         let formData=$("#form").serialize();

@@ -3,11 +3,121 @@ require("../../config/grobals.php");
 // include input and validate
 require("../../util/input.php");
 include("../../util/validate.php");
+include("../../util/upload.php");
 $action=input::get("action");
 if(!isset($_SESSION)){
     session_start();
 }
 switch ($action) {
+    case 'ADD_GRADE_TO_STUDENT':
+        try {
+            $level=$_SESSION['ht_level'];
+            if($level!="PARTNER"){
+                echo json_encode(["isOk"=>false,"data"=>"Access denied"]);
+                exit(0);
+            }
+        $val=new validate();
+        $val->check($_POST,[
+            "student_id"=>['required'=>true],
+            "supervisior_id"=>['required'=>true],
+            "internaship_id"=>['required'=>true],
+            "relationship"=>['required'=>true,"maxnum"=>10,"minnum"=>0],
+            "responsibility"=>['required'=>true,"maxnum"=>10,"minnum"=>0],
+            "personal_qualities"=>['required'=>true,"maxnum"=>10,"minnum"=>0],
+            "professional_qualities"=>['required'=>true,"maxnum"=>10,"minnum"=>0],
+            "professional_knowledge"=>['required'=>true,"maxnum"=>10,"minnum"=>0],
+            "attachment"=>['required'=>true,"type"=>"jpg,png,jpeg"],
+        ]);
+        if(!$val->passed()){
+            echo json_encode(["isOk"=>false,"data"=>implode(',',$val->errors())]);
+            exit(0);
+        }
+        $intern=input::get("internaship_id");
+        $studentId=input::get("student_id");
+        $userID=$_SESSION["ht_hotel"];
+        // check if internaship is allowed to upload
+        $isAllowed=$database->count_all("a_internaship_periode where id=$intern AND upload_grade='yes'");
+        if($isAllowed==0){
+            echo json_encode(["isOk"=>false,"data"=>"Currently to upload student internaship grade is not allowed please contact auca administraction"]);
+            exit(0);
+        }
+        // check if data already exists
+        $hasExists=$database->count_all("a_student_grade where student_id=$studentId  AND internaship_id=$intern");
+        if($hasExists>0){
+            echo json_encode(["isOk"=>false,"data"=>"Student Internaship Grade already exists"]);
+            exit(0);
+        }
+        $pt=upload::Image($_FILES,"attachment","../uploads/")['sqlValue'];
+        $pk=input::get("professional_knowledge");
+        $rel=input::get("relationship");
+        $resp=input::get("responsibility");
+        $peq=input::get("personal_qualities");
+        $pq=input::get("professional_qualities");
+        $creteria="Professional knowledge:$pk,Professional qualities:$pq,Personal qualities:$peq,Responsibility:$resp,Relationship:$resp";
+
+        $isCreated=$database->insert("a_student_grade",
+        ["evaluation_criteria"=>$creteria,
+        "marks"=>($pk+$rel+$resp+$peq+$pq),
+        "attachment"=>$pt,
+        "student_id"=>$studentId,
+        "partner_id"=>$userID,
+        "supervisior_id"=>input::get("supervisior_id"),
+        "internaship_id"=>input::get("internaship_id")]);
+        if(!$isCreated){
+            echo json_encode(["isOk"=>false,"data"=>"unable to upload student grade"]);
+            exit(0);
+        }
+        echo json_encode(["isOk"=>true,"data"=>"success"]);
+                    # code...
+                } catch (\Throwable $e) {
+                    echo json_encode(["isOk"=>false,"data"=>$e->getMessage()]);
+                }
+        break;
+    case 'CREATE_NEW_INTERNASHIP_PERIODE':
+        $val=new validate();
+        $val->check($_POST,[
+            "end_date"=>['required'=>true],
+            "start_date"=>['required'=>true],
+            "status"=>['required'=>true],
+            "upload_grade"=>['required'=>true],
+        ]);
+        if(!$val->passed()){
+            echo json_encode(["isOk"=>false,"data"=>implode(',',$val->errors())]);
+            exit(0);
+        }
+        // check start date and last date
+        $startDate=input::get("start_date");
+        $endDate=input::get("end_date");
+        $status=input::get("status");
+        $isGraded=input::get("upload_grade");
+        if($startDate>$endDate){
+            echo json_encode(["isOk"=>false,"data"=>"Please check start date and end date"]);
+            exit(0);
+        }
+        // is update or insert
+        $isUpdate=(int)input::get("id");
+        if($isUpdate==0){
+            // insert new update
+            $info=["start_date"=>$startDate,"end_date"=>$endDate,
+            "status"=>$status,"upload_grade"=>$isGraded];
+            $isInserted=$database->insert("a_internaship_periode",$info);
+            if(!$isInserted){
+                echo json_encode(["isOk"=>false,"data"=>"New Internaship is not " + $status]);
+                exit(0);
+            }
+            echo json_encode(["isOk"=>true,"data"=>"Auca internaship(Start:$startDate End:$endDate,status:$status,upload Marks:$isGraded)","i"=>$inserted,"o"=>"create"]);
+            exit(0);
+        }
+        // update
+        $info=["start_date"=>$startDate,"end_date"=>$endDate,
+        "status"=>$status,"upload_grade"=>$isGraded];
+        $isUpdated=$database->update("a_internaship_periode","id=$isUpdate",$info);
+            if(!$isUpdated){
+                echo json_encode(["isOk"=>false,"data"=>"Internaship not changed try again"]);
+                exit(0);
+            }
+            echo json_encode(["isOk"=>true,"data"=>" New Update Internaship(End:$endDate,status:$status,upload Marks:$isGraded)","i"=>$isUpdate,"o"=>"update"]);
+        break;
     case 'GET_PARTNER_FOR_MAJOR_IN':
         $userID=$_SESSION['ht_userId'];
         $intern=input::get("inter");
@@ -35,25 +145,31 @@ switch ($action) {
         $major=explode(",",$major);
         $major_value=explode(",",$major_value);
         $userID=$_SESSION['ht_userId'];
+        $levelId=$_SESSION['ht_hotel'];
         $intern=input::get("inter");
          // remove all previsious recourd
-        $database->query("DELETE  FROM a_partner_student_request where internaship_id= $intern AND partner_id= $userID");
+        $database->query("DELETE  FROM a_partner_student_request where internaship_id= $intern AND partner_id=$levelId");
         $allStudent=0;
         $today=date('Y-m-d');
         $counts=count($major);
         $sql='';
         for ($i=0; $i <$counts; $i++) { 
             $allStudent+=$major_value[$i];
-            $sql.="({$major_value[$i]},'{$major[$i]}',$userID,$intern,'$today'),";
+            $sql.="({$major_value[$i]},'{$major[$i]}',$levelId,$intern,'$today'),";
         }
         $sql=trim($sql,",");
         $sqlQuery="INSERT INTO a_partner_student_request(request_student_number,major_in,partner_id,internaship_id,created_at) VALUES $sql";
         // echo json_encode(["status"=>$sqlQuery]);
          // update requested student
-         $database->query("DELETE from a_partner_student_request_totals WHERE internaship_id=$intern AND partner_id =$userID");
-         $database->insert("a_partner_student_request_totals",["requested_student"=>$allStudent,"internaship_id"=>$intern,"partner_id"=>$userID]);
+         $database->query("DELETE from a_partner_student_request_totals WHERE internaship_id=$intern AND partner_id =$levelId");
+         $database->insert("a_partner_student_request_totals",["requested_student"=>$allStudent,"internaship_id"=>$intern,"partner_id"=>$levelId]);
         if($database->query($sqlQuery)){
-            echo json_encode(["status"=>"ok"]);
+            // get level name
+            echo json_encode(
+            ["status"=>"ok",
+            "students"=>$allStudent,
+            "myId"=>$levelId,
+            "from"=>$_SESSION['ht_name']]);
         }else{
         echo json_encode(["status"=>"Unable to request students"]);
         }
@@ -62,10 +178,9 @@ switch ($action) {
             }
  break;
  case 'SEND_EMAIL':
-    case 'CONTACT':
         $message = input::sanitize("message");
         $names = input::sanitize("names");
-        $to = 'contact@thegreatlakeseye.com';
+        $to = 'niyogibertos@gmail.com';
         $from = input::sanitize("email");
         $subject = input::sanitize("subject");
         $headers = "From: $from";

@@ -23,35 +23,7 @@ if(isset($_SESSION['ht_userId'])){
     <link href="css/customer/mycss.css" rel='stylesheet' />
   <script src="js/customer/nprogress.js"></script>
   <style>
- .mybg { 
-  background: url(images/bj.png) no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  
-}
-.mybg{
-  /* Set rules to fill background */
-  min-height: 100%;
-  min-width: 1024px;
-	
-  /* Set up proportionate scaling */
-  width: 100%;
-  height: auto;
-	
-  /* Set up positioning */
-  position: fixed;
-  top: 0;
-  left: 0;
-}
 
-@media screen and (max-width: 1024px) { /* Specific to this particular image */
-  .mybg {
-    left: 50%;
-    margin-left: -512px;   /* 50% */
-  }
-}
   </style>
 </head>
 <body class="h-100 mybg">
@@ -98,7 +70,7 @@ if(isset($_SESSION['ht_userId'])){
                                         <div class="form-group  text-center">
                                         <div id="ajaxresults"></div>
                                             <button id="btnaLogin" type="button" class="btn  btn-xs btn-outline-primary w-25">Login </button>
-                                            <a href="register" class="btn  btn-xs btn-outline-warning ">Become our supplier </a>
+                                            <a href="register" class="btn  btn-xs btn-outline-warning ">Become our Partner </a>
                                       </div>
                                     </form>
                                 </div>

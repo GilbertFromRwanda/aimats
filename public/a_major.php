@@ -137,6 +137,12 @@ include("./includes/head.php");
                 try {
                     let json=JSON.parse(res);
                 if(json.status=="ok"){
+                    // notify admin
+                    let requestedStudent=json.students;
+                    let msg=`${json.from} requests ${requestedStudent} students for internaship`
+                    makePostRequest(`url=a_student_request_admin?p=${json.myId}&level=ADMIN&level_id=1&action=NOTIFY&message=${msg}`).then((res)=>{
+                        console.log(res);
+                    })
                     window.location.href="a_student_request";return;
                     }
                     alert(json.status);

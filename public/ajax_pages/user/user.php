@@ -15,13 +15,13 @@ case 'EDIT_USER_INFO':
                 exit();
             }
             // check if it is system,manager
-            if(!in_array($_SESSION['ht_level'],['ADMIN','INST_ADMIN']) ){
+            if(!in_array($_SESSION['ht_level'],['ADMIN']) ){
                 echo json_encode(["isOk"=>false,"data"=>"Access denied; please contact  admin"]); 
                 exit(); 
             }
             $val=new validate();
             $val->check($_POST,[
-             "names"=>['required'=>true,"max"=>50],
+             "names"=>['required'=>true],
              "user_level"=>['required'=>true],
              "user_status"=>['required'=>true],
              "phone"=>['required'=>true,"number"=>true,"max"=>16],
@@ -38,21 +38,6 @@ case 'EDIT_USER_INFO':
              "status"=>$_POST['user_status'],
              "phone"=>$_POST['phone']
          ];
-         if(in_array($_POST['user_level'],['INST_ADMIN','BEN_ADMIN'])){
-            // check if insti was selected
-            if(!isset($_POST['institition']) || empty($_POST['institition'])){
-                echo json_encode(["isOk"=>false,"data"=>'Please select institition or beneficiary']); 
-                exit();
-            }
-            $userData['institition_id']=$_POST['user_level']=="INST_ADMIN"?$_POST['institition']:$_SESSION['ht_hotel'];
-            $userData['ben_id']=$_POST['user_level']=="BEN_ADMIN"?$_POST['institition']:0;
-            if($login_level=="ADMIN" && $_POST['user_level']=="BEN_ADMIN"){
-                $userData['ben_id']=$_POST['beneficiary'];
-                $userData['institition_id']=$_POST['institition'];
-            }
-        }else{
-            $userData['institition_id']= $_SESSION['ht_hotel'];
-        }
         $userId=input::get("user_id");
         $isUserInserted=$database->update("a_users","id=$userId",$userData);
         if($isUserInserted){
@@ -74,8 +59,8 @@ case 'EDIT_USER_INFO':
         }
         $val=new validate();
        $val->check($_POST,[
-        "user_name"=>["required"=>true,"max"=>30,"unique"=>["table"=>"a_users","column"=>'username']],
-        "names"=>['required'=>true,"max"=>50],
+        "user_name"=>["required"=>true,"unique"=>["table"=>"a_users","column"=>'username']],
+        "names"=>['required'=>true],
         "pswd"=>['required'=>true,"min"=>4],
         "user_level"=>['required'=>true],
         "user_status"=>['required'=>true],
@@ -95,22 +80,6 @@ case 'EDIT_USER_INFO':
         "status"=>$_POST['user_status'],
         "phone"=>$_POST['phone']
     ];
-    if(in_array($_POST['user_level'],['INST_ADMIN','BEN_ADMIN'])){
-        // check if insti was selected
-        if(!isset($_POST['institition']) || empty($_POST['institition'])){
-            echo json_encode(["isOk"=>false,"data"=>'Please select institition or beneficiary']); 
-            exit();
-        }
-        $userData['institition_id']=$_POST['user_level']=="INST_ADMIN"?$_POST['institition']:$_SESSION['ht_hotel'];
-        $userData['ben_id']=$_POST['user_level']=="BEN_ADMIN"?$_POST['institition']:0;
-        if($login_level=="ADMIN" && $_POST['user_level']=="BEN_ADMIN"){
-            $userData['ben_id']=$_POST['beneficiary'];
-            $userData['institition_id']=$_POST['institition'];
-        }
-    }else{
-        $userData['institition_id']= $_SESSION['ht_hotel'];
-    }
-
     $isUserInserted=$database->insert("a_users",$userData);
     if($isUserInserted){
         echo json_encode(["isOk"=>true,"data"=>input::get("names") ." Account has been created"]); 

@@ -84,7 +84,7 @@ switch ($action) {
             $_SESSION['ht_name']=$_POST['person'];
             $_SESSION['ht_ben']=0;
             $_SESSION['ht_ip']=input::getClientIp();
-            $msg=$_POST['company']." request to be approved as supplier please review the profile";
+            $msg=$_POST['company']." request to be approved as auca partner please review the profile";
             $notifyQuery="INSERT INTO notifications_tb(message,link,level,level_id,done_by) value('$msg','supplier?d=$isSupInserted','ADMIN',1,$isUserCreated)"; 
             $database->query($notifyQuery);
             echo json_encode(["isOk"=>true,"data"=>'success']); 

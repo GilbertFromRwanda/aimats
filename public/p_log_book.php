@@ -1,6 +1,16 @@
 <?php
 // require_once("../config/grobals.php");
 include("./includes/head.php");
+if(session::get("is_active")!='yes' && $level=='PARTERN' ){
+    echo "Unautorized <span >Redirecting ...</span>";
+    echo '<meta http-equiv="refresh" content="1;url=./home">';
+    exit(0);
+}
+if (isset($_GET['n'])) {
+    $id = $_GET['n'];
+    $idDec=input::enc_dec("d",$id);
+    $database->query("DELETE FROM notifications_tb where id=$idDec");
+  }
 ?>
 <div id="main-wrapper">
     <?php include("./includes/sidebar.php") ?>
@@ -42,9 +52,9 @@ include("./includes/head.php");
                                     <thead>
                                         <tr>
                                         <th class=" fs-13">#</th>
+                                        <th class=" fs-13">Date</th>
                                             <th class=" fs-13">Student</th>
                                             <th class=" fs-13">Description</th>
-                                            <th class=" fs-13">Date</th>
                                             <th class=" fs-13">Lesson Learnt</th>
                                             <th class=" fs-13">Challenges</th>
                                             <th class=" fs-13">Partner Comment</th>
@@ -55,22 +65,31 @@ include("./includes/head.php");
                                     <tbody class=" fs-12">
                                         <?php
                                         
-                                        $user_id=$_SESSION['ht_userId'];
-                                        // $lists=$database->fetch("SELECT * FROM a_student_logbook  where suppervisor_id ='{$user_id}' order by id desc");
-                                            $lists=$database->fetch("SELECT al.*,st.first_name,st.last_name FROM a_student_logbook as al INNER JOIN a_student_tb as st WHERE st.id=al.student_id and al.partner_id ='{$user_id}'");
+                                        $user_id=$_SESSION['ht_hotel'];
+                                        $sql="SELECT al.*,st.first_name,st.last_name FROM a_student_logbook as al INNER JOIN a_student_tb as st WHERE st.card_id=al.student_id AND al.partner_id ='{$user_id}' ORDER BY al.id desc";
+                                        if(isset($_GET['today'])){
+                                            $today=date('Y-m-d');
+                                            $sql="SELECT al.*,st.first_name,st.last_name FROM a_student_logbook as al INNER JOIN a_student_tb as st WHERE st.card_id=al.student_id AND al.log_date='$today' AND al.partner_id ='{$user_id}' ORDER BY al.id desc";
+                                        }
+                                        if(isset($_GET['st'])){
+                                            $sql="SELECT al.*,st.first_name,st.last_name FROM a_student_logbook as al INNER JOIN a_student_tb as st WHERE st.card_id=al.student_id AND al.student_id ='{$_GET['st']}' AND al.partner_id ='{$user_id}' ORDER BY al.id desc"; 
+                                        }
+                                        // echo $sql;
+                                            $lists=$database->fetch($sql);
                                         $i=0;
                                         foreach ($lists as $key => $h) {
                                             $i++;
                                             ?>
                                             <tr>
                                             <td><?= $i?></td>
+                                            <td class=""><?= $h['created_at'] ?></td>
                                                 <td  ><span class=" pointer"><?= $h['first_name']." ".$h['last_name'] ?></span></td>
                                                 <td class=" text-capitalize"><?= $h['name'] ?></td>
-                                                <td class=""><?= $h['created_at'] ?></td>
+                                              
                                                 <td class=""><?= $h['objective'] ?></td>
                                                 <td class=""><?= $h['challenges'] ?></td>
-                                                <td class=""><?= $h['partner_comment'] ?></td>
-                                                <td class="" id="sup<?=$h['id']?>"><?= $h['suppervisior_comment'] ?></td>
+                                                <td class="" id="sup<?=$h['id']?>"><?= $h['partner_comment'] ?></td>
+                                                <td class="" ><?= $h['suppervisior_comment'] ?></td>
                                                 <td>
                                                     <div class="dropdown ms-auto text-right">
                                                         <div class="btn-link" data-bs-toggle="dropdown">
@@ -84,7 +103,8 @@ include("./includes/head.php");
                                                             </svg>
                                                         </div>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            <a class="dropdown-item" href="#"  onclick="openStudentPartner(<?php echo htmlspecialchars(json_encode($h))?>);"><i class="las la-check-square scale5 text-primary me-2"></i> Edit</a>
+                                                            <a class="dropdown-item" href="#" onclick="openStudentPartner(<?php echo htmlspecialchars(json_encode($h))?>);">
+                                                            <i class="las la-check-square scale5 text-primary me-2"></i>  Comment</a>
                                                             <!-- <a class="dropdown-item" href="#"><i class="las la-times-circle scale5 text-danger me-2"></i> Reject Order</a> -->
                                                         </div>
                                                     </div>
@@ -137,14 +157,14 @@ include("./includes/head.php");
                         <div class="col-lg-12">
                             <div class="mb-3">
                                 <label for="menu_type" class="text-black form-label">Lessons Learnt <span class="required text-danger">*</span></label>
-                                <input type="text" id="lesson"  name="lesson" value="" class=" form-control text-uppercase" readonly/>
+                                <input type="text" id="lesson"  name="lesson" value="" class=" form-control " readonly/>
                                 <!-- <input type="hidden" name="lesson" value="CREATE_NEW_BEN"/> -->
                             </div>
                         </div> 
                         <div class="col-lg-12">
                             <div class="mb-3">
                                 <label for="menu_type" class="text-black form-label">Challenges Faced <span class="required text-danger">*</span></label>
-                                <input type="text" id="challenge" name="challenge" value="" class=" form-control text-uppercase" readonly/>
+                                <input type="text" id="challenge" name="challenge" value="" class=" form-control " readonly/>
                                 <!-- <input type="hidden" name="challenge" value="CREATE_NEW_BEN"/> -->
                             </div>
                         </div> 
@@ -152,7 +172,7 @@ include("./includes/head.php");
                         <div class="col-lg-12">
                             <div class="mb-3">
                                 <label for="menu_type" class="text-black form-label">Partner Comment <span class="required text-danger">*</span></label>
-                                <textarea  name="p_comment" id="p_comment" placeholder="Eg:Great.." class=" form-control text-uppercase"></textarea>
+                                <textarea  name="p_comment" id="p_comment" placeholder="Eg:Great.." class=" form-control "></textarea>
                                 <!-- <input type="hidden" name="lesson" value="CREATE_NEW_BEN"/> -->
                             </div>
                         </div>
@@ -178,21 +198,19 @@ include("./includes/head.php");
         //  let formdData=document.getElementById("form");
         $(".btnlog").attr("disabled","disabled");
          let formData=$("#form").serialize();
-         let comment=$("#sp_comment").val();
-        //   let  formData2 = $(#from).serialize();
-                // console.log(formData);
-                // return;
+         let comment=$("#p_comment").val();
          fetch(`ajax_pages/logbook?${formData}`).then((res)=>res.text()).then((data)=>{
-            // $(".btnlog").removeClass("d-none");
         $(".btnlog").removeAttr("disabled");
             try {
                let json=JSON.parse(data);
-               console.log(json);
               if(json.isOk){
-                alert("Data was saved");
+                console.log(selectedStudent)
+                // send notification to the  student
+                makePostRequest(`url=a_log_book?id=${json.id}&level=STUDENT&level_id=${selectedStudent.student_id}&action=NOTIFY&message=${json.from} make comment click to view`).then((res)=>{
+                        console.log(res);
+                    });
                 $(`#sup${selectedStudent.id}`).text(comment);
-                // $("#basicModal").hide("d-none");
-                window.location.reload();
+                $("#basicModal").modal("hide");
               }else{
                 console.log(json.data);
                 alert(json.data);

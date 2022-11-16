@@ -14,6 +14,21 @@
   observer.observe();
 </script>
 <script>
+  function  makePostRequest(bodyQuery, url = "ajax_pages/requests.php") {
+      return new Promise((resolve) => {
+        fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: bodyQuery,
+        })
+          .then((res) => res.text())
+          .then((res) => {
+            resolve(res);
+          });
+      });
+    }
   var tout=null;
   function checkNotification(){
     clearTimeout(tout);
@@ -31,10 +46,7 @@
       checkNotification();
     },2000);
   }
-  // checkNotification();
-
-  
-
+  checkNotification();
   function clearInputs(...inputs) {
   inputs.forEach((el) => {
     let i = $("#"+el);
@@ -189,27 +201,6 @@ if(in_array($page, ['generatedReport'])) :
   setTimeout(() => {
     window.print();
   }, 500);
-</script>
-<?php endif; ?>
-<?php
-if(in_array($page, ['reports'])) : 
-?>
-<script>
- function generateReport(){
-  let req=$("#form").serialize();
-  let url="generatedReport?"+req;
-  window.open(url, '_blank').focus();
-  // window.open(url);
- }
-  function chooseReport(name="",label=""){
-    if(name=="LS" || name=="SR" || name=="BR"){
-      let url=`generatedReport?rname=${name}`;
-      window.open(url, '_blank').focus();
-    }
-    $("#rname").val(name);
-    $("#asr").text(label)
-    $("#basicModal").modal("show");
-  }
 </script>
 <?php endif; ?>
 <?php
@@ -479,165 +470,9 @@ $("#cStatus").click(()=>{
 
 </script>
 <?php endif; ?>
-<?php if (in_array($page, ['requests'])) : ?>
-  <script>
-    var devices={};
-    var dbDevices=<?php echo  $jsonDevices ?>;
 
-    // save devices on database
-    function onSaveDeviceRequest(e){
-      let dbData=JSON.stringify(devices);
-      let keys=JSON.stringify(Object.keys(devices));
-      let req=`keys=${keys}&devices=${dbData}&action=MAKE_DEVICE_REQUEST`;
-      NProgress.start();
-      $(e).addClass("d-none");
-      $("#ajaxresults2").html(`<div class="alert alert-warning"><span>Please wait moment ... </span></div>`);
-      sendWithAjax(`${req}`, "ajax_pages/requests").then((res) => {
-        $(e).removeClass('d-none');
-        NProgress.done(true);
-        if (res.isOk) {
-          $("#ajaxresults2").html(`<div class="alert alert-success"><p>Your request has been sent #${res.data}</p></div>`);
-          window.location.href=`requested?c=${res.data}`;
-        } else {
-          $("#ajaxresults2").html(`<div class="alert alert-warning"><p>${res.data}</p></div>`);
-        }
-      }).catch((err) => {
-        console.log("Error occurred", err);
-      })
-    }
-    function openRequestModel(key){
-      if(!objHasKey(devices,key))devices[`${key}`]=[];
-      $("#ckey").text(key);
-      $("#currentKey").val(key);
-      $("#dCount").text(devices[`${key}`].length);
-      if($("#"+key).attr("data-list")=="no"){
-        displayNames(key);
-        $("#"+key).attr("data-list","yes");
-      }
-      $("#ajaxresults").html(``);
-      $(".openModel").click();
-    }
 
-    function displayNames(key){
-      const d=dbDevices[`${key}`];
-      let o='';
-    d.forEach(el => {
-      o+=`<option value='${el}'>${el}</option>`;
-    });
-    $("#name").html(`<option value="" >__Select__</option>${o}`);
-    }
-    function onAddDeviceOnList(){
-      let key=$("#currentKey").val();
-      // check name and size
-      let name=$("#name").val();
-      let size=$("#size").val();
-      let spec=$("#specification").val();
-      if(name.trim()=='' || size.trim()==''){
-        $("#ajaxresults").html(`<div class="alert alert-warning"><p>Please check name or size </p></div>`);
-      }else{
-        $("#ajaxresults").html(``);
-        let data={name:name,size:size,spec:spec};
-        if(deviceWasSelectedBefore(key,name)){
-          $("#ajaxresults").html(`<div class="alert alert-warning"><p>${name} was already selected before</p></div>`);
-          clearInputs("name");
-        }else{
-        devices[`${key}`].push(data);
-        displayList(key,true);
-        $("#dCount").text(devices[`${key}`].length);
-        clearInputs("name","size","specification");
-        $("#ajaxresults").html(`<div class="alert alert-success"><p>${name} added to the wishlist</p></div>`);
-        }
-       
-      }
-      $("#name").trigger("focus");
-    }
-    function deviceWasSelectedBefore(key,name=''){
-      const list=devices[`${key}`];
-      let wasFound=false;
-      list.forEach((d,i) => {
-        if(wasFound){
-          return;
-        }
-        if(d.name===name){
-          wasFound=true;
-          return
-        }
-      });
-      return wasFound;
-    }
-  function removeDevice(index,key){
-    // console.log(index,key);
-    const newArr=devices[`${key}`].splice(index,1);
-    $(`#${key}_${index}`).remove();
-  }
-function displayList(key,isSingle=true){
-  if(isSingle){
-    $("#dList").removeClass("d-none");
-    const list=devices[`${key}`];
-    let div="";
-    list.forEach((d,i) => {
-      div+=`<div class='d-flex justify-content-between align-items-center border border-0 border-bottom mb-2' id="${key}_${i}">
-      <span class="text-uppercase">${d.name}(${d.size})</span>
-      <span class="removeDevice text-danger badge badge-outline-danger" onClick="removeDevice(${i},'${key}')" ><span class="fa fa-times " ></span></span></div>`
-    });
-    $("#"+key).html(div);
-  }else{
-    for (const key in devices) {
-      console.log(`${key}: ${devices[key]}`);
-}
-  }
-}
-$("#size").keyup(function(event) {
-    if (event.keyCode === 13) {
-      onAddDeviceOnList();
-        // $("#id_of_button").click();
-    }
-})
-    // add new hotel in system
-    function onInstititionCreated(e) {
-      let data = $("#form").serialize();
-      NProgress.start();
-      $(e).addClass("d-none");
-      $("#ajaxresults").html(`<div class="alert alert-warning"><span>Please wait moment ... </span></div>`);
-      sendWithAjax(data, "ajax_pages/institition").then((res) => {
-        $(e).removeClass('d-none');
-        NProgress.done(true);
-        if (res.isOk) {
-         window.location.reload(true);
-        } else {
-          $("#ajaxresults").html(`<div class="alert alert-warning"><p>${res.data}</p></div>`);
-        }
-      }).catch((err) => {
-        console.log("Error occurred", err);
-      })
 
-    }
-  </script>
-<?php endif; ?>
-
-<?php if (in_array($page, ['institition'])) : ?>
-  <script>
-    // add new hotel in system
-    function onInstititionCreated(e) {
-      let data = $("#form").serialize();
-      NProgress.start();
-      $(e).addClass("d-none");
-      $("#ajaxresults").html(`<div class="alert alert-warning"><span>Please wait moment ... </span></div>`);
-      sendWithAjax(data, "ajax_pages/institition").then((res) => {
-        $(e).removeClass('d-none');
-        NProgress.done(true);
-        if (res.isOk) {
-         window.location.reload(true);
-        } else {
-          $("#ajaxresults").html(`<div class="alert alert-warning"><p>${res.data}</p></div>`);
-        }
-      }).catch((err) => {
-        console.log("Error occurred", err);
-      })
-
-    }
-  </script>
-<?php endif; ?>
 <?php if (in_array($page, ['supplier'])) : ?>
   <script>
    $(".approveSupplier").change(function(){
@@ -669,118 +504,11 @@ $("#size").keyup(function(event) {
     }
   </script>
 <?php endif; ?>
-<?php if (in_array($page, ['internaship','allowedDevice'])) : ?>
-  <script>
-    let p="<?=$page?>";
-    function onBenCreated(e) {
-      let data = $("#form").serialize();
-      NProgress.start();
-      $(e).addClass("d-none");
-      $("#ajaxresults").html(`<div class="alert alert-warning"><span>Please wait moment ... </span></div>`);
-      sendWithAjax(data, "ajax_pages/internaship").then((res) => {
-        $(e).removeClass('d-none');
-        NProgress.done(true);
-        if (res.isOk) {
-          if(p==="allowedDevice"){
-            clearInputs("name");
-            $("#ajaxresults").html(`<div class="alert alert-success"><p>${res.data}</p></div>`);
-          }else{
-            window.location.reload(true);
-          }
-        } else {
-          $("#ajaxresults").html(`<div class="alert alert-warning"><p>${res.data}</p></div>`);
-        }
-      }).catch((err) => {
-        console.log("Error occurred", err);
-      })
 
-    }
-  </script>
-<?php endif; ?>
 <!-- Dashboard 1 -->
 <?php if (in_array($page, ['home'])) : ?>
   <script>
-    function deliveryDevice(code){
-      if(confirm("are you sure to continue?")){
-        NProgress.start();
-      sendWithAjax(`action=MAKE_DELIVER_REQUEST&code=${code}`, "ajax_pages/requests").then((res) => {
-        NProgress.done(true);
-        if(res.isOk){
-          window.location.reload(true);
-        }else{
-          alert(res.data);
-        }
-      }).catch((err)=>{
-        alert(JSON.stringify(err));
-      })
-      }
-    }
-    $(document).ready(()=>{
-      // $("#cancelTender").click(()=>{
-      //   if(confirm("are you you want to cancel your application")){
-      //   $("#cancelTender").addClass('d-none');
-      // let code=$("#cancelTender").attr("data-code");
-      // NProgress.start();
-      // sendWithAjax(`action=CANCEL_APPLICATION&code=${code}`, "ajax_pages/requests").then((res) => {
-      //   NProgress.done(true);
-      //   $("#cancelTender").removeClass('d-none');
-      //   if(res.isOk){
-      //     $("#ta_"+code).remove();
-      //   }else{
-      //     alert(res.data);
-      //   }
-      // }).catch((err)=>{
-      //   alert(JSON.stringify(err));
-      // })
-      //   }
-      // })
-  
-      // $('#applyTender').click(function(){
-      //   let code=$(this).attr("data-code");
-      //   $("#rcode").val(code);
-      //   $("#basicModal").modal("show");
-      // })
-    })
-    function cancelTender(code){
-      if(confirm("are you you want to cancel your application")){
-      //   $("#cancelTender").addClass('d-none');
-      // let code=$("#cancelTender").attr("data-code");
-      NProgress.start();
-      sendWithAjax(`action=CANCEL_APPLICATION&code=${code}`, "ajax_pages/requests").then((res) => {
-        NProgress.done(true);
-        $("#cancelTender").removeClass('d-none');
-        if(res.isOk){
-          $("#ta_"+code).remove();
-        }else{
-          alert(res.data);
-        }
-      }).catch((err)=>{
-        alert(JSON.stringify(err));
-      })
-        }
-    }
-    function applyTender(code){
-        $("#rcode").val(code);
-        $("#basicModal").modal("show");
-      }
-    function saveApplication(e){
-      $(e).addClass('d-none');
-      let form=$("#form").serialize();
-      NProgress.start();
-      sendWithAjax(form, "ajax_pages/requests").then((res) => {
-        NProgress.done(true);
-        $(e).removeClass('d-none');
-        if(res.isOk){
-          $("#applyTender").remove();
-          $("#basicModal").modal("hide");
-        }else{
-          alert(res.data);
-        }
-      }).catch((err)=>{
-        alert(JSON.stringify(err));
-      })
 
-    }
     var series=<?php echo json_encode($series)?>;
     var categories=<?php echo json_encode($cats)?>;
   </script>

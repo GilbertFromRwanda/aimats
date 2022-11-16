@@ -23,7 +23,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-4 pointer" onclick="window.location.href='a_student?status=no_happy'">
+    <div class="col-lg-4 pointer" onclick="window.location.href='a_student_request_admin'">
       <div class="widget-stat card ">
         <div class="card-body p-4">
           <div class="media ai-icon d-flex">
@@ -87,13 +87,13 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-4 pointer">
+    <!-- <div class="col-lg-4 pointer">
       <div class="widget-stat card ">
         <div class="card-body p-4">
           <div class="media ai-icon d-flex">
             <span class="me-3 bgl-primary text-white bg5">
-              <!-- <i class="ti-user"></i> -->
-              <i class="flaticon-381-share-2"></i>
+               <i class="ti-user"></i> -->
+              <!-- <i class="flaticon-381-share-2"></i>
             </span>
             <div class="media-body">
               <h3 class="mb-0 text-black">
@@ -108,7 +108,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     
   
     <div class="col-lg-4 pointer" onclick="window.location.href='a_student?status=no_daily'">
@@ -122,7 +122,9 @@
               <h3 class="mb-0 text-black">
                 <span class="counter ms-0">
                   <?php
-                  echo 0;
+                  $today=date('Y-m-d');
+                  $cond=" WHERE  card_id NOT IN(SELECT student_id FROM a_student_logbook  WHERE  log_date='$today' AND internaship_id=$cIntern->id)   AND internaship_periode_id={$cIntern->id} AND partner_id  IS NOT NULL "; 
+                    echo $database->count_all("a_student_tb $cond");  
                   ?>
                 </span>
               </h3>
@@ -176,7 +178,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-4 pointer ">
+    <div class="col-lg-4 pointer " onclick="window.location.href='a_suppervisior'" >
       <div class="widget-stat card  ">
         <div class="card-body p-4">
           <div class="media ai-icon d-flex">
@@ -197,6 +199,7 @@
         </div>
       </div>
     </div>
+    
 
   </div>
 </div>

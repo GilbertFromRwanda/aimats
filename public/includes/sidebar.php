@@ -50,31 +50,30 @@
           </li>
             <?php }?>
           <?php if($level=='ADMIN'){ ?>
-   
-          <li>
-            <a class="ai-icon" href="a_student_request">
-              <i class="flaticon-381-add"></i>
-              <span class="nav-text">Student request
-              </span>
-            </a>
-          </li>
-            <li>
+            <!-- <li>
             <a class="ai-icon" href="a_student">
               <i class="flaticon-381-user-5"></i>
               <span class="nav-text">Students
               </span>
             </a>
+          </li> -->
+          <li>
+            <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+              <i class="flaticon-381-user-5"></i>
+              <span class="nav-text">Students</span>
+            </a>
+            <ul aria-expanded="false">
+              <li><a href="a_student">Internaship Lists</a></li>
+              <li><a href="a_student_request_admin">Requested by partners</a></li>
+              <li><a href="a_student?status=no_partner">Without Partner</a></li>
+              <li><a href="a_student?status=no_suppervisior">Without Suppervisior</a></li>
+              <li><a href="a_partner_student?viewgraded">Marks</a></li>
+            </ul>
           </li>
             <li>
             <a class=" ai-icon" href="a_internaship">
               <i class="flaticon-381-share-2"></i>
               <span class="nav-text">Internaship</span>
-            </a>
-          </li>
-          <li>
-            <a class="ai-icon" href="institition">
-              <i class="flaticon-381-home"></i>
-              <span class="nav-text">Institution</span>
             </a>
           </li>
           <li>
@@ -98,52 +97,16 @@
           </li>
           <?php } ?> 
           <?php 
-            if($level==="INST_ADMIN"){
+            if($level==="PARTNER"){
              ?>
-            <li>
-            <a class="ai-icon" href="benificiary">
-              <i class="flaticon-381-gift"></i>
-              <span class="nav-text">Beneficiary</span>
+           <li>
+            <a class="ai-icon" href="a_student_request">
+              <i class="flaticon-381-add"></i>
+              <span class="nav-text">Student request
+              </span>
             </a>
           </li>
-          <a class="ai-icon" href="benificiary">
-              <i class="flaticon-381-gift"></i>
-              <span class="nav-text">Beneficiaryy</span>
-            </a>
-          </li>
-          <li>
-            <a class=" ai-icon" href="allowedDevice">
-              <i class="flaticon-381-share-2"></i>
-              <span class="nav-text">Allowed devices</span>
-            </a>
-          </li>
-          <li>
-            <a class=" ai-icon" href="requested">
-              <i class="flaticon-381-bookmark-1"></i>
-              <span class="nav-text">Requested devices</span>
-            </a>
-          </li>
-          <li>
-            <a class=" ai-icon" href="requests">
-              <i class="flaticon-381-plus"></i>
-              <span class="nav-text">new devices</span>
-            </a>
-          </li>
-          <li>
-            <a class=" ai-icon" href="reported">
-              <i class="flaticon-381-bookmark"></i>
-              <span class="nav-text">Reported devices</span>
-            </a>
-          </li>
-          <li>
-            <a class=" ai-icon" href="reports">
-              <i class="flaticon-381-blueprint"></i>
-              <span class="nav-text">Reports</span>
-            </a>
-          </li>
-          <?php } ?>
-          <?php if($level=="BEN_ADMIN"){ ?>
-          <li>
+          <!-- <li>
             <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
               <i class="flaticon-381-share-2"></i>
               <span class="nav-text">Requests</span>
@@ -152,21 +115,9 @@
               <li><a href="requests">New Request</a></li>
               <li><a href="requested">View Requested devices</a></li>
             </ul>
-          </li>
-          <li>
-            <a class=" ai-icon" href="reported">
-              <i class="flaticon-381-bookmark"></i>
-              <span class="nav-text">Reported devices</span>
-            </a>
-          </li>
-          
-          <li>
-            <a class=" ai-icon" href="reports">
-              <i class="flaticon-381-blueprint"></i>
-              <span class="nav-text">Reports</span>
-            </a>
-          </li>
+          </li> -->
           <?php } ?>
+          
           <!-- <li>
             <a class=" ai-icon" href="devices">
               <i class="flaticon-381-cloud-computing"></i>
@@ -174,7 +125,7 @@
             </a>
           </li> -->
 
-          <?php if(in_array($level,['ADMIN','INST_ADMIN'])){ ?>
+          <?php if(in_array($level,['ADMIN'])){ ?>
           <li>
             <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
               <i class="flaticon-381-user-1"></i>

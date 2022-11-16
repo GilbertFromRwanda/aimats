@@ -24,10 +24,10 @@ include("./includes/head.php");
 
                                     <div class="col-lg-4">
                                         <div class="widget-stat card">
-                                            <div class="card-body p-4 btn-outline-primary " onclick="chooseReport('SR','The suppliers rating')">
+                                            <div class="card-body p-4 btn-outline-primary " onclick="chooseReport('LSNCL','List of Students did not complete logbook')">
                                                 <div class="media ai-icon d-flex">
                                                     <div class="media-body ">
-                                                        <p class="mb-0">The suppliers rating </p>
+                                                        <p class="mb-0">List of Students based on how to  complete logbook</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -35,10 +35,10 @@ include("./includes/head.php");
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="widget-stat card">
-                                            <div class="card-body p-4 btn-outline-warning dates" onclick="chooseReport('LRQD','List of requested devices')">
+                                            <div class="card-body p-4 btn-outline-warning dates" onclick="chooseReport('LSNG','List of Students haven\'t grade')">
                                                 <div class="media ai-icon d-flex">
                                                     <div class="media-body ">
-                                                        <p class="mb-0">List of requested devices </p>
+                                                        <p class="mb-0">List of Students haven't grades </p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -46,10 +46,10 @@ include("./includes/head.php");
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="widget-stat card">
-                                            <div class="card-body p-4 btn-outline-light dates" onclick="chooseReport('LRPD','List of reported devices')">
+                                            <div class="card-body p-4 btn-outline-light dates" onclick="chooseReport('LSNP','List of Students haven\'t partner')">
                                                 <div class="media ai-icon d-flex">
                                                     <div class="media-body ">
-                                                        <p class="mb-0">List of reported devices </p>
+                                                        <p class="mb-0">List of Students haven't partner </p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -57,110 +57,50 @@ include("./includes/head.php");
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="widget-stat card">
-                                            <div class="card-body p-4 btn-outline-success dates" onclick="chooseReport('LS','List of suppliers')">
+                                            <div class="card-body p-4 btn-outline-success dates" onclick="chooseReport('LSWG','List of Students with  grades')">
                                                 <div class="media ai-icon d-flex">
                                                     <div class="media-body ">
-                                                        <p class="mb-0">List of suppliers </p>
+                                                        <p class="mb-0">List of Students with  grades </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="widget-stat card">
+                                            <div class="card-body p-4 btn-outline-info dates" onclick="chooseReport('LSNS','List of Students haven\'t Suppervisor')">
+                                                <div class="media ai-icon d-flex">
+                                                    <div class="media-body ">
+                                                        <p class="mb-0">List of Students haven't Suppervisor</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="widget-stat card">
+                                            <div class="card-body p-4 btn-outline-info dates" onclick="chooseReport('SLB','Student logbook')">
+                                                <div class="media ai-icon d-flex">
+                                                    <div class="media-body ">
+                                                        <p class="mb-0">Students Logbook</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="widget-stat card">
+                                            <div class="card-body p-4 btn-outline-primary dates" onclick="chooseReport('CR','Course rating')">
+                                                <div class="media ai-icon d-flex">
+                                                    <div class="media-body ">
+                                                        <p class="mb-0">How major courses requested</p>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                
-                                    <?php } elseif ($level == "INST_ADMIN") { ?>
-                                       
-                                        <div class="col-lg-4">
-                                        <div class="widget-stat card">
-                                            <div class="card-body p-4 btn-outline-success" onclick="chooseReport('BR','The beneficiary rating')">
-                                                <div class="media ai-icon d-flex">
-                                                    <div class="media-body ">
-                                                        <p class="mb-0">The beneficiary rating </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="widget-stat card">
-                                            <div class="card-body p-4 btn-outline-info dates" onclick="chooseReport('LRQD','List of requested devices')">
-                                                <div class="media ai-icon d-flex">
-                                                    <div class="media-body ">
-                                                        <p class="mb-0">List of requested devices </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="widget-stat card">
-                                            <div class="card-body p-4 btn-outline-danger dates" onclick="chooseReport('LRPD','List of reported devices')">
-                                                <div class="media ai-icon d-flex">
-                                                    <div class="media-body ">
-                                                        <p class="mb-0">List of reported devices </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="widget-stat card">
-                                            <div class="card-body p-4 btn-outline-warning dates" onclick="chooseReport('LDNW','List of devices not working ')">
-                                                <div class="media ai-icon d-flex">
-                                                    <div class="media-body ">
-                                                        <p class="mb-0">List of devices not working </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                               
-                                <?php } else { ?>
-
-                                    <div class="col-lg-4">
-                                        <div class="widget-stat card btn-outline-primary dates" onclick="chooseReport('LRQD','List of requested devices')">
-                                            <div class="card-body p-4">
-                                                <div class="media ai-icon d-flex">
-                                                    <div class="media-body ">
-                                                        <p class="mb-0">List of requested devices</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="widget-stat card">
-                                            <div class="card-body p-4 btn-outline-info dates" onclick="chooseReport('LRD','List of replaced devices')">
-                                                <div class="media ai-icon d-flex">
-                                                    <div class="media-body ">
-                                                        <p class="mb-0">List of replaced devices  </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="widget-stat card">
-                                            <div class="card-body p-4 btn-outline-danger dates"  onclick="chooseReport('LMD','List of maintenance devices')">
-                                                <div class="media ai-icon d-flex">
-                                                    <div class="media-body ">
-                                                        <p class="mb-0">List of maintenance devices </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="widget-stat card">
-                                            <div class="card-body p-4 btn-outline-success dates" onclick="chooseReport('LUD','List of unfunctional devices')">
-                                                <div class="media ai-icon d-flex">
-                                                    <div class="media-body ">
-                                                        <p class="mb-0">List of unfunctional devices</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php } ?>
+                                    <?php } ?>
                             </div>
                         </div>
                     </div>
@@ -180,17 +120,23 @@ include("./includes/head.php");
                 <div class="modal-body">
                    <form id="form">
                         <div class="row">
-                            <div class="col-lg-12">
+                            <div class="col-lg-12 myhide d-none">
                                 <div class="mb-3">
                                     <label for="menu_type" class="text-black form-label">From </label>
                                     <input type="date" name="from" class=" form-control" />
                                     <input type="hidden" name="rname" class="form-control" id="rname" />
                                 </div>
                             </div>
-                            <div class="col-lg-12">
+                            <div class="col-lg-12 myhide d-none">
                                 <div class="mb-3">
                                     <label for="menu_type" class="text-black form-label">To </label>
                                     <input type="date" name="to" class=" form-control" />
+                                </div>
+                            </div>
+                            <div class="col-lg-12 myid">
+                                <div class="mb-3">
+                                    <label for="menu_type" class="text-black form-label"> Student Id </label>
+                                    <input type="number" name="student_id" placeholder="Enter student here" class=" form-control" id="student_id" />
                                 </div>
                             </div>
                             <div class="col-lg-12">
@@ -208,3 +154,23 @@ include("./includes/head.php");
     
     <!-- include footer -->
     <?php include_once("./footer.php") ?>
+    <script>
+        var action="";
+ function generateReport(){
+  let req=$("#form").serialize();
+  let url="generatedReport?"+req;
+  window.open(url, '_blank').focus();
+  // window.open(url);
+ }
+  function chooseReport(name="",label=""){
+    action=name;
+    if(name!="SLB"){
+      let url=`generatedReport?rname=${name}`;
+      window.open(url, '_blank').focus();
+      return;
+    }
+    $("#rname").val(name);
+    $("#asr").text(label)
+    $("#basicModal").modal("show");
+  }
+</script>

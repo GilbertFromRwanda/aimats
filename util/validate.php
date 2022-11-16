@@ -30,6 +30,16 @@ class validate{
 							$this->adderror("{$item} must be of maximum of {$rule_value} lettre(s)");
 						}
 						break;
+						case 'minnum':
+						    if($value< $rule_value){
+							$this->adderror("{$item} must be a minimum of {$rule_value} ");
+						}
+						break;
+						case 'maxnum':
+						    if($value > $rule_value){
+							$this->adderror("{$item} must be of maximum of {$rule_value} ");
+						}
+						break;
 						case 'number':
 						    if(!is_numeric($value) && $rule_value== true){
 								$this->adderror("{$item} can only contain digits");

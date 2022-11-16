@@ -28,8 +28,8 @@ if (isset($_GET['n'])) {
                             <div class="card-action card-tabs mb-3">
                                 <ul class="nav nav-tabs" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link  active"   href="a_student_request" role="tab">
-                                            Back
+                                        <a class="nav-link  active"   href="home" role="tab">
+                                            Home
                                         </a>
                                     </li>
                                    
@@ -39,6 +39,51 @@ if (isset($_GET['n'])) {
                     </div>
                 </div>
             </div>
+            <?php
+            $userId=$_SESSION['ht_hotel'];
+            $column="";
+            $levelCond="ast.partner_id={$userId}";
+            $levelCond1="st.partner_id={$userId}";
+            if($level=="SUPERVISIOR"){
+                $levelCond="ast.supervisior_id ={$userId}";
+                $levelCond1="st.suppervisior_id={$userId}";
+                // exit(0);
+            }
+                $cond=" WHERE  st.partner_id={$userId} order by id desc ";
+                if(isset($_GET['pinter']) && is_numeric($_GET['pinter'])){
+                    $cond="where st.internaship_periode_id={$_GET['pinter']} AND st.partner_id={$userId} order by id desc ";
+                }
+                if(isset($_GET['ungraded'])){
+                    // get student who does not have a marks
+                    $cond="where st.card_id NOT IN(SELECT student_id  from a_student_grade ast where $levelCond AND ast.internaship_id={$cIntern->id}) AND $levelCond1 AND st.internaship_periode_id=$cIntern->id";
+                } else if(isset($_GET['graded'])){
+                    // get student graded
+                    $cond="where st.card_id  IN(SELECT student_id  from a_student_grade ast where $levelCond AND ast.internaship_id={$cIntern->id}) AND $levelCond1 AND st.internaship_periode_id=$cIntern->id";
+                        $column=",(SELECT ast.marks  from a_student_grade ast where ast.student_id=st.card_id AND $levelCond AND ast.internaship_id={$cIntern->id}) as marks";
+                } else if(isset($_GET['viewgraded']) && $level=="ADMIN"){
+                    $cond="where st.card_id  IN(SELECT student_id  from a_student_grade ast where  ast.internaship_id={$cIntern->id})  AND st.internaship_periode_id=$cIntern->id";
+                    $column=",(SELECT ast.marks  from a_student_grade ast where ast.student_id=st.card_id AND ast.internaship_id={$cIntern->id}) as marks";
+                }
+                if(isset($_GET['sinter']) && is_numeric($_GET['sinter'])){
+                    $cond="where st.internaship_periode_id={$_GET['sinter']} AND st.suppervisior_id={$userId} order by id desc ";
+                }
+                if(isset($_GET['unsubmitted'])){
+                    $today=date('Y-m-d');
+                    $cond="where st.card_id NOT IN(SELECT student_id FROM a_student_logbook where log_date='$today' AND suppervisor_id={$userId} ) AND $levelCond1 ";  
+                }
+                if(isset($_GET['st'])){
+                    // get one students
+                    $cond="where st.card_id={$_GET['st']}";
+                }
+                if(isset($_GET['d'])){
+                    // get one students
+                    $cond="where st.card_id={$_GET['d']}";
+                }
+                $query="SELECT st.* $column FROM a_student_tb st $cond";
+    
+                // echo $query;
+            
+            ?>
             <div class="row">
              <div class="col-12">
              <div class=" card">
@@ -53,37 +98,54 @@ if (isset($_GET['n'])) {
                                             <th class=" fs-13">Major</th>
                                             <th class=" fs-13">Email</th>
                                             <th class=" fs-13">Tel</th>
+                                            <?php if(!empty($column)): ?>
+                                                <th class=" fs-13">Marks</th> 
+                                                <?php endif; ?>
+                                            <th class=" fs-13"></th>
                                         </tr>
                                     </thead>
                                     <tbody class=" fs-12">
                                     
                                         <?php
-                                        $userId=$_SESSION['ht_userId'];
-                                            $cond="";
-                                            if(isset($_GET['pinter']) && is_numeric($_GET['pinter'])){
-                                                $cond="where internaship_periode_id={$_GET['pinter']} AND partner_id={$userId} order by id desc ";
-                                            }
-                                        //   echo $cond;
-                                        $lists=$database->fetch("SELECT * FROM a_student_tb $cond ");
+                                        $lists=$database->fetch($query);
+                                        // $lists=[];
                                         $i=0;
-                                        $inters=[];
-                                        $partners=[];
-                                        $supv=[];
                                         foreach ($lists as $key => $h) {
                                             $i++;
+                                            $cId=input::enc_dec("e",$h['card_id']);
+                                            $names=$h['first_name'] .' '. $h['last_name'];
                                             ?>
                                             <tr>
                                             <td><?= $i?></td>
-                                                <td class=" text-capitalize"><?= $h['first_name'] .' '. $h['last_name'] ?></td>
+                                                <td class=" text-capitalize"><?= $names ?></td>
                                                 <td class=" text-capitalize"><?= $h['major_in'] ?></td>
                                                 <td class=""><?= $h['email'] ?></td>
                                                 <td class=""><?= $h['phone'] ?></td>
-                                                <!-- <td>
-                                                    <select  class="approveSupplier form-control is_<?=$h['is_active']?>" data-sup="<?= $h['id']?>">
-                                                       <option value="yes" <?php if($h['is_active']=="yes")echo "selected" ?>> Yes </option>
-                                                       <option value="no" <?php if($h['is_active']=="no")echo "selected" ?>> No </option>
-                                                </select>
-                                                </td> -->
+                                                <?php if(!empty($column)): ?>
+                                                <td class=" fs-13"><?=$h['marks']?></td> 
+                                                <?php endif; ?>
+                                                <td>
+                                                    <div class="dropdown ms-auto text-right">
+                                                        <div class="btn-link" data-bs-toggle="dropdown">
+                                                            <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                                    <rect x="0" y="0" width="24" height="24"></rect>
+                                                                    <circle fill="#000000" cx="5" cy="12" r="2"></circle>
+                                                                    <circle fill="#000000" cx="12" cy="12" r="2"></circle>
+                                                                    <circle fill="#000000" cx="19" cy="12" r="2"></circle>
+                                                                </g>
+                                                            </svg>
+                                                        </div>
+                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                            <?php if($level=="PARTERN"): ?>
+                                                            <a class="dropdown-item" href="#" onclick="openStudentPartner(<?php echo htmlspecialchars(json_encode($h))?>,'ADD_GRADE');">
+                                                            <i class="las la-check-square scale5 text-primary me-2"></i> Add Grade</a>
+                                                            <?php endif ?>
+                                                            <a class="dropdown-item" href="a_student_marks?st=<?=$cId?>&nm=<?=$names?>&c=<?=$h['card_id']?>">
+                                                            <i class="las la-check-square scale5 text-primary me-2"></i> View Grade details</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         <?php }
                                         ?>
@@ -101,71 +163,140 @@ if (isset($_GET['n'])) {
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="title">Add New Student</h5>
+                    <h5 class="modal-title" id="title">Evaluation Form</h5>
                     <span class="  close"> <span class=" fa fa-times " data-bs-dismiss="modal"></span></span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <form id="form">
-                        <div class="row divRequestForm mydv" >
-                            <div class="col-md-8">
-                            <div class="mb-3">
-                                <label for="menu_type" class="text-black form-label">Internaship period <span class="required text-danger">*</span></label>
-                                <select type="text" class="form-control" value="" name="internaship" id="intern">
-                                    <?php 
-                                
-                                    ?>
-                            </select>                           
-                            </div>
-                            </div>
-                            <div class="col-md-4 mt-2">
-                            <div class="mb-3 mt-4"> 
+                        <div class="row d-none  divRequestForm mydv" >
+                        <!-- view grade here -->
                         </div>
-                        </div>
-                    <div class="row d-none divStudent mydv">
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label for="menu_type" class="text-black form-label">Student name <span class="required text-danger">*</span></label>
-                                <input type="text" readonly="true"  name="name" id="names" class=" form-control text-uppercase"/>
-                                <input type="hidden" name="action" id="action" value="ASSIGN_STUDENT_TO_PARTNER_TO_SUPPERVISIOR"/>
-                            </div>
-                        </div> 
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label for="menu_type" class="text-black form-label">Major In <span class="required text-danger">*</span></label>
-                                <input  type="text" name="majorIn" id="majorIn" class=" form-control"/>
-                            </div>
-                        </div> 
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label for="menu_type" class="text-black form-label">Suppervisior <span class="required text-danger">*</span></label>
-                                <!-- <input type="number"  name="tin" placeholder="Eg:000000001" class=" form-control" onkeypress="limitKeypress(event,this.value,9)"/> -->
-                                <select value="" id="sSuppervisior" name="suppervisior" class="form-control">
-                                </select>
-                            </div>
-                        </div> 
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label for="menu_type" class="text-black form-label">Partner  <span class="required text-danger">*</span> <span class=" text-warning" id="waitPartner"></span></label>
-                                <select value="" id="sPartner" name="partner" class=" form-control">
-                                </select>
-                            </div>
-                        </div> 
-                        <div class="col-md-12 text-center">
-                        <button type="button" class="btn btn-primary "  onclick="onAssignStudent(this)">Save</button> 
-                        </div> 
-                    </div>
-                    <div class="row">
-                    <div class="col-12">
+                    <div class="row divStudent mydv">
+                        <div class="col-lg-12">
+                            <form id="form">
+
+                              <table class=" table" id="tbGrade">
+                                <thead>
+                                    <tr><th colspan="3" class=" text-center"><span id="names"></span></th></tr>
+                                    <tr>
+                                        <th>#</th><th>Evaluation Criterias</th><th>Marks</th></tr></thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td class="tdlbl">Professional knowledge</td>
+                                        <td class="nodb knowledge">
+      
+                                            <input type="number" onblur="updateTotal(this,'PRK')" value="" name="professional_knowledge"> <span class="text-danger">*</span>/10
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                    <td>2</td>
+                                        <td class="tdlbl">
+                                            <ul>
+                                                <li>
+                                                Professional Qualities 
+                                                <!-- <span class="badge badge-primary badge-sm">Add new</span> -->
+                                                    <ul class="myli">
+                                                        <li>
+                                                            Punctuality
+                                                        </li>
+                                                        <li >
+                                                            Initiative
+                                                        </li>
+                                                        <li>
+                                                            Adaptability
+                                                        </li>
+                                                        <li>
+                                                            Discipline
+                                                        </li>
+                                                        <li>
+                                                            Achievement
+                                                        </li>
+                                                        <li>
+                                                            Team Sprit
+                                                        </li>
+                                                        
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        <td class="nodb qualities">
+                                            <input type="number" onblur="updateTotal(this,'PRQ')" value="" name="professional_qualities"> <span class="text-danger">*</span>/10
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                    <td>3</td>
+                                    <td class="tdlbl">
+                                            <ul>
+                                                <li>
+                                                Personal Qualities 
+                                                <!-- <span class="badge badge-primary badge-sm">Add new</span> -->
+                                                    <ul class="myli">
+                                                        <li>
+                                                            Originality
+                                                        </li>
+                                                        <li >
+                                                            Enthusiasm
+                                                        </li>
+                                                        <li>
+                                                            Courtesy
+                                                        </li>
+                                                        
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        <td class="nodb personal">
+      
+                                            <input type="number" value="" onblur="updateTotal(this,'PEQ')" name="personal_qualities" > <span class="text-danger">*</span>/10
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                    <td>4</td>
+                                        <td id="" class="tdlbl">
+                                            Responsibility
+                                        </td>
+                                        <td class="nodb responsibility">
+      
+                                            <input type="number" value=""  onblur="updateTotal(this,'RES')" name="responsibility" > <span class="text-danger">*</span>/10
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                    <td>5</td>
+                                        <td id="" class="tdlbl">Relationship with co-workers</td>
+                                        <td class="nodb relationship">
+                                           <input type="number" value="" onblur="updateTotal(this,'REL')" name="relationship" ><span class="text-danger">*</span>/10
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                    <td></td>
+                                        <td id="" class="tdlbl">Attchment <span class="text-danger">*</span></td>
+                                        <td><input type="file" name="attachment" accept="images/*"/></td>
+                                    </tr>
+                                    <tr>
+                                    <td></td>
+                                        <td id="" class="tdlbl"></td>
+                                        <td id="tdtoto">Tot:<span id="mytoto"></span><span>/50</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                           
+                        </form>
+                        </div>  
+                        <div class="col-12">
                             <div id="ajaxresults"></div>
                         </div>
+                        <div class="col-md-12 text-center">
+                        <button type="button" class="btn btn-primary btn-sm"  onclick="onGradeStudent(this)">Save</button> 
+                        </div> 
                     </div>
                
                 </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary  d-none"  onclick="onSupplierCreated(this)">Save</button>
+                    <!-- <button type="button" class="btn btn-primary  d-none"  onclick="onSupplierCreated(this)">Save</button> -->
                 </div>
             </div>
         </div>
@@ -173,3 +304,66 @@ if (isset($_GET['n'])) {
     <!-- end of modal -->
     <!-- include footer -->
     <?php include_once("./footer.php") ?>
+    <script>
+        var student=null;
+        var tot={};
+        function updateTotal(e,key){
+            $(".check").remove();
+            let v=Number($(e).val());
+            if(v>10 || v<0){
+                $(e).before("<span class='text-danger check'> Please check <br/></span>");
+            }
+            tot[key]=v;
+            getTotal();
+        }
+        function getTotal(){
+            let t=0;
+           Object.entries(tot).map(([key,val]=entry)=>{
+            console.log(val);
+            t+=val;
+           });
+           $("#mytoto").text(t);
+        }
+function openStudentPartner(selectedStudent,action){
+    student=selectedStudent;
+    $("#names").text(`${student.first_name} ${student.last_name} : ${student.major_in}`)
+    $("#basicModal").modal("show");
+}
+function onGradeStudent(e){
+    $(e).attr("disabled","disabled");
+    var formData = new FormData($("#form")[0]);
+    formData.append("student_id",student.card_id);
+    formData.append("internaship_id",student.internaship_periode_id );
+    formData.append("supervisior_id",student.suppervisior_id);
+    formData.append("action","ADD_GRADE_TO_STUDENT");
+    $.ajax({
+        type: "POST",
+        url:"ajax_pages/internaship.php",
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType: "json",
+        success: function(data, textStatus, jqXHR) {
+            $(e).removeAttr("disabled");
+           //process data
+           if(data.isOk){
+               // send notification to the  student
+               makePostRequest(`url=a_student_marks&level=STUDENT&level_id=${student.card_id}&action=NOTIFY&message=Check your internaship marks`).then((res)=>{
+                        console.log(res);
+                    });
+            $("#form").trigger("reset");
+            $("#ajaxresults").removeClass("alert alert-danger").addClass("alert alert-success").html(data.data);
+            $("#basicModal").modal("hide");
+            // window.location.reload();
+           }else{
+            $("#ajaxresults").removeClass("alert alert-success").addClass("alert alert-danger").html(data.data);
+           }
+        },
+        error: function(data, textStatus, jqXHR) {
+            $(e).removeAttr("disabled");
+           //process error msg
+           $("#ajaxresults").html(data);
+        }});
+        return
+}
+</script>

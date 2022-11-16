@@ -39,12 +39,12 @@
                   </svg>
                   <div class="pulse-css"></div>
                 </a>
-                <div class="dropdown-menu dropdown-menu-right" id="dropdown-menu-right">
+                <div class="dropdown-menu dropdown-menu-right mynotify" id="dropdown-menu-right">
                   <div id="DZ_W_Notification1" class="widget-media dz-scroll p-3" style="height: 380px">
                     <ul class="timeline" id="notifyList">
                       <?php
                       $level=$_SESSION['ht_level'];
-                      $levelId=$level!="BEN_ADMIN"?$_SESSION['ht_hotel']:$_SESSION['ht_ben'];
+                      $levelId=$level!="STUDENT"?$_SESSION['ht_hotel']:$_SESSION['ht_userId'];
                       $hasNotification=$database->count_all("notifications_tb WHERE level_id=$levelId AND level='$level'");
                       if($hasNotification){
                         $rows=$database->fetch("SELECT * FROM notifications_tb WHERE level_id=$levelId AND level='$level' order by id desc limit 5 ");

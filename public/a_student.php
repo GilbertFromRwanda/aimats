@@ -8,7 +8,6 @@ if (isset($_GET['n'])) {
     $database->query("DELETE FROM notifications_tb where id=$idDec");
 }
 ?>
-
 <div id="main-wrapper">
     <?php include("./includes/sidebar.php") ?>
     <!-- header here -->
@@ -79,9 +78,18 @@ if (isset($_GET['n'])) {
                                                 $cond.=" AND suppervisior_id  IS NULL";
                                             }else if($status=="no_partner"){
                                                 $cond.=" AND partner_id  IS NULL";
+                                            } else if($status=="no_daily"){
+                                                $today=date('Y-m-d');
+                                                $cond=" WHERE  card_id NOT IN(SELECT student_id FROM a_student_logbook  WHERE  log_date='$today' AND internaship_id=$currentIntern->id)   AND internaship_periode_id={$currentIntern->id} AND partner_id  IS NOT NULL ";  
+                                            }
+                                            if(isset($_GET['p'])){
+                                                $cond=" WHERE partner_id={$_GET['p']} AND internaship_periode_id={$currentIntern->id}";
                                             }
                                         //   var_dump("SELECT * FROM a_student_tb $cond");
+                                        // echo "SELECT * FROM a_student_tb $cond";
+                                          
                                         $lists=$database->fetch("SELECT * FROM a_student_tb $cond");
+                                        // $lists=[];
                                         $i=0;
                                         $inters=[];
                                         $partners=[];
@@ -255,14 +263,31 @@ if (isset($_GET['n'])) {
       $(e).addClass("d-none");
       $("#ajaxresults").html(`<div class="alert alert-warning"><span>Please wait moment ... </span></div>`);
       let i=$("#intern").val();
-      sendWithAjax(`osup=${selectedStudent.suppervisior_id}&op=${selectedStudent.partner_id}&major=${selectedStudent.major_in}&inter=${selectedStudent.internaship_periode_id}&student=${selectedStudent.id}&p=${partner}&s=${supper}&idate=${intershipDate}&action=ASSSIGN_SUPPERVISIOR_PARTNER_TO_STUDENT`, "ajax_pages/suppervisior").then((res) => {
+      sendWithAjax(`card_id=${selectedStudent.card_id}&osup=${selectedStudent.suppervisior_id}&op=${selectedStudent.partner_id}&major=${selectedStudent.major_in}&inter=${selectedStudent.internaship_periode_id}&student=${selectedStudent.id}&p=${partner}&s=${supper}&idate=${intershipDate}&action=ASSSIGN_SUPPERVISIOR_PARTNER_TO_STUDENT`, "ajax_pages/suppervisior").then((res) => {
         $(e).removeClass('d-none');
         NProgress.done(true);
         if (res.isOk) {
-            let spname=$("#sPartner option:selected").text();
+        let spname=$("#sPartner option:selected").text();
         let ssname=$("#sSuppervisior option:selected").text();
         $(`#pname${selectedStudent.id}`).text(spname);
         $(`#sname${selectedStudent.id}`).text(ssname);
+                    // send to partner
+            if(spname!='__select__')
+         makePostRequest(`url=a_partner_student?st=${selectedStudent.card_id}&level=PARTNER&level_id=${partner}&action=NOTIFY&message=New Internaship Student(${selectedStudent.last_name} ${selectedStudent.last_name})`).then((res)=>{
+                        console.log(res);
+                    });  
+            // send to supervisior
+            if(ssname!='__select__')
+            makePostRequest(`url=a_partner_student?st=${selectedStudent.card_id}&level=SUPERVISIOR&level_id=${supper}&action=NOTIFY&&message=New Assigned Student(${selectedStudent.last_name} ${selectedStudent.last_name})`).then((res)=>{
+                        console.log(res);
+                    }); 
+                            // send notification to student
+                            ssname=ssname!='__select__'?ssname:"-";
+                            spname=spname!='__select__'?spname:"-";
+        let msg=`${spname} as partern AND ${ssname} as supervisior`;
+        makePostRequest(`url=home&level=STUDENT&level_id=${selectedStudent.card_id}&action=NOTIFY&message=${msg}`).then((res)=>{
+                        console.log(res);
+                    });
         $("#basicModal").modal("hide");
             // $("#ajaxresults").html(`<div class="alert alert-success"><span>${res.data}</span></div>`);
             $("#ajaxresults").html("");
@@ -289,7 +314,7 @@ if (isset($_GET['n'])) {
                 fetch(`ajax_pages/internaship?action=GET_PARTNER_FOR_MAJOR_IN&inter=${student.internaship_periode_id}&major=${student.major_in}`).then((res)=>res.json()).then((data)=>{
                     partners=data.data;
                     $("#waitPartner").text("")
-                    let option='<option selected value=" " disabled>__select__</option>';
+                    let option='<option selected value=" " >__select__</option>';
                 partners.forEach(p => {
                     let selected=selectedStudent.partner_id==p.id?"selected":"NoSelected";
                     option+=`<option value="${p.id}" ${selected}>${p.name} -> ${p.place}</option>`;
@@ -297,7 +322,7 @@ if (isset($_GET['n'])) {
                 $("#sPartner").html(option);
                 })
                 //  append suppervisiors
-                let option='<option selected value=" " disabled>__select__</option>';
+                let option='<option selected value=" " >__select__</option>';
                 suppervisiors.forEach(s => {
                     let selected=selectedStudent.suppervisior_id==s.id?"selected":"NoSelected";
                     // console.log(selectedStudent.suppervisior_id,s.id);

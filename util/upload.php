@@ -50,7 +50,7 @@ public static function Images($files,$inputName="file",$targetDir="../assets/img
       }else{
       $statusMsg = '404';
       }
-      return json_encode(['statusMsg'=>$statusMsg,'errorMsg'=>$errorMsg,'sqlValue'=>$insertValuesSQL]);
+      return ['statusMsg'=>$statusMsg,'errorMsg'=>$errorMsg,'sqlValue'=>$insertValuesSQL];
 }
 public static function Image($files,$inputName="file",$targetDir="../assets/images/"){
   $statusMsg = $errorMsg = $insertValuesSQL = $errorUpload = $errorUploadType = '';
@@ -87,7 +87,7 @@ public static function Image($files,$inputName="file",$targetDir="../assets/imag
  }else{
   $statusMsg = '404';
   }
-  return json_encode(['statusMsg'=>$statusMsg,'errorMsg'=>$errorMsg,'sqlValue'=>$insertValuesSQL]);
+  return ['statusMsg'=>$statusMsg,'errorMsg'=>$errorMsg,'sqlValue'=>$insertValuesSQL];
   }
 
   public static function removeUploadedImage($fileName="file",$targetDir="../assets/img/"){

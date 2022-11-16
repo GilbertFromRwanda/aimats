@@ -6,7 +6,7 @@ function backHome(){
     echo '<meta http-equiv="refresh" content="1;url=./home">';
     exit();
 }
-if(!in_array($level,['ADMIN','INST_ADMIN'])){
+if(!in_array($level,['ADMIN'])){
     backHome();
     exit();
 }
@@ -85,59 +85,12 @@ $user=User::findById($userId);
                                                         <div class="mb-3">
                                                             <label for="hotel_level" class="text-black font-w600 form-label">level <span class="required">*</span></label>
                                                             <select type="text" class="form-control" value="" name="user_level" id="hotel_level">
-                                                            <option value="" disabled selected>__select__</option>
-                                                            <?php if($level=='ADMIN'){
-                                                                $tb="institition_tb";
-                                                                ?>    
+                                                            <option value="" disabled selected>__select__</option> 
                                                                 <option value="ADMIN" <?=$user->level=='ADMIN'?'selected':''?>>Admin</option>
-                                                                <option value="INST_ADMIN" <?=$user->level=='INST_ADMIN'?'selected':''?>>Institition Admin</option>
-                                                                <option value="BEN_ADMIN" <?=$user->level=='BEN_ADMIN'?'selected':''?>>Beneficiary Admin</option>
-                                                                <option value="SUP_ADMIN" <?=$user->level=='SUP_ADMIN'?'selected':''?>>Supplier Admin</option>
-                                                                <?php }else{
-                                                                    $tb="beneficiary_tb";
-                                                                    ?>
-                                                                <!-- <option value="INST_ADMIN">Institition Admin</option> -->
-                                                                <option value="BEN_ADMIN" <?=$user->level=='BEN_ADMIN'?'selected':''?>>Beneficiary Admin</option>
-                                                                <?php } ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6" id="dvInst">
-                                                        <div class="mb-3">
-                                                            <label for="insti" class="text-black font-w600 form-label">Institition <span class="required">*</span></label>
-                                                            <select type="text" class="form-control" value="" name="institition" id="insti" data-level="<?=$level?>" onchange="getBen1(this)">
-                                                            <option value="" disabled selected>__select__</option>
-                                                            <?php
-                                                                $cond="";
-                                                                if($level!="ADMIN"){
-                                                                    $cond=" where id={$user->institition_id}";
-                                                                }
-                                                                $lists=$database->fetch("SELECT id,name from institition_tb $cond order by id desc");
-                                                                foreach ($lists as $key => $h) {
-                                                                ?>    
-                                                               <option value="<?=$h['id']?>" <?=$user->institition_id==$h['id']?'selected':''?>><?=$h['name']?></option>
-                                                                <?php } 
-                                                                ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6" id="dvBen">
-                                                        <div class="mb-3">
-                                                            <label for="insti" class="text-black font-w600 form-label">beneficiary <span class="d-none" id="bLoader">Loading ... </span> <span class="required">*</span></label>
-                                                            <select type="text" class="form-control" value="" name="beneficiary" id="ben">
-                                                            <option value="" disabled selected>__select__</option>
-                                                            <?php
-                                                            $cond="";
-                                                            if($level!="ADMIN"){
-                                                                $cond=" where id={$user->ben_id}";
-                                                            }
-                                                                $lists=$database->fetch("SELECT id,name from beneficiary_tb $cond order by id desc");
+                                                                <option value="STUDENT" <?=$user->level=='STUDENT'?'selected':''?>>Student</option>
+                                                                <option value="SUPERVISIOR" <?=$user->level=='SUPERVISIOR'?'selected':''?>>Supervisior</option>
+                                                                <option value="PARTNER" <?=$user->level=='PARTNER'?'selected':''?>>Partner</option>
                                                                 
-                                                                foreach ($lists as $key => $h) {
-                                                                ?>    
-                                                                <option value="<?=$h['id']?>" <?=$user->ben_id==$h['id']?'selected':''?>><?=$h['name']?></option>
-                                                                <?php } 
-                                                                ?>
                                                             </select>
                                                         </div>
                                                     </div>

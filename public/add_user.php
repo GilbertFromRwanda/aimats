@@ -71,41 +71,8 @@ if(!in_array($level,['ADMIN','INST_ADMIN'])){
                                                             <label for="hotel_level" class="text-black font-w600 form-label">level <span class="required">*</span></label>
                                                             <select type="text" class="form-control" value="" name="user_level" id="hotel_level" onchange="onLevelChange(this.value)">
                                                             <option value="" disabled selected>__select__</option>
-                                                            <?php if($level=='ADMIN'){
-                                                                $tb="institition_tb";
-                                                                ?>    
                                                                 <option value="ADMIN">Admin</option>
-                                                                <option value="INST_ADMIN">Institition Admin</option>
-                                                                <option value="BEN_ADMIN">Beneficiary Admin</option>
-                                                                <?php }else{
-                                                                    $tb="beneficiary_tb";
-                                                                    ?>
-                                                                <!-- <option value="INST_ADMIN">Institition Admin</option> -->
-                                                                <option value="BEN_ADMIN">Beneficiary Admin</option>
-                                                                <?php } ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6 d-none" id="dvInst">
-                                                        <div class="mb-3">
-                                                            <label for="insti" class="text-black font-w600 form-label"><?=$tb=="beneficiary_tb"?'Beneficiary':'Institition'?> <span class="required">*</span></label>
-                                                            <select type="text" class="form-control" value="" name="institition" id="insti" data-level="<?=$level?>" onchange="getBen(this)">
-                                                            <option value="" disabled selected>__select__</option>
-                                                            <?php if($level=='ADMIN' || $level=="INST_ADMIN"){ 
-                                                                $cond= $level=="INST_ADMIN"?" WHERE institition_id={$_SESSION['ht_hotel']}":"";
-                                                                $lists=$database->fetch("SELECT id,name from $tb $cond order by id desc");
-                                                                foreach ($lists as $key => $h) {
-                                                                ?>    
-                                                                <option value="<?=$h['id']?>"><?=$h['name']?></option>
-                                                                <?php } }?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6 d-none" id="dvBen">
-                                                        <div class="mb-3">
-                                                            <label for="insti" class="text-black font-w600 form-label">beneficiary <span class="d-none" id="bLoader">Loading ... </span> <span class="required">*</span></label>
-                                                            <select type="text" class="form-control" value="" name="beneficiary" id="ben">
-                                                            <option value="" disabled selected>__select__</option>
+                                                                <option value="USER">Normal user</option>
                                                             </select>
                                                         </div>
                                                     </div>

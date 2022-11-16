@@ -4,59 +4,95 @@ require("../../config/grobals.php");
 // include input and validate
 require("../../util/input.php");
 include("../../util/validate.php");
+include("../../util/upload.php");
 $action=input::get("action");
 
 
 
 switch ($action) {
     case 'ADD_LOGBOOK':
+        try {
+        $level=$_SESSION["ht_level"];
+        $userId=$_SESSION['ht_userId'];
+        if($level!="STUDENT"){
+            echo json_encode(["isOk"=>false,"data"=>"Access Denied"]); 
+            exit(0);
+        }
         $val=new validate();
-        $val->check($_GET,[
+        $mycheck=[
             "lesson"=>["required"=>true],
             "description"=>["required"=>true],
             "challenge"=>['required'=>true],
-            "internaship_id"=>['required'=>true],
-            "suppervisor_id"=>['required'=>true],
-            "partner_id"=>['required'=>true],
-            // "sp_comment"=>['required'=>true],
-            // "id"=>['required'=>true]
-        ]);
+            // "photo"=>["type"=>"jpg,png,jpeg"]
+        ];
+        $isEditable=(boolean)input::get("isEditable");
+        $today=date('Y-m-d');
+        if(!$isEditable){
+        $isThere=$database->get("log_date,screenshoots","a_student_logbook","student_id=$userId AND log_date='$today'");
+        if(isset($isThere->log_date)){
+           echo json_encode(["isOk"=>false,"data"=>"Daily activity already exists <button onclick='editActivity()'  class='btn btn-success btn-sm' type='button'>Click here to replace it</button>"]); 
+           exit(0);  
+        } 
+    }
+        $val->check($_POST,$mycheck);
             if(!$val->passed()){
                 echo json_encode(["isOk"=>false,"data"=>implode(',',$val->errors())]); 
                 exit(0);
         }
-        // one date at once
-
+        // check internaship
+        $internaship=$database->get("id","a_internaship_periode","status='activated'");
+        if(!isset($internaship->id)){
+            echo json_encode(["isOk"=>false,"data"=>"No activated Internaship available please contact your admin"]); 
+            exit(0); 
+        }
+        //  get student info
+        $student=$database->get("internaship_periode_id,partner_id,suppervisior_id","a_student_tb","card_id=$userId");
+        if($internaship->id!=$student->internaship_periode_id){
+            echo json_encode(["isOk"=>false,"data"=>"You are not included in current internaship periode"]); 
+            exit(0); 
+        }
+        if(!isset($student->partner_id)){
+            echo json_encode(["isOk"=>false,"data"=>"Your partner not available please contact Auca administration"]); 
+            exit(0);
+        }
+        if(!isset($student->suppervisior_id)){
+            echo json_encode(["isOk"=>false,"data"=>"Your Suppervisior not available please contact Auca administration"]); 
+            exit(0);
+        }
+    
+        $pt=upload::Images($_FILES,"photo","../uploads/")['sqlValue']; 
         $name=input::get("description");
         $c=input::get("challenge");
         $l=input::get("lesson");
-        
-        $sup=input::get("suppervisor_id");
-        $partner=input::get("partner_id");
-        $i=input::get("internaship_id");
+        $sup=$student->suppervisior_id;
+        $partner=$student->partner_id;
+        $i=$internaship->id;
         $spcomment=input::get("sp_comment");
         $userId=$_SESSION['ht_userId'];
-
+        $names=$_SESSION['ht_name'];
         // $logdate=input::get("log_date");
          //daily permit
-         $today=date('Y-m-d');
-         $isThere=$database->get("log_date","a_student_logbook","student_id=$userId AND log_date='$today'");
-         if(isset($isThere->log_date)){
-            echo json_encode(["isOk"=>false,"data"=>"Daily activity already exists"]); 
-            exit(0);  
-         }         
-         
-       $query="INSERT INTO a_student_logbook(name,objective,challenges,student_id,suppervisor_id,internaship_id,partner_id,suppervisior_comment) 
-       values('{$name}','{$l}','{$c}',{$userId},'{$sup}','{$i}','{$partner}','{$spcomment}')";
-       
-    //    echo $query;
-
+         if(!$isEditable){
+       $query="INSERT INTO a_student_logbook(screenshoots,name,objective,challenges,student_id,suppervisor_id,internaship_id,partner_id,suppervisior_comment) 
+       values('{$pt}','{$name}','{$l}','{$c}',{$userId},'{$sup}','{$i}','{$partner}','{$spcomment}')";
+         }else{
+            $pt=empty($pt)?"":"screenshoots='$pt',";
+            $query="UPDATE a_student_logbook SET $pt name='$name',objective='$l',suppervisior_comment='$spcomment',challenges='$c' WHERE student_id=$userId AND log_date='{$today}'";
+         }
         $iscreated=$database->query($query);
        if($iscreated){
-        echo json_encode(["isOk"=>true,"data"=>"Data Saved"]); 
+        echo json_encode(["isOk"=>true,"data"=>"Data Saved","message"=>"Please check $names daily activity",
+        "sid"=>$sup,
+        "pid"=>$partner,
+        "st"=>$userId,
+        "today"=>$today
+    ]); 
         exit(0);
        }
        echo json_encode(["isOk"=>false,"data"=>"Data Alrady Exist"]);
+    } catch (\Throwable $e) {
+        echo json_encode(["isOk"=>false,"data"=>$e->getMessage()]);
+    }
         break;
     
 
@@ -87,7 +123,7 @@ switch ($action) {
 
            $iscommented=$database->query($updatequery);
            if($iscommented){
-            echo json_encode(["isOk"=>true,"data"=>"Data Commented","q"=>$updatequery]); 
+            echo json_encode(["isOk"=>true,"data"=>"Data Commented","q"=>$updatequery,"id"=>$i,"from"=>$_SESSION['ht_name']]); 
             exit(0);
            }
            echo json_encode(["isOk"=>false,"data"=>"Data Not Commented"]);
@@ -120,7 +156,7 @@ switch ($action) {
 
            $iscommented=$database->query($updatequery);
            if($iscommented){
-            echo json_encode(["isOk"=>true,"data"=>"Data Commented","q"=>$updatequery]); 
+            echo json_encode(["isOk"=>true,"data"=>"Data Commented","q"=>$updatequery,"id"=>$i,"from"=>$_SESSION['ht_name']]); 
             exit(0);
            }
            echo json_encode(["isOk"=>false,"data"=>"Data Not Commented"]);
