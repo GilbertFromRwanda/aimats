@@ -1,5 +1,5 @@
 <?php 
-echo date('D');
+// echo date('D');
  $userId=$_SESSION['ht_userId'];
 $student=$database->get("partner_id,suppervisior_id","a_student_tb","card_id=$userId AND internaship_periode_id=$cIntern->id");
 $student->partner="-";
