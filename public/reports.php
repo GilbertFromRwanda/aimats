@@ -68,6 +68,28 @@ include("./includes/head.php");
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="widget-stat card">
+                                            <div class="card-body p-4 btn-outline-success dates" onclick="chooseReport('LSWGS','List of Students with  grades from supervisors')">
+                                                <div class="media ai-icon d-flex">
+                                                    <div class="media-body ">
+                                                        <p class="mb-0">List of Students with  grades from supervisors </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="widget-stat card">
+                                            <div class="card-body p-4 btn-outline-warning dates" onclick="chooseReport('LSNGS','List of Students haven\'t grade from supervisors')">
+                                                <div class="media ai-icon d-flex">
+                                                    <div class="media-body ">
+                                                        <p class="mb-0">List of Students haven't grades from supervisors </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="widget-stat card">
                                             <div class="card-body p-4 btn-outline-info dates" onclick="chooseReport('LSNS','List of Students haven\'t Suppervisor')">
                                                 <div class="media ai-icon d-flex">
                                                     <div class="media-body ">

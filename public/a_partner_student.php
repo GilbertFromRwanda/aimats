@@ -59,10 +59,20 @@ if (isset($_GET['n'])) {
                 } else if(isset($_GET['graded'])){
                     // get student graded
                     $cond="where st.card_id  IN(SELECT student_id  from a_student_grade ast where $levelCond AND ast.internaship_id={$cIntern->id}) AND $levelCond1 AND st.internaship_periode_id=$cIntern->id";
-                        $column=",(SELECT ast.marks  from a_student_grade ast where ast.student_id=st.card_id AND $levelCond AND ast.internaship_id={$cIntern->id}) as marks";
-                } else if(isset($_GET['viewgraded']) && $level=="ADMIN"){
+                        $column=",(SELECT ast.s_marks  from a_student_grade ast where ast.student_id=st.card_id AND ast.internaship_id={$cIntern->id}) as s_marks,(SELECT ast.marks  from a_student_grade ast where ast.student_id=st.card_id AND $levelCond AND ast.internaship_id={$cIntern->id}) as marks";
+                }
+                else if(isset($_GET['ungraded_by_sup'])){
+                    // get student who does not have a marks
+                    $cond="where st.card_id NOT IN(SELECT student_id  from a_student_grade ast where $levelCond AND ast.internaship_id={$cIntern->id}  AND ast.s_marks IS NOT  NULL) AND $levelCond1 AND st.internaship_periode_id=$cIntern->id";
+                } else if(isset($_GET['graded_by_sup'])){
+                    // get student graded
+                    $cond="where st.card_id  IN(SELECT student_id  from a_student_grade ast where $levelCond AND ast.internaship_id={$cIntern->id} AND ast.s_marks IS NOT NULL) AND $levelCond1 AND st.internaship_periode_id=$cIntern->id ";
+                // echo $cond;
+                        $column=",(SELECT ast.s_marks  from a_student_grade ast where ast.student_id=st.card_id AND ast.internaship_id={$cIntern->id}) as s_marks,(SELECT ast.marks  from a_student_grade ast where ast.student_id=st.card_id AND $levelCond AND ast.internaship_id={$cIntern->id}) as marks";
+                }
+                else if(isset($_GET['viewgraded']) && $level=="ADMIN"){
                     $cond="where st.card_id  IN(SELECT student_id  from a_student_grade ast where  ast.internaship_id={$cIntern->id})  AND st.internaship_periode_id=$cIntern->id";
-                    $column=",(SELECT ast.marks  from a_student_grade ast where ast.student_id=st.card_id AND ast.internaship_id={$cIntern->id}) as marks";
+                    $column=",(SELECT ast.s_marks  from a_student_grade ast where ast.student_id=st.card_id AND ast.internaship_id={$cIntern->id}) as s_marks,(SELECT ast.marks  from a_student_grade ast where ast.student_id=st.card_id AND ast.internaship_id={$cIntern->id}) as marks";
                 }
                 if(isset($_GET['sinter']) && is_numeric($_GET['sinter'])){
                     $cond="where st.internaship_periode_id={$_GET['sinter']} AND st.suppervisior_id={$userId} order by id desc ";
@@ -99,7 +109,8 @@ if (isset($_GET['n'])) {
                                             <th class=" fs-13">Email</th>
                                             <th class=" fs-13">Tel</th>
                                             <?php if(!empty($column)): ?>
-                                                <th class=" fs-13">Marks</th> 
+                                                <th class=" fs-13">P.Marks</th> 
+                                                <th class=" fs-13">S.Marks</th> 
                                                 <?php endif; ?>
                                             <th class=" fs-13"></th>
                                         </tr>
@@ -123,6 +134,7 @@ if (isset($_GET['n'])) {
                                                 <td class=""><?= $h['phone'] ?></td>
                                                 <?php if(!empty($column)): ?>
                                                 <td class=" fs-13"><?=$h['marks']?></td> 
+                                                <td class=" fs-13"><?=$h['s_marks']?></td> 
                                                 <?php endif; ?>
                                                 <td>
                                                     <div class="dropdown ms-auto text-right">
@@ -139,6 +151,10 @@ if (isset($_GET['n'])) {
                                                         <div class="dropdown-menu dropdown-menu-right">
                                                             <?php if($level=="PARTNER"): ?>
                                                             <a class="dropdown-item" href="#" onclick="openStudentPartner(<?php echo htmlspecialchars(json_encode($h))?>,'ADD_GRADE');">
+                                                            <i class="las la-check-square scale5 text-primary me-2"></i> Add Grade</a>
+                                                            <?php endif ?>
+                                                            <?php if($level=="SUPERVISIOR"): ?>
+                                                            <a class="dropdown-item" href="#" onclick="openStudentSupervisior(<?php echo htmlspecialchars(json_encode($h))?>,'ADD_GRADE');">
                                                             <i class="las la-check-square scale5 text-primary me-2"></i> Add Grade</a>
                                                             <?php endif ?>
                                                             <a class="dropdown-item" href="a_student_marks?st=<?=$cId?>&nm=<?=$names?>&c=<?=$h['card_id']?>">
@@ -163,7 +179,7 @@ if (isset($_GET['n'])) {
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="title">Evaluation Form</h5>
+                    <h5 class="modal-title" id="title">Evaluation Form:<span id="s_name"></span></h5>
                     <span class="  close"> <span class=" fa fa-times " data-bs-dismiss="modal"></span></span>
                     </button>
                 </div>
@@ -281,7 +297,14 @@ if (isset($_GET['n'])) {
                                     </tr>
                                 </tbody>
                             </table>
-                           
+                               <div class="row d-none" id="sup_marks">
+                                <div class="col-4">
+                                    <label>Enter  Marks</label>
+                                </div>
+                                <div class="col-6">
+                                    <input type="number" value="" name="student_marks" class="" placeholder="/20"/>
+                                </div>
+                               </div>
                         </form>
                         </div>  
                         <div class="col-12">
@@ -324,9 +347,18 @@ if (isset($_GET['n'])) {
            });
            $("#mytoto").text(t);
         }
+    function openStudentSupervisior(selectedStudent,action){
+        student=selectedStudent;
+        $("#s_name").text(`${student.first_name} ${student.last_name} : ${student.major_in}`);
+        $("#sup_marks").removeClass("d-none");
+        $("#tbGrade").addClass("d-none");
+        $("#basicModal").modal("show");
+    }
 function openStudentPartner(selectedStudent,action){
     student=selectedStudent;
     $("#names").text(`${student.first_name} ${student.last_name} : ${student.major_in}`)
+    $("#sup_marks").addClass("d-none");
+    $("#tbGrade").removeClass("d-none");
     $("#basicModal").modal("show");
 }
 function onGradeStudent(e){
@@ -354,7 +386,7 @@ function onGradeStudent(e){
             $("#form").trigger("reset");
             $("#ajaxresults").removeClass("alert alert-danger").addClass("alert alert-success").html(data.data);
             $("#basicModal").modal("hide");
-            // window.location.reload();
+            window.location.reload();
            }else{
             $("#ajaxresults").removeClass("alert alert-success").addClass("alert alert-danger").html(data.data);
            }

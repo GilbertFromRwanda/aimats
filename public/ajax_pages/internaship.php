@@ -12,22 +12,26 @@ switch ($action) {
     case 'ADD_GRADE_TO_STUDENT':
         try {
             $level=$_SESSION['ht_level'];
-            if($level!="PARTNER"){
-                echo json_encode(["isOk"=>false,"data"=>"Access denied"]);
+            if($level!="PARTNER" && $level!="SUPERVISIOR"){
+                echo json_encode(["isOk"=>false,"data"=>"Access denied $level"]);
                 exit(0);
             }
         $val=new validate();
-        $val->check($_POST,[
-            "student_id"=>['required'=>true],
-            "supervisior_id"=>['required'=>true],
-            "internaship_id"=>['required'=>true],
-            "relationship"=>['required'=>true,"maxnum"=>10,"minnum"=>0],
-            "responsibility"=>['required'=>true,"maxnum"=>10,"minnum"=>0],
-            "personal_qualities"=>['required'=>true,"maxnum"=>10,"minnum"=>0],
-            "professional_qualities"=>['required'=>true,"maxnum"=>10,"minnum"=>0],
-            "professional_knowledge"=>['required'=>true,"maxnum"=>10,"minnum"=>0],
-            "attachment"=>['required'=>true,"type"=>"jpg,png,jpeg"],
-        ]);
+            $formRule = [
+                "student_id" => ['required' => true],
+                "supervisior_id" => ['required' => true],
+                "internaship_id" => ['required' => true],
+                "relationship" => ['required' => true, "maxnum" => 10, "minnum" => 0],
+                "responsibility" => ['required' => true, "maxnum" => 10, "minnum" => 0],
+                "personal_qualities" => ['required' => true, "maxnum" => 10, "minnum" => 0],
+                "professional_qualities" => ['required' => true, "maxnum" => 10, "minnum" => 0],
+                "professional_knowledge" => ['required' => true, "maxnum" => 10, "minnum" => 0],
+                "attachment" => ['required' => true, "type" => "jpg,png,jpeg"],
+            ];
+            if ($level== "SUPERVISIOR") {
+                $formRule = ["student_marks" => ['required' => true, "maxnum" => 20, "minnum" => 0],];
+            }
+        $val->check($_POST,$formRule);
         if(!$val->passed()){
             echo json_encode(["isOk"=>false,"data"=>implode(',',$val->errors())]);
             exit(0);
@@ -42,10 +46,27 @@ switch ($action) {
             exit(0);
         }
         // check if data already exists
-        $hasExists=$database->count_all("a_student_grade where student_id=$studentId  AND internaship_id=$intern");
+            $cond = "";
+            if($level=="SUPERVISIOR"){
+                $cond = " AND s_marks IS NOT NULL";
+            }
+        $hasExists=$database->count_all("a_student_grade where student_id=$studentId  AND internaship_id=$intern $cond ");
         if($hasExists>0){
             echo json_encode(["isOk"=>false,"data"=>"Student Internaship Grade already exists"]);
             exit(0);
+        }
+        if($level=="SUPERVISIOR"){
+            $in=input::get("internaship_id");
+            $marks=input::get("student_marks");
+            $isUpdated=$database->update("a_student_grade","student_id=$studentId AND internaship_id=$in",
+            ["s_marks"=>$marks]);
+            if($isUpdated){
+                echo json_encode(["isOk"=>true,"data"=>"success"]);
+            }else{
+                echo json_encode(["isOk"=>false,"data"=>"unable to upload student grade please check if student was given marks from partener"]);
+                // exit(0);
+            }
+                exit(0);
         }
         $pt=upload::Image($_FILES,"attachment","../uploads/")['sqlValue'];
         $pk=input::get("professional_knowledge");

@@ -65,7 +65,12 @@ include("./includes/head.php");
                               <div class="col-6 ">
                                 <div class=" card bg1">
                                     <div class=" card-body text-white">
-                                       TOT: <?=$myGrade->marks?> = <?= ($myGrade->marks*100)/50 .'%'?>
+                                       Tot: <?=$myGrade->marks .'/50'?> = <?= ($myGrade->marks*100)/50 .'%'?>
+                                       <?php if($level!="PARTNER"): ?>
+                                        <div>
+                                       Supervisior:<?=$myGrade->s_marks?$myGrade->s_marks .'/20='.($myGrade->s_marks*100)/20 .'%':"-"?>
+                                       </div>
+                                       <?php endif ?>
                                     </div>
                                 </div>
                               </div>

@@ -172,8 +172,98 @@ if ($rName == "LSNCL") {
             </div>
         </div>
     </div>
+    <?php } elseif ($rName == "LSNGS") {
+    $cond="";
+    $date="";
+    if(input::required(array('from','to'))){
+    $f=input::get('from');
+    $t=input::get('to');
+        $from=date('Y-m-d 00:00:00',strtotime($f));
+        $to=date('Y-m-d 23:59:59',strtotime($t));
+        $cond=" where created_at >='$from' AND created_at <='$to'";
+        $date="($f to $t)";
+    }
+      $cond="where st.card_id NOT IN(SELECT student_id  from a_student_grade ast where ast.internaship_id={$cIntern->id} AND ast.s_marks IS NOT NULL)  AND st.internaship_periode_id=$cIntern->id ORDER BY card_id asc";
+    ?>
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header border-0 pb-0 d-sm-flex d-block">
+                <div class=" text-center d-flex justify-content-center align-items-center">
+                    <h4 class="card-title mb-1  "> List of Students haven't grades from Supervisors <br />
+                        <hr class=" hr" />
+                    </h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class=" fs-13">#</th>
+                                <th class=" fs-13">ID</th>
+                                <th class=" fs-13">Names</th>
+                                <th class=" fs-13">Phone</th>
+                                <th class=" fs-13">Major In</th>
+                                <th class=" fs-13">Partner</th>
+                                <th class=" fs-13">Suppervisor</th>
+                            </tr>
+                        </thead>
+                        <tbody class=" fs-12">
+                            <?php
+        $lists=$database->fetch("SELECT * FROM a_student_tb st $cond");
+        $i=0;
+        $inters=[];
+        $partners=[];
+        $supv=[];
+        foreach ($lists as $key => $h) {
+            $i++;
+            $h['internaship']='-';
+            $h['institition_name']='-';
+            $h['suppervisior_name']='-';
+                // partner
+                if(!isset($partners["i_{$h['partner_id']}"])){
+                    $h['institition_name']="-";
+                    if(isset($h['partner_id'])){
+                    $int=$database->get("*","a_partner_tb","id={$h['partner_id']}");
+                   $h['institition_name']=$int->name;
+                   $partners=array_merge($partners,["i_{$h['partner_id']}"=>$h['institition_name']]);
+                    }
+               }else{
+                   $h['institition_name']=$partners["i_{$h['partner_id']}"];  
+               }
+            // suppervisior
+            if(!isset($supv["i_{$h['suppervisior_id']}"])){
+                $h['suppervisior_name']='-';
+                if(isset($h['suppervisior_id'])){
+                $int=$database->get("*","a_suppervisior_tb","id={$h['suppervisior_id']}");
+               $h['suppervisior_name']=$int->names;
+               $supv=array_merge($supv,["i_{$h['suppervisior_id']}"=>$h['suppervisior_name']]);
+                }
+              
+           }else{
+               $h['suppervisior_name']=$supv["i_{$h['suppervisior_id']}"];  
+           }
+            ?>
+            <tr>
+            <td><?= $i?></td>
+            <td class="pointer"><span class=" pointer"><?= $h['card_id'] ?></span></td>
+                <td class=" text-capitalize"><?= $h['first_name'] .' '. $h['last_name'] ?></td>
+                <td class=" text-capitalize"><?= $h['phone'] ?></td>
+                <td class=" text-capitalize"><?= $h['major_in'] ?></td>
 
-<?php } else if ($rName == "LSNP") { 
+                <td class=" text-capitalize" id="pname<?=$h['id']?>"><?= $h['institition_name'] ?></td>
+                <td class=" text-capitalize" id="sname<?=$h['id']?>"><?= $h['suppervisior_name'] ?></td> 
+            </tr>
+        <?php }
+        ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php }
+else if ($rName == "LSNP") { 
            $cond="where  st.internaship_periode_id=$cIntern->id AND  partner_id  IS NULL ORDER BY card_id asc";
            ?>
            <div class="col-12">
@@ -254,7 +344,7 @@ if ($rName == "LSNCL") {
 
 <?php } else if ($rName == "LSWG") {
   
-      $cond="where  st.internaship_periode_id=$cIntern->id ORDER BY sg.marks DESC";
+      $cond="where  st.internaship_periode_id=$cIntern->id  ORDER BY sg.marks DESC";
     ?>
     <div class="col-12">
         <div class="card">
@@ -335,6 +425,91 @@ if ($rName == "LSNCL") {
             </div>
         </div>
     </div>
+<?php ?>
+
+<?php } else if ($rName == "LSWGS") {
+  
+  $cond="where  st.internaship_periode_id=$cIntern->id AND sg.s_marks IS NOT NULL ORDER BY sg.marks DESC";
+?>
+<div class="col-12">
+    <div class="card">
+        <div class="card-header border-0 pb-0 d-sm-flex d-block">
+            <div class=" text-center d-flex justify-content-center align-items-center">
+                <h4 class="card-title mb-1  "> List of Students with grades from supervisors <br />
+                    <hr class=" hr" />
+                </h4>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class=" fs-13">#</th>
+                            <th class=" fs-13">ID</th>
+                            <th class=" fs-13">Names</th>
+                            <th class=" fs-13">Phone</th>
+                            <th class=" fs-13">Major In</th>
+                            <th class=" fs-13">Partner</th>
+                            <th class=" fs-13">Suppervisor</th>
+                            <th class=" fs-13">Marks</th>
+                        </tr>
+                    </thead>
+                    <tbody class=" fs-12">
+                        <?php
+    $lists=$database->fetch("SELECT st.*,sg.s_marks as marks FROM a_student_tb st INNER JOIN a_student_grade  sg ON st.card_id=sg.student_id   $cond");
+    $i=0;
+    $inters=[];
+    $partners=[];
+    $supv=[];
+    foreach ($lists as $key => $h) {
+        $i++;
+        $h['internaship']='-';
+        $h['institition_name']='-';
+        $h['suppervisior_name']='-';
+            // partner
+            if(!isset($partners["i_{$h['partner_id']}"])){
+                $h['institition_name']="-";
+                if(isset($h['partner_id'])){
+                $int=$database->get("*","a_partner_tb","id={$h['partner_id']}");
+               $h['institition_name']=$int->name;
+               $partners=array_merge($partners,["i_{$h['partner_id']}"=>$h['institition_name']]);
+                }
+           }else{
+               $h['institition_name']=$partners["i_{$h['partner_id']}"];  
+           }
+        // suppervisior
+        if(!isset($supv["i_{$h['suppervisior_id']}"])){
+            $h['suppervisior_name']='-';
+            if(isset($h['suppervisior_id'])){
+            $int=$database->get("*","a_suppervisior_tb","id={$h['suppervisior_id']}");
+           $h['suppervisior_name']=$int->names;
+           $supv=array_merge($supv,["i_{$h['suppervisior_id']}"=>$h['suppervisior_name']]);
+            }
+          
+       }else{
+           $h['suppervisior_name']=$supv["i_{$h['suppervisior_id']}"];  
+       }
+        ?>
+        <tr>
+        <td><?= $i?></td>
+        <td class="pointer"><span class=" pointer"><?= $h['card_id'] ?></span></td>
+            <td class=" text-capitalize"><?= $h['first_name'] .' '. $h['last_name'] ?></td>
+            <td class=" text-capitalize"><?= $h['phone'] ?></td>
+            <td class=" text-capitalize"><?= $h['major_in'] ?></td>
+
+            <td class=" text-capitalize"><?= $h['institition_name'] ?></td>
+            <td class=" text-capitalize" ><?= $h['suppervisior_name'] ?></td>
+            <td class=" text-capitalize" ><?= $h['marks'] ?></td>  
+        </tr>
+    <?php }
+    ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 <?php ?>
 <?php } else if ($rName == "LSNS") { 
            $cond="where  st.internaship_periode_id=$cIntern->id AND  suppervisior_id   IS NULL ORDER BY card_id asc";

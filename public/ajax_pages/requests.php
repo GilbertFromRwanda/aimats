@@ -54,7 +54,7 @@ switch ($action) {
         $userId=$_SESSION['ht_hotel'];
         if($level=="ADMIN"){
         // find(partner,suppervisior,student,)
-        displayData("SELECT id, concat(first_name,' ',last_name) as name from a_student_tb WHERE (first_name like '%$q%' OR last_name='%$q%')","a_student","STU");
+        displayData("SELECT id, concat(first_name,' ',last_name) as name from a_student_tb WHERE (first_name like '%$q%' OR last_name='%$q%' OR card_id='$q')","a_student","STU");
         }elseif($level=="PARTNER"){
             /*1. student 2.logbook*/
             displayData("SELECT id, concat(first_name,' ',last_name) as name from a_student_tb WHERE partner_id=$userId AND  (first_name like '%$q%' OR last_name='%$q%')","a_partner_student","STU");
