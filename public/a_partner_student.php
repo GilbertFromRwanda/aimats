@@ -28,7 +28,7 @@ if (isset($_GET['n'])) {
                             <div class="card-action card-tabs mb-3">
                                 <ul class="nav nav-tabs" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link  active"    href="home" role="tab">
+                                        <a  class="nav-link  active"    href="home" role="tab">
                                             Home
                                         </a>
                                     </li>

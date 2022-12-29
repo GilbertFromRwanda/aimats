@@ -114,7 +114,7 @@
                   ?>
                 </span>
               </h3>
-              <p class="mb-0">Graded Students </p>
+              <p class="mb-0 fs-12">Graded Students by partner</p>
             </div>
           </div>
         </div>
@@ -137,14 +137,14 @@
                   ?>
                 </span>
               </h3>
-              <p class="mb-0 ">UnGraded students </p>
+              <p class="mb-0 fs-12 " style="">UnGraded students by partner </p>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="col-lg-4 pointer" onclick="window.location.href='a_partner_student?graded_by_sup'">
+    <div class="col-lg-6 pointer" onclick="window.location.href='a_partner_student?graded_by_sup'">
       <div class="widget-stat card ">
         <div class="card-body p-4">
           <div class="media ai-icon d-flex">
@@ -160,14 +160,14 @@
                   ?>
                 </span>
               </h3>
-              <p class="mb-0">Graded Students by me </p>
+              <p class="mb-0">Graded Students by supervisior </p>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="col-lg-4 pointer" onclick="window.location.href='a_partner_student?ungraded_by_sup'">
+    <div class="col-lg-6 pointer" onclick="window.location.href='a_partner_student?ungraded_by_sup'">
       <div class="widget-stat card ">
         <div class="card-body p-4">
           <div class="media ai-icon d-flex">
@@ -183,7 +183,7 @@
                   ?>
                 </span>
               </h3>
-              <p class="mb-0 ">UnGraded students by me </p>
+              <p class="mb-0 ">UnGraded students by supervisior </p>
             </div>
           </div>
         </div>

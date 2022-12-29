@@ -11,7 +11,7 @@ function displayData($sql="SELECT 1",$page="/",$k=""){
     global $database;
      $rows=$database->fetch($sql);
    foreach ($rows as $key => $r) {
-    echo "<li> <a href='$page?d={$r['id']}'>{$k}:{$r['name']}</a></li>";
+    echo "<li> <a href='$page?d={$r['id']}'>{$r['card_id']}:{$r['name']}</a></li>";
    }
 }
 switch ($action) {
@@ -54,14 +54,14 @@ switch ($action) {
         $userId=$_SESSION['ht_hotel'];
         if($level=="ADMIN"){
         // find(partner,suppervisior,student,)
-        displayData("SELECT id, concat(first_name,' ',last_name) as name from a_student_tb WHERE (first_name like '%$q%' OR last_name='%$q%' OR card_id='$q')","a_student","STU");
+        displayData("SELECT id,card_id, concat(first_name,' ',last_name) as name from a_student_tb WHERE (first_name like '%$q%' OR last_name LIKE '%$q%' OR card_id LIKE '$q%')","a_student","STU");
         }elseif($level=="PARTNER"){
             /*1. student 2.logbook*/
-            displayData("SELECT id, concat(first_name,' ',last_name) as name from a_student_tb WHERE partner_id=$userId AND  (first_name like '%$q%' OR last_name='%$q%')","a_partner_student","STU");
+            displayData("SELECT id,card_id, concat(first_name,' ',last_name) as name from a_student_tb WHERE partner_id=$userId AND  (first_name like '%$q%' OR last_name LIKE '%$q%' OR card_id LIKE '$q%')","a_partner_student","STU");
         }
         elseif($level=="SUPERVISIOR"){
             /*1. student 2.logbook*/
-            displayData("SELECT id, concat(first_name,' ',last_name) as name from a_student_tb WHERE suppervisior_id=$userId AND  (first_name like '%$q%' OR last_name='%$q%')","a_partner_student","STU");
+            displayData("SELECT id,card_id, concat(first_name,' ',last_name) as name from a_student_tb WHERE suppervisior_id=$userId AND  (first_name like '%$q%' OR last_name LIKE '%$q%' OR card_id LIKE '$q%')","a_partner_student","STU");
         }
         else{
             // displayData('device_requests',$q,"requested","DEV");
