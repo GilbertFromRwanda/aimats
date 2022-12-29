@@ -34,11 +34,13 @@
               <h3 class="mb-0 text-black">
                 <span class="counter ms-0">
                   <?php
-                   echo $database->get("SUM(requested_student) as total","a_partner_student_request_totals","internaship_id='{$cIntern->id}'")->total;
+                  // var_dump($cIntern->id);
+                   $t= $database->get("SUM(requested_student) as total","a_partner_student_request_totals","internaship_id='{$cIntern->id}'");
+                   echo isset($t->total)?$t->total:0
                   ?>
                 </span>
               </h3>
-              <p class="mb-0 fs-11"> Requested Students for Internaship </p>
+              <p class="mb-0 fs-11"> Requested Stuents for Internaship </p>
             </div>
           </div>
         </div>

@@ -3,5 +3,5 @@
 defined("DB_SERVE") ? NULL : DEFINE("DB_SERVE", "localhost");
 defined("DB_USER") ? NULL : DEFINE("DB_USER", "root");
 defined("DB_PASS") ? NULL : DEFINE("DB_PASS", "");
-defined("DB_NAME") ? NULL : DEFINE("DB_NAME", "my_cim");
+defined("DB_NAME") ? NULL : DEFINE("DB_NAME", "aimats_db");
 define("UPLOAD_DIR", "uploads/");

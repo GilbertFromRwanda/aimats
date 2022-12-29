@@ -151,13 +151,13 @@ function approveSupplier(sup_id,status="yes"){
     NProgress.done(true);
     if(res.isOk){
       $("#btnApprove").remove();
-      alert("The supplier is now approved");
+      alert("The partner is now approved");
     }else{
       $("#btnApprove").removeClass("d-none");
      alert(res.data);
     }
   }).catch((err)=>{
-    alert("unable to approve the supplier");
+    alert("unable to approve the partner");
   })
 }
 function updateSupplierProfile(sup_id){

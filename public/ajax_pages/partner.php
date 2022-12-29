@@ -44,15 +44,16 @@ switch ($action) {
             echo json_encode(["isOk"=>True,"data"=>"Username was Taken"]);
         }else {
             $query="INSERT INTO a_partner_tb (`name`, `phone`, `tin`, `place`, `email`, `c_profile`, `user_id`) VALUES ('{$name}', '{$phone}', '{$tin}', '{$place}', '{$email}', '{$profile}', '{$userid}')";
-            $userquery="INSERT INTO `a_users` (`names`, `username`, `phone`, `secret`, `level`,`status`) VALUES ('{$name}', '{$username}', '{$phone}', '{$password}', 'PARTNER','active')";
-            $database->beginTransaction();
+            $isinserted=$database->query($query);
+            $pId=$database->inset_id();
+            // $database->beginTransaction();
             try {
-                $isinserted=$database->query($query);
+                $userquery="INSERT INTO `a_users` (`names`, `username`, `phone`, `secret`, `level`,`status`,institition_id ) VALUES ('{$name}', '{$username}', '{$phone}', '{$password}', 'PARTNER','active',$pId)";
                 $userinserted=$database->query($userquery);
-                $database->commit();
+                // $database->commit();
                 echo json_encode(["isOk"=>true,"data"=>"Partner was saved"]);
             } catch (\Throwable $th) {
-                $database->rollBack();
+                // $database->rollBack();
                 echo json_encode(["isOk"=>false,"data"=>"Partner was not saved".$th->getMessage()]);
             }
         }

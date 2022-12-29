@@ -131,6 +131,7 @@ switch ($action) {
             "username"=>$cardId,"phone"=>$phone,
             "secret"=>input::getHash($cardId),
             "level"=>"STUDENT",
+            "status"=>"active"
           ]);
             if($isInserted){
               $inserted++;
