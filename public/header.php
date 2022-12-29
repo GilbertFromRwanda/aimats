@@ -1,7 +1,13 @@
-<?php $cIntern=$database->get("*","a_internaship_periode","status='activated'");
+<?php
+if($database->count_all("a_internaship_periode")>0){
+ $cIntern=$database->get("*","a_internaship_periode","status='activated'");
   if(!isset($cIntern->id)){
     $cIntern=$database->get("*","a_internaship_periode","order by id desc"); 
   }
+}else{
+  $cIntern=(object)["start_date"=>date('Y-m-d'),"end_date"=>date('Y-m-d'),"id"=>0];
+}
+
 ?>
 
         <div class="header">

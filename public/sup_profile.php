@@ -45,7 +45,7 @@ if (isset($_GET['n'])) {
                        <?php if($level=="SUP_ADMIN"){ ?>
                       <button class=" btn btn-xs btn-outline-primary" type="button" id="btnUpdate" onclick="updateSupplierProfile('<?=$id?>')">Save changes</button>
                        <?php }if($level=="ADMIN"){ ?>
-                      <button class=" btn btn-xs btn-outline-success" type="button" id="btnApprove" onclick="approveSupplier('<?=$id?>','<?=$approve?>')">Approve the supplier</button>
+                      <button class=" btn btn-xs btn-outline-success" type="button" id="btnApprove" onclick="approveSupplier('<?=$id?>','<?=$approve?>')">Approve the partner</button>
                     <?php } ?>
                     </div>
              <div class="card-body">

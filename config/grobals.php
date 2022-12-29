@@ -4,5 +4,5 @@ if(!isset($_SESSION)){
 }
 require_once("config.php"); 
 require_once("database.php"); 
-// error_reporting(0);
+error_reporting(0);
 date_default_timezone_set('Africa/kigali');

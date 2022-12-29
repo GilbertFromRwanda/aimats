@@ -95,18 +95,19 @@ switch ($action) {
                 }
         break;
     case 'CREATE_NEW_INTERNASHIP_PERIODE':
-        $val=new validate();
-        $val->check($_POST,[
-            "end_date"=>['required'=>true],
-            "start_date"=>['required'=>true],
-            "status"=>['required'=>true],
-            "upload_grade"=>['required'=>true],
-        ]);
-        if(!$val->passed()){
-            echo json_encode(["isOk"=>false,"data"=>implode(',',$val->errors())]);
-            exit(0);
-        }
-        // check start date and last date
+        try {
+            $val=new validate();
+            $val->check($_POST,[
+                "end_date"=>['required'=>true],
+                "start_date"=>['required'=>true],
+                "status"=>['required'=>true],
+                "upload_grade"=>['required'=>true],
+            ]);
+            if(!$val->passed()){
+                echo json_encode(["isOk"=>false,"data"=>implode(',',$val->errors())]);
+                exit(0);
+            }
+                 // check start date and last date
         $startDate=input::get("start_date");
         $endDate=input::get("end_date");
         $status=input::get("status");
@@ -115,29 +116,38 @@ switch ($action) {
             echo json_encode(["isOk"=>false,"data"=>"Please check start date and end date"]);
             exit(0);
         }
-        // is update or insert
-        $isUpdate=(int)input::get("id");
-        if($isUpdate==0){
-            // insert new update
-            $info=["start_date"=>$startDate,"end_date"=>$endDate,
-            "status"=>$status,"upload_grade"=>$isGraded];
-            $isInserted=$database->insert("a_internaship_periode",$info);
-            if(!$isInserted){
-                echo json_encode(["isOk"=>false,"data"=>"New Internaship is not " + $status]);
-                exit(0);
-            }
-            echo json_encode(["isOk"=>true,"data"=>"Auca internaship(Start:$startDate End:$endDate,status:$status,upload Marks:$isGraded)","i"=>$inserted,"o"=>"create"]);
-            exit(0);
-        }
+          // is update or insert
+          $isUpdate=(int)input::get("id");
+          $userID=$_SESSION['ht_userId'];
+          if($isUpdate==0){
+              // insert new update
+              $info=["start_date"=>$startDate,"end_date"=>$endDate,
+              "status"=>$status,"upload_grade"=>$isGraded,"user_id"=>$userID];
+              $isInserted=$database->insert("a_internaship_periode",$info);
+              if(!$isInserted){
+                  echo json_encode(["isOk"=>false,"data"=>"New Internaship is not " + $status]);
+                  exit(0);
+              }
+              echo json_encode(["isOk"=>true,"data"=>"Auca internaship(Start:$startDate End:$endDate,status:$status,upload Marks:$isGraded)","i"=>$inserted,"o"=>"create"]);
+              exit(0);
+          }
+          
         // update
         $info=["start_date"=>$startDate,"end_date"=>$endDate,
-        "status"=>$status,"upload_grade"=>$isGraded];
+        "status"=>$status,"upload_grade"=>$isGraded,"user_id"=>$userID];
         $isUpdated=$database->update("a_internaship_periode","id=$isUpdate",$info);
             if(!$isUpdated){
                 echo json_encode(["isOk"=>false,"data"=>"Internaship not changed try again"]);
                 exit(0);
             }
             echo json_encode(["isOk"=>true,"data"=>" New Update Internaship(End:$endDate,status:$status,upload Marks:$isGraded)","i"=>$isUpdate,"o"=>"update"]);
+        } catch (\Throwable $th) {
+            echo json_encode(["isOk"=>false,"data"=>$th->getMessage()]);
+            exit(0);
+        }
+
+   
+      
         break;
     case 'GET_PARTNER_FOR_MAJOR_IN':
         $userID=$_SESSION['ht_userId'];

@@ -11,6 +11,7 @@
     $given=isset($req->given)?$req->given:0;
     }
     $par=$database->get("name,is_active","a_partner_tb","id=$userID");
+    // echo($userID);
     session::put("is_active",'no');
    if($par->is_active=='yes'){
     session::put("is_active",'yes');

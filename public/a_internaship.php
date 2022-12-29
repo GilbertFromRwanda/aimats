@@ -82,10 +82,10 @@ include("./includes/head.php");
                                                             </svg>
                                                         </div>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                        <?php if($h['status']=='activated'): ?>
+                                                        <?php //if($h['status']=='activated'): ?>
                                                             <a class="dropdown-item" href="#" onclick="openInternLog(<?php echo htmlspecialchars(json_encode($h))?>);"><i class="las la-check-square scale5 text-primary me-2"></i> Edit</a>
                                                             <!-- <a class="dropdown-item" href="#"><i class="las la-times-circle scale5 text-danger me-2"></i> Reject Order</a> -->
-                                                        <?php endif; ?>
+                                                        <?php // endif; ?>
                                                         </div>
                                                     </div>
                                                 </td>
