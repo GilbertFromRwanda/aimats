@@ -113,7 +113,7 @@ switch ($action) {
             if($orign=="create"){
                 $partners=$database->fetch("SELECT id FROM a_partner_tb where is_active='yes'");
              foreach ($partners as $key => $p) {
-                $database->insert("notifications_tb",["message"=>$msg,"link"=>"home","level"=>'PARTNER',"level_id"=>$p['id'],"done_by"=>$user]);
+                $database->insert("notifications_tb",["message"=>$msg,"link"=>"home?id","level"=>'PARTNER',"level_id"=>$p['id'],"done_by"=>$user]);
              }
             }
             echo "sent";
