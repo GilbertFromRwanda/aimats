@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 29, 2022 at 03:10 PM
--- Server version: 10.4.25-MariaDB
--- PHP Version: 8.1.10
+-- Generation Time: Sep 07, 2023 at 12:16 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -36,15 +36,14 @@ CREATE TABLE `a_internaship_periode` (
   `upload_grade` enum('no','yes') NOT NULL DEFAULT 'no',
   `status` enum('activated','deactivated') NOT NULL DEFAULT 'deactivated',
   `user_id` bigint(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `a_internaship_periode`
 --
 
 INSERT INTO `a_internaship_periode` (`id`, `start_date`, `end_date`, `total_student`, `taken_student`, `upload_grade`, `status`, `user_id`) VALUES
-(1, '2022-11-16', '2022-12-31', 10, 0, 'no', 'activated', 1),
-(2, '2022-12-14', '2023-01-28', 0, 0, 'no', 'deactivated', 1);
+(1, '2023-09-07', '2023-10-22', 17, 0, 'no', 'activated', 1);
 
 -- --------------------------------------------------------
 
@@ -60,14 +59,7 @@ CREATE TABLE `a_partner_student_request` (
   `internaship_id` int(3) NOT NULL,
   `given_student_number` int(3) NOT NULL,
   `created_at` date NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `a_partner_student_request`
---
-
-INSERT INTO `a_partner_student_request` (`id`, `request_student_number`, `major_in`, `partner_id`, `internaship_id`, `given_student_number`, `created_at`) VALUES
-(21, 1, 'Software Engineering', 20, 1, 1, '2022-12-14');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -81,14 +73,7 @@ CREATE TABLE `a_partner_student_request_totals` (
   `internaship_id` int(6) NOT NULL,
   `requested_student` int(3) NOT NULL DEFAULT 0,
   `given_student` int(3) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `a_partner_student_request_totals`
---
-
-INSERT INTO `a_partner_student_request_totals` (`id`, `partner_id`, `internaship_id`, `requested_student`, `given_student`) VALUES
-(19, 20, 1, 1, 1);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -107,20 +92,7 @@ CREATE TABLE `a_partner_tb` (
   `c_profile` text DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `a_partner_tb`
---
-
-INSERT INTO `a_partner_tb` (`id`, `name`, `phone`, `tin`, `place`, `email`, `is_active`, `c_profile`, `created_at`, `user_id`) VALUES
-(16, 'MTN RWANDA', '0789329423', '324423421', 'kigali', 'mtn@gmail.com', 'yes', 'mtn is network company ', '2022-12-14 04:09:52', 1),
-(17, 'RWANDA tel', '0723472364', '452934884', 'kigali', 'ki@gmail.com', 'yes', 'RWanda tel is best ver', '2022-12-14 04:33:06', 1),
-(18, 'Igihe ltd', '0789994324', '085324958', 'kigali', 'igihe@gmail.com', 'yes', 'igihe is broadasc', '2022-12-14 04:38:31', 1),
-(19, 'Umuseke', '0784238482', '239482394', 'kigali', 'umuseke@gmail.com', 'yes', 'bwetwte', '2022-12-14 04:41:07', 1),
-(20, 'Kaneza tech', '0782384234', '0', 'kigali-kimironko', 'kanze@gmail.com', 'yes', NULL, '2022-12-14 04:44:44', 0),
-(21, 'AIRTEL.RW', '0723456789', '12343456', 'kigali', 'Airtel@gmail.com', 'yes', 'airtel.rw', '2022-12-14 05:13:59', 1),
-(22, 'RDB', '0788123452', '0', 'kigali-rwanda', 'rdb12@gmail.com', 'no', NULL, '2022-12-14 21:00:13', 0);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -139,7 +111,7 @@ CREATE TABLE `a_student_grade` (
   `supervisior_id` int(6) NOT NULL,
   `internaship_id` int(6) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -162,7 +134,7 @@ CREATE TABLE `a_student_logbook` (
   `suppervisior_comment` varchar(200) NOT NULL DEFAULT '-',
   `log_date` date NOT NULL DEFAULT current_timestamp(),
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -184,23 +156,30 @@ CREATE TABLE `a_student_tb` (
   `suppervisior_id` int(6) DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `a_student_tb`
 --
 
 INSERT INTO `a_student_tb` (`id`, `first_name`, `last_name`, `email`, `phone`, `gender`, `major_in`, `card_id`, `internaship_periode_id`, `partner_id`, `suppervisior_id`, `created_at`, `updated_at`) VALUES
-(30, 'Braden', 'Schroeder', 'santos.lowe@gmail.com', '+9194651261956', 'male', 'Finance', 18064, 1, NULL, NULL, '2022-11-16 06:19:21', '2022-11-16 06:19:21'),
-(31, 'Fern', 'Blanda', 'johnson.jaren@skiles.com', '+5173576788310', 'male', 'Software Engineering', 17370, 1, 20, 20, '2022-11-16 06:19:21', '2022-12-14 05:25:15'),
-(32, 'Jevon', 'Lowe', 'bechtelar.gretchen@gmail.com', '+5082351399297', 'male', 'Information Management', 18548, 1, NULL, 21, '2022-11-16 06:19:21', '2022-12-14 05:26:16'),
-(33, 'Brenna', 'Rempel', 'mcartwright@hammes.com', '+6546251132206', 'female', 'Software Engineering', 19082, 1, NULL, NULL, '2022-11-16 06:19:22', '2022-11-16 06:19:22'),
-(34, 'Cesar', 'Hayes', 'dillon49@ferry.info', '+3679831274637', 'male', 'Marketing', 18294, 1, NULL, NULL, '2022-11-16 06:19:22', '2022-11-16 06:19:22'),
-(35, 'Gerry', 'Goodwin', 'fritsch.ora@stehr.com', '+6151731056284', 'female', 'Software Engineering', 17741, 1, NULL, NULL, '2022-11-16 06:19:22', '2022-11-16 06:19:22'),
-(36, 'Nyasia', 'Ullrich', 'lynn.will@gmail.com', '+2799949129914', 'female', 'Health Sciences', 19037, 1, NULL, NULL, '2022-11-16 06:19:22', '2022-11-16 06:19:22'),
-(37, 'Jordon', 'Daniel', 'nwaelchi@yahoo.com', '+4452307222008', 'male', 'Network and communication Systems', 20427, 1, NULL, NULL, '2022-11-16 06:19:23', '2022-11-16 06:19:23'),
-(38, 'Alvera', 'Keebler', 'brendon.flatley@beahan.net', '+8893712759459', 'female', 'Information Management', 17198, 1, NULL, NULL, '2022-11-16 06:19:23', '2022-11-16 06:19:23'),
-(39, 'Daniella', 'Klocko', 'eric.brakus@hotmail.com', '+6560524024504', 'female', 'Accounting', 19708, 1, NULL, NULL, '2022-11-16 06:19:23', '2022-11-16 06:19:23');
+(1, 'Gregg', 'Nicolas', 'noelia.kovacek@spinka.com', '+6064828186982', 'male', 'Software Engineering', 21430, 1, NULL, NULL, '2023-09-07 12:15:27', '2023-09-07 12:15:27'),
+(2, 'Fernando', 'Schumm', 'waelchi.bryana@parker.com', '+2349989527245', 'male', 'Marketing', 19326, 1, NULL, NULL, '2023-09-07 12:15:27', '2023-09-07 12:15:27'),
+(3, 'Sherwood', 'Rippin', 'larkin.vallie@hotmail.com', '+9803093543297', 'male', 'Management', 18156, 1, NULL, NULL, '2023-09-07 12:15:27', '2023-09-07 12:15:27'),
+(4, 'Sadie', 'Herzog', 'domenic.bruen@price.biz', '+5966934578901', 'female', 'Information Management', 19310, 1, NULL, NULL, '2023-09-07 12:15:27', '2023-09-07 12:15:27'),
+(5, 'Mabelle', 'McLaughlin', 'rogahn.danika@schmeler.com', '+9196726471053', 'female', 'theology', 19943, 1, NULL, NULL, '2023-09-07 12:15:27', '2023-09-07 12:15:27'),
+(6, 'Araceli', 'Breitenberg', 'wehner.reagan@hotmail.com', '+8573410331717', 'female', 'Management', 21306, 1, NULL, NULL, '2023-09-07 12:15:28', '2023-09-07 12:15:28'),
+(7, 'Alyce', 'Haag', 'krystal46@yahoo.com', '+5219475399867', 'female', 'Health Sciences', 19070, 1, NULL, NULL, '2023-09-07 12:15:28', '2023-09-07 12:15:28'),
+(8, 'Jerod', 'Keeling', 'bahringer.lexi@yahoo.com', '+6998294616392', 'male', 'Health Sciences', 20386, 1, NULL, NULL, '2023-09-07 12:15:28', '2023-09-07 12:15:28'),
+(9, 'Dixie', 'Mitchell', 'swaniawski.carlie@mosciski.net', '+1623156596643', 'female', 'Information Management', 20164, 1, NULL, NULL, '2023-09-07 12:15:28', '2023-09-07 12:15:28'),
+(10, 'Adalberto', 'Heathcote', 'mckenzie.laura@terry.com', '+4472306704271', 'male', 'Marketing', 19997, 1, NULL, NULL, '2023-09-07 12:15:28', '2023-09-07 12:15:28'),
+(11, 'Scot', 'Veum', 'reichmann@hotmail.com', '+4507107585887', 'male', 'Health Sciences', 20495, 1, NULL, NULL, '2023-09-07 12:15:28', '2023-09-07 12:15:28'),
+(12, 'Cleora', 'Schamberger', 'goldner.marcelino@daniel.com', '+1394456810195', 'female', 'Management', 21094, 1, NULL, NULL, '2023-09-07 12:15:29', '2023-09-07 12:15:29'),
+(13, 'Dulce', 'Leannon', 'fgleichner@gmail.com', '+3500452913858', 'female', 'Health Sciences', 19340, 1, NULL, NULL, '2023-09-07 12:15:29', '2023-09-07 12:15:29'),
+(14, 'Karina', 'Hammes', 'karolann.shanahan@hotmail.com', '+6722676143240', 'female', 'Marketing', 21214, 1, NULL, NULL, '2023-09-07 12:15:29', '2023-09-07 12:15:29'),
+(15, 'Ethyl', 'Welch', 'hammes.suzanne@mann.com', '+9803520539828', 'female', 'Management', 20859, 1, NULL, NULL, '2023-09-07 12:15:29', '2023-09-07 12:15:29'),
+(16, 'Arvid', 'Reilly', 'tyrese.homenick@dach.biz', '+3267057482237', 'male', 'Information Management', 19588, 1, NULL, NULL, '2023-09-07 12:15:29', '2023-09-07 12:15:29'),
+(17, 'Chaya', 'Monahan', 'heidenreich.xander@gmail.com', '+4517683434425', 'female', 'Network and communication Systems', 21911, 1, NULL, NULL, '2023-09-07 12:15:29', '2023-09-07 12:15:29');
 
 -- --------------------------------------------------------
 
@@ -218,16 +197,7 @@ CREATE TABLE `a_suppervisior_tb` (
   `status` enum('active','inactive') NOT NULL DEFAULT 'active',
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `a_suppervisior_tb`
---
-
-INSERT INTO `a_suppervisior_tb` (`id`, `names`, `gender`, `department`, `email`, `phone`, `status`, `created_at`, `updated_at`) VALUES
-(19, 'Mugabo Ganza', 'male', 'IT', 'ganza@gmail.com', '0732472634', 'active', '2022-12-14 04:11:03', '2022-12-14 04:11:03'),
-(20, 'prince', 'male', 'IT', 'prince@gmail.com', '0788845689', 'active', '2022-12-14 05:09:02', '2022-12-14 05:09:02'),
-(21, 'genifa', 'female', 'IT', 'genifa@gmail.com', '0782345677', 'active', '2022-12-14 05:10:45', '2022-12-14 05:10:45');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -246,34 +216,31 @@ CREATE TABLE `a_users` (
   `status` enum('active','inactive') NOT NULL DEFAULT 'inactive',
   `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
   `a_ip` varchar(40) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `a_users`
 --
 
 INSERT INTO `a_users` (`id`, `names`, `username`, `phone`, `secret`, `level`, `institition_id`, `status`, `updated_at`, `a_ip`) VALUES
-(1, 'john', 'auca', NULL, '$2y$10$yCJUqcquW6HUZAMgufO5xOmDSX8xTwVmaDcRoxLdnC6V8B/Z77TIq', 'ADMIN', '1', 'active', '2022-12-21 15:40:44', '::1'),
-(45, 'Braden Schroeder', '18064', '+9194651261956', '$2y$10$P/hButk/KoNHzzF/GL0qIeX50rpjsTcU/SUb7tw4BH18GJ0Plj0cu', 'STUDENT', '0', 'active', '2022-12-14 14:54:55', '::1'),
-(46, 'Fern Blanda', '17370', '+5173576788310', '$2y$10$cHBRMbRM34K8DGptq98mQu3ddW25ljkhNLzFvFEK7JSL4QWz7xOHa', 'STUDENT', '0', 'active', '2022-11-16 06:19:21', NULL),
-(47, 'Jevon Lowe', '18548', '+5082351399297', '$2y$10$N.BJpb118vn2VlxnOfTCAuLrnWiDQzuioledUUN2q2CdfUp4.Caje', 'STUDENT', '0', 'active', '2022-11-16 06:19:22', NULL),
-(48, 'Brenna Rempel', '19082', '+6546251132206', '$2y$10$lF3j6VTnsr/wpEYkWQGUzOZWOnnazjPTgPePtj6bCpjHMyaXr0yze', 'STUDENT', '0', 'active', '2022-11-16 06:19:22', NULL),
-(49, 'Cesar Hayes', '18294', '+3679831274637', '$2y$10$Wr.VbCygwqrAuH8VYMORPu8sulRkVTQJEpvTvYwyj6dLPmKQISLLu', 'STUDENT', '0', 'active', '2022-11-16 06:19:22', NULL),
-(50, 'Gerry Goodwin', '17741', '+6151731056284', '$2y$10$Ayb9GHN45FvPOKS4ldbsnewbXc/r3htXON9GB6A4scX1lNJIMrdL.', 'STUDENT', '0', 'active', '2022-11-16 06:19:22', NULL),
-(51, 'Nyasia Ullrich', '19037', '+2799949129914', '$2y$10$bPOVS9VNALKHx4vgUPS16OArqYxE4FTOH/fJnDi.ue4efkH7UTiZS', 'STUDENT', '0', 'active', '2022-11-16 06:19:23', NULL),
-(52, 'Jordon Daniel', '20427', '+4452307222008', '$2y$10$iwI/NIYKoxn7l3FpuPUSEuVagyVKBcAfmWKZbZSv5Yd1cjul5Tvk2', 'STUDENT', '0', 'active', '2022-11-16 06:19:23', NULL),
-(53, 'Alvera Keebler', '17198', '+8893712759459', '$2y$10$ATI5lwkO7/Ey2VnPzmIJSOtlGKUgF/Gqnh.j/kOvDKUpb0w.xlpqC', 'STUDENT', '0', 'active', '2022-11-16 06:19:23', NULL),
-(54, 'Daniella Klocko', '19708', '+6560524024504', '$2y$10$Yc65Z9ks8iNYlFqFdTIg/eqC4pPHNXi/IfDq0y/x5PmggSdZSnTAm', 'STUDENT', '0', 'active', '2022-11-16 06:19:23', NULL),
-(55, 'MTN RWANDA', 'mtn', '0789329423', '$2y$10$RFwvrxHRD9s5Kxp0H6.STupaRIPQYlBVbi1mNGEPe6aUkZkEHIW0i', 'PARTNER', '16', 'active', '2022-12-14 14:31:24', '::1'),
-(56, 'Mugabo Ganza', 'sup', '0732472634', '$2y$10$kQetpxVAXczbbIIKPSgKZO8TO.yLrExPHFDiG6NWfp633BnJePJUS', 'SUPERVISIOR', '19', 'active', '2022-12-29 16:08:40', '::1'),
-(57, 'RWANDA tel', 'rtel', '0723472364', '$2y$10$xxmGsYoS0b4LEopUxl3w2Oe4rrC1OZSEvgwUrSRffIKJiB6hGRgQW', 'PARTNER', '17', 'active', '2022-12-14 14:33:36', '::1'),
-(58, 'Igihe ltd', 'igihe', '0789994324', '$2y$10$8vrEjXwSj6ord3qWkb5mDOotBuNXOrlbFddce.Dxp2HNKfGqTRgwW', 'PARTNER', '18', 'active', '2022-12-14 04:38:32', NULL),
-(59, 'Umuseke', 'umuseke', '0784238482', '$2y$10$meIVw6MTOLIkcPO.XRjOSO7PQjbdMc2cE4M5GL6WxWoE8nlFdoNXe', 'PARTNER', '19', 'active', '2022-12-14 04:41:07', NULL),
-(60, 'kaneza', 'kaneza', '0782384234', '$2y$10$i2kGocO3miq/QIkC.h.hXuhxhZz/JU1cnnp4XUWDM5p.EWwCksuxy', 'PARTNER', '20', 'active', '2022-12-14 14:50:25', '::1'),
-(61, 'prince', 'prince', '0788845689', '$2y$10$y5r/aaiq3qYQ7YL7SmEDneKTYY5bLGV18KxmMMs0pCRR1G8TimWiq', 'SUPERVISIOR', '20', 'active', '2022-12-14 05:09:02', NULL),
-(62, 'genifa', 'genifa', '0782345677', '$2y$10$eZOwImMZJx6q3/VD8AZeL.MpJ.tAWTxTg7owLSyXVd.llySONnKXy', 'SUPERVISIOR', '21', 'active', '2022-12-14 21:01:12', '::1'),
-(63, 'AIRTEL.RW', 'airtel', '0723456789', '$2y$10$5azRbtAVkb3HG/fyODXQ5epPv8A1zP8uWprP6BzuWJTK4kwOIKpMi', 'PARTNER', '21', 'active', '2022-12-14 05:13:59', NULL),
-(64, 'rdb', 'rdb', '0788123452', '$2y$10$xJ5Rwsq1RMJlDCxMy0RoMuwk.Mv2KGnl45SYxT2Zl2jOd68MZLM0K', 'PARTNER', '22', 'active', '2022-12-14 21:00:13', '::1');
+(1, 'john', 'iprc', NULL, '$2y$10$yCJUqcquW6HUZAMgufO5xOmDSX8xTwVmaDcRoxLdnC6V8B/Z77TIq', 'ADMIN', '1', 'active', '2023-09-07 12:13:31', '::1'),
+(99, 'Gregg Nicolas', '21430', '+6064828186982', '$2y$10$YxEMQgg086xcxX2eJwiqSOADX4nrgL536Ds0RK3BoLgZeeUtTDTnG', 'STUDENT', '0', 'active', '2023-09-07 12:15:27', NULL),
+(100, 'Fernando Schumm', '19326', '+2349989527245', '$2y$10$aa1DBDDRyjgqIiExJlpdF.KAegS07WLd1AEijKNddCgg03nTiMaCi', 'STUDENT', '0', 'active', '2023-09-07 12:15:27', NULL),
+(101, 'Sherwood Rippin', '18156', '+9803093543297', '$2y$10$IS3sg8S0mJmWcI9gvPO4FuSMyZgTvaN3OI1ucdZz/T6GLjwP1grgy', 'STUDENT', '0', 'active', '2023-09-07 12:15:27', NULL),
+(102, 'Sadie Herzog', '19310', '+5966934578901', '$2y$10$B9ksAMU1J/6KTKw5j03u2eMVBi9.hqkzlsuGWSyUp/jnlhOu/D9oW', 'STUDENT', '0', 'active', '2023-09-07 12:15:27', NULL),
+(103, 'Mabelle McLaughlin', '19943', '+9196726471053', '$2y$10$7AYIAkgf4OsGfrVU12aJq.RwO57/E72TvgxQPHpDMV2JhpjwolaDG', 'STUDENT', '0', 'active', '2023-09-07 12:15:28', NULL),
+(104, 'Araceli Breitenberg', '21306', '+8573410331717', '$2y$10$cb.Z1IC/HH9ynvr0EMYjf.PyoBB9pafJBOxEa8F6j918msML5pg1u', 'STUDENT', '0', 'active', '2023-09-07 12:15:28', NULL),
+(105, 'Alyce Haag', '19070', '+5219475399867', '$2y$10$JAr9xHpzasjXyI5VOEkKGOqG/qONfokpvJ8qc/ZeIDP3b5JRAT6Gu', 'STUDENT', '0', 'active', '2023-09-07 12:15:28', NULL),
+(106, 'Jerod Keeling', '20386', '+6998294616392', '$2y$10$usg8jjhovxPej/4LMor0suY6oc87mJhAen5.X6stwUUmBQ5I6c1eK', 'STUDENT', '0', 'active', '2023-09-07 12:15:28', NULL),
+(107, 'Dixie Mitchell', '20164', '+1623156596643', '$2y$10$HNKzihW0ZUQEpdKuPD.g4Ob.31kBhQMzC/3EADNF7pltfA5MnJOyi', 'STUDENT', '0', 'active', '2023-09-07 12:15:28', NULL),
+(108, 'Adalberto Heathcote', '19997', '+4472306704271', '$2y$10$78E0vbjou71kYrDfrLDO3.bOPJsMxvdXqNWS6xuPLyyMvRMXpTvj.', 'STUDENT', '0', 'active', '2023-09-07 12:15:28', NULL),
+(109, 'Scot Veum', '20495', '+4507107585887', '$2y$10$WxdeqMniRjl0KIfdaM/Yte7TVOGSj/IA23SeGYVCTPSHk5AZhXkPO', 'STUDENT', '0', 'active', '2023-09-07 12:15:29', NULL),
+(110, 'Cleora Schamberger', '21094', '+1394456810195', '$2y$10$1g/ZP1f4nfoJeK8Bi5oLBe9sdkPYHKc4cPaoi1kKvWsHDjTmINUte', 'STUDENT', '0', 'active', '2023-09-07 12:15:29', NULL),
+(111, 'Dulce Leannon', '19340', '+3500452913858', '$2y$10$6.QTP7XiN8SV2FEUTvHBHOxZ8Pkzf.LsKfnN0dMjpjfmxt4NdQW9C', 'STUDENT', '0', 'active', '2023-09-07 12:15:29', NULL),
+(112, 'Karina Hammes', '21214', '+6722676143240', '$2y$10$2Cky0hkBIaQopTpqUUouQOQn9/2X0PaARmWwnmJZ1Wg0CS0RWlgSa', 'STUDENT', '0', 'active', '2023-09-07 12:15:29', NULL),
+(113, 'Ethyl Welch', '20859', '+9803520539828', '$2y$10$uKCb0qwUpqMQQ42si8SjjubANEhzFOlfw7cdcGEKiAUkKhoU69vXC', 'STUDENT', '0', 'active', '2023-09-07 12:15:29', NULL),
+(114, 'Arvid Reilly', '19588', '+3267057482237', '$2y$10$R5DZYLHQZOsEwT8.9wAeSOQfuUkmt3VAJNyzyRusCFSlHnUb..0gO', 'STUDENT', '0', 'active', '2023-09-07 12:15:29', NULL),
+(115, 'Chaya Monahan', '21911', '+4517683434425', '$2y$10$9AO8KxiCpmz8PPqFBoBc6uS93xvuGX4UICQ9XiZx.DwsELj7noniG', 'STUDENT', '0', 'active', '2023-09-07 12:15:30', NULL);
 
 -- --------------------------------------------------------
 
@@ -289,24 +256,7 @@ CREATE TABLE `notifications_tb` (
   `level_id` int(3) NOT NULL,
   `done_by` int(3) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `notifications_tb`
---
-
-INSERT INTO `notifications_tb` (`id`, `message`, `link`, `level`, `level_id`, `done_by`, `created_at`) VALUES
-(17, 'Auca internaship(Start:2022-12-14 End:2023-01-28,status:deactivated,upload Marks:no)', 'home', 'PARTNER', 16, 1, '2022-12-14 05:17:08'),
-(18, 'Auca internaship(Start:2022-12-14 End:2023-01-28,status:deactivated,upload Marks:no)', 'home', 'PARTNER', 17, 1, '2022-12-14 05:17:08'),
-(19, 'Auca internaship(Start:2022-12-14 End:2023-01-28,status:deactivated,upload Marks:no)', 'home', 'PARTNER', 18, 1, '2022-12-14 05:17:08'),
-(20, 'Auca internaship(Start:2022-12-14 End:2023-01-28,status:deactivated,upload Marks:no)', 'home', 'PARTNER', 19, 1, '2022-12-14 05:17:08'),
-(21, 'Auca internaship(Start:2022-12-14 End:2023-01-28,status:deactivated,upload Marks:no)', 'home', 'PARTNER', 20, 1, '2022-12-14 05:17:08'),
-(22, 'Auca internaship(Start:2022-12-14 End:2023-01-28,status:deactivated,upload Marks:no)', 'home', 'PARTNER', 21, 1, '2022-12-14 05:17:09'),
-(23, 'New Internaship Student(Blanda Blanda)', 'a_partner_student?st=17370', 'PARTNER', 20, 1, '2022-12-14 05:25:15'),
-(24, 'Kaneza tech -&gt; kigali-kimironko as partern AND prince -&gt; IT as supervisior', 'home', 'STUDENT', 17370, 1, '2022-12-14 05:25:15'),
-(25, 'New Assigned Student(Blanda Blanda)', 'a_partner_student?st=17370', 'SUPERVISIOR', 20, 1, '2022-12-14 05:25:15'),
-(26, 'New Assigned Student(Lowe Lowe)', 'a_partner_student?st=18548', 'SUPERVISIOR', 21, 1, '2022-12-14 05:26:16'),
-(27, '- as partern AND genifa -&gt; IT as supervisior', 'home', 'STUDENT', 18548, 1, '2022-12-14 05:26:17');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Indexes for dumped tables
@@ -403,25 +353,25 @@ ALTER TABLE `notifications_tb`
 -- AUTO_INCREMENT for table `a_internaship_periode`
 --
 ALTER TABLE `a_internaship_periode`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `a_partner_student_request`
 --
 ALTER TABLE `a_partner_student_request`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `a_partner_student_request_totals`
 --
 ALTER TABLE `a_partner_student_request_totals`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `a_partner_tb`
 --
 ALTER TABLE `a_partner_tb`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `a_student_grade`
@@ -439,25 +389,25 @@ ALTER TABLE `a_student_logbook`
 -- AUTO_INCREMENT for table `a_student_tb`
 --
 ALTER TABLE `a_student_tb`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `a_suppervisior_tb`
 --
 ALTER TABLE `a_suppervisior_tb`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `a_users`
 --
 ALTER TABLE `a_users`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
 
 --
 -- AUTO_INCREMENT for table `notifications_tb`
 --
 ALTER TABLE `notifications_tb`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
